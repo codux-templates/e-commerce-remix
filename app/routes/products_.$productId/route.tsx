@@ -75,13 +75,13 @@ export default function ProductDetailsPage() {
 
                 {product.priceData && (
                     <div className={styles.priceSection}>
-                        {product.priceData?.price !== product.priceData?.discountedPrice && (
+                        {product.priceData.price !== product.priceData.discountedPrice && (
                             <div className={classNames(commonStyles.price, commonStyles.fullPrice)}>
-                                {product.priceData?.formatted?.price}
+                                {product.priceData.formatted?.price}
                             </div>
                         )}
                         <div className={commonStyles.price}>
-                            {product.priceData?.formatted?.discountedPrice}
+                            {product.priceData.formatted?.discountedPrice}
                         </div>
                     </div>
                 )}
