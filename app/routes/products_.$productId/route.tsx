@@ -66,9 +66,28 @@ export default function ProductDetailsPage() {
                 className={styles.left}
             />
             <div className={styles.right}>
-                <div>{product.name}</div>
+                <div>
+                    <div className={styles.productName}>{product.name}</div>
+                    {product.sku !== undefined && (
+                        <div className={styles.sku}>SKU: {product.sku}</div>
+                    )}
+                </div>
+
                 {product.priceData && (
-                    <div className={commonStyles.price}>{product.price?.formatted?.price}</div>
+                    <div className={styles.priceSection}>
+                        {product.priceData?.price !== product.priceData?.discountedPrice && (
+                            <div className={classNames(commonStyles.price, commonStyles.fullPrice)}>
+                                {product.priceData?.formatted?.price}
+                            </div>
+                        )}
+                        <div className={commonStyles.price}>
+                            {product.priceData?.formatted?.discountedPrice}
+                        </div>
+                    </div>
+                )}
+
+                {product.description && (
+                    <div className={styles.description}>{product.description}</div>
                 )}
 
                 <div className={styles.addToCart}>

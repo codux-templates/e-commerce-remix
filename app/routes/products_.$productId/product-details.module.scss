@@ -18,6 +18,27 @@
 .right {
     padding-top: 20px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.productName {
+    text-transform: uppercase;
+}
+
+.sku {
+    font-size: small;
+}
+
+.description {
+    padding: 8px 0;
+}
+
+.priceSection {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .addToCartBtn {
