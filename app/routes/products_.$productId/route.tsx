@@ -11,6 +11,7 @@ import { isRouteErrorResponse, useLoaderData, useRouteError, json } from '@remix
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
+import { RichText } from '~/components/rich-text/rich-text';
 
 const OptionType = {
     color: 'color',
@@ -87,7 +88,7 @@ export default function ProductDetailsPage() {
                 )}
 
                 {product.description && (
-                    <div className={styles.description}>{product.description}</div>
+                    <RichText className={styles.description}>{product.description}</RichText>
                 )}
 
                 <div className={styles.addToCart}>
