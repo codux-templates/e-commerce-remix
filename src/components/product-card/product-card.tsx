@@ -27,10 +27,12 @@ export const ProductCard = ({
             )}
             <div className={styles.cardContent}>
                 <p className={styles.description}>{name}</p>
-                <Price
-                    fullPrice={price?.formatted?.price}
-                    currentPrice={price?.formatted?.discountedPrice}
-                />
+                {price?.formatted?.discountedPrice && (
+                    <Price
+                        previousPrice={price?.formatted?.price}
+                        currentPrice={price?.formatted?.discountedPrice}
+                    />
+                )}
             </div>
         </div>
     );

@@ -38,10 +38,12 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                 <div className={styles.itemLine}>
                     <div>
                         <h4 className={styles.description}>{name}</h4>
-                        <Price
-                            currentPrice={cartItem.price?.formattedConvertedAmount}
-                            fullPrice={cartItem.fullPrice?.formattedConvertedAmount}
-                        />
+                        {cartItem.price?.formattedConvertedAmount && (
+                            <Price
+                                currentPrice={cartItem.price?.formattedConvertedAmount}
+                                previousPrice={cartItem.fullPrice?.formattedConvertedAmount}
+                            />
+                        )}
                     </div>
                     <button
                         onClick={() => removeItem(cartItem._id!)}
