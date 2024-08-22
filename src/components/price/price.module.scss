@@ -1,11 +1,6 @@
 .container {
     display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.price {
-    margin-top: 2px;
+    flex-direction: column;
 }
 
 .fullPrice {

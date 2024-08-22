@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import styles from './price.module.scss';
 
 export interface PriceProps {
@@ -9,11 +8,9 @@ export interface PriceProps {
 export const Price = ({ price, fullPrice }: PriceProps) => {
     return price ? (
         <div className={styles.container}>
-            {fullPrice !== price && (
-                <div className={classNames(styles.price, styles.fullPrice)}>{fullPrice}</div>
-            )}
+            {fullPrice !== price && <div className={styles.fullPrice}>{fullPrice}</div>}
 
-            <div className={classNames(styles.price, styles.currentPrice)}>{price}</div>
+            <div className={styles.currentPrice}>{price}</div>
         </div>
     ) : undefined;
 };
