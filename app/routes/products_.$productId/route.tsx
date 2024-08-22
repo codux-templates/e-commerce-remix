@@ -70,7 +70,7 @@ export default function ProductDetailsPage() {
                 <div>{product.name}</div>
                 <Price
                     fullPrice={product.priceData?.formatted?.price}
-                    price={product.priceData?.formatted?.discountedPrice}
+                    currentPrice={product.priceData?.formatted?.discountedPrice}
                 />
 
                 <div className={styles.addToCart}>

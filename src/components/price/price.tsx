@@ -2,15 +2,15 @@ import styles from './price.module.scss';
 
 export interface PriceProps {
     fullPrice: string | undefined;
-    price: string | undefined;
+    currentPrice: string | undefined;
 }
 
-export const Price = ({ price, fullPrice }: PriceProps) => {
-    return price ? (
+export const Price = ({ currentPrice, fullPrice }: PriceProps) => {
+    return currentPrice ? (
         <div className={styles.container}>
-            {fullPrice !== price && <div className={styles.fullPrice}>{fullPrice}</div>}
+            {fullPrice !== currentPrice && <div className={styles.fullPrice}>{fullPrice}</div>}
 
-            <div className={styles.currentPrice}>{price}</div>
+            <div className={styles.currentPrice}>{currentPrice}</div>
         </div>
     ) : undefined;
 };

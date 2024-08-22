@@ -39,7 +39,7 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                     <div>
                         <h4 className={styles.description}>{name}</h4>
                         <Price
-                            price={cartItem.price?.formattedConvertedAmount}
+                            currentPrice={cartItem.price?.formattedConvertedAmount}
                             fullPrice={cartItem.fullPrice?.formattedConvertedAmount}
                         />
                     </div>
