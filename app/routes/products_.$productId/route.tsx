@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { ecomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
+import { Price } from '~/components/price/price';
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
@@ -74,17 +75,11 @@ export default function ProductDetailsPage() {
                     )}
                 </div>
 
-                {product.priceData && (
-                    <div className={styles.priceSection}>
-                        {product.priceData.price !== product.priceData.discountedPrice && (
-                            <div className={classNames(commonStyles.price, commonStyles.fullPrice)}>
-                                {product.priceData.formatted?.price}
-                            </div>
-                        )}
-                        <div className={commonStyles.price}>
-                            {product.priceData.formatted?.discountedPrice}
-                        </div>
-                    </div>
+                {product.priceData?.formatted?.price && (
+                    <Price
+                        fullPrice={product.priceData?.formatted?.price}
+                        discountedPrice={product.priceData?.formatted?.discountedPrice}
+                    />
                 )}
 
                 {product.description && (
@@ -93,7 +88,6 @@ export default function ProductDetailsPage() {
                         {product.description}
                     </UnsafeRichText>
                 )}
-
                 <div className={styles.addToCart}>
                     <label>
                         Quantity: <br />
