@@ -5,13 +5,13 @@ import { useRef } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { ecomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
+import { Price } from '~/components/price/price';
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
-import { Price } from '~/components/price/price';
 
 const OptionType = {
     color: 'color',
