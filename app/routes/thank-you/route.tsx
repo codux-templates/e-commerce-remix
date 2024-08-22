@@ -1,7 +1,7 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useSearchParams } from '@remix-run/react';
 import { ROUTES } from '~/router/config';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
+import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
 
@@ -22,7 +22,7 @@ export default function ThankYouPage() {
                 </p>
             </div>
             <Link to={ROUTES.products.to()}>
-                <button className={CommonStyles_module.primaryButton} type="button">
+                <button className={commonStyles.primaryButton} type="button">
                     Continue Shopping
                 </button>
             </Link>

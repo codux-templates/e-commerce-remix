@@ -22,13 +22,13 @@
     width: 100%;
 }
 
-.small-title {
+.smallTitle {
     font: $medium-paragraph-bold;
     margin-top: 80px;
     font-size: 38px;
 }
 
-.big-title {
+.bigTitle {
     max-width: 80%;
     font: $extra-large-thin-title;
     line-height: 1.2;
@@ -37,22 +37,22 @@
     margin-top: 25px;
 }
 
-.overlay-button {
+.overlayButton {
     margin-top: 68px;
 }
 
 // --- MEDIA QUERIES ---
 
 @media (width >= $large-desktop) {
-    .small-title {
+    .smallTitle {
         font-size: 42px;
     }
 
-    .big-title {
+    .bigTitle {
         max-width: 70%;
     }
 
-    .overlay-button {
+    .overlayButton {
         height: 47px;
     }
 }
@@ -62,17 +62,17 @@
         padding-left: 8vw;
     }
 
-    .small-title {
+    .smallTitle {
         font-size: 20px;
         margin-top: 40px;
     }
 
-    .big-title {
+    .bigTitle {
         font-size: 50px;
         margin-top: 11px;
     }
 
-    .overlay-button {
+    .overlayButton {
         margin-top: 40px;
     }
 }

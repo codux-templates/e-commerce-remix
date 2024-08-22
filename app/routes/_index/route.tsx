@@ -26,10 +26,10 @@ export default function HomePage() {
                 topLabel="Best Prices"
                 bottomLabel="Get more for less on selected brands"
                 buttonLabel="Shop Now"
-                topLabelClassName={styles['top-label-highlighted']}
+                topLabelClassName={styles.topLabelHighlighted}
                 onButtonClick={() => navigate('/products')}
             />
-            <h1 className={styles['hero-title']}>Best Sellers</h1>
+            <h1 className={styles.heroTitle}>Best Sellers</h1>
             <p className={styles.bestSeller}>Shop our best seller items</p>
             <div className={styles.cardsLayout}>
                 {products?.map((product) =>

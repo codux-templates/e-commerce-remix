@@ -17,7 +17,7 @@ export function ProductImages(props: {
                 className={styles.img}
                 data-testid="product-img"
             />
-            <div className={styles['image-grid']}>
+            <div className={styles.imageGrid}>
                 {restImages?.map((item, index) => {
                     return (
                         <img

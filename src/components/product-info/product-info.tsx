@@ -12,8 +12,8 @@ export const ProductInfo = ({ className, productInfo }: ProductInfoProps) => {
         <div className={classNames(styles.root, className)}>
             {productInfo?.map((info, index) => (
                 <div key={info.title || index}>
-                    <div className={styles['info-title']}>{info.title}</div>
-                    <div className={styles['info-prgrp']}>{info.description}</div>
+                    <div className={styles.infoTitle}>{info.title}</div>
+                    <div className={styles.infoDescription}>{info.description}</div>
                 </div>
             ))}
         </div>

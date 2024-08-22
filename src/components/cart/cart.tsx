@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useCart, useCartTotals } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
+import commonStyles from '~/styles/common-styles.module.scss';
 import { CartItem } from './cart-item/cart-item';
 import { useCartOpen } from './cart-open-context';
 import styles from './cart.module.scss';
@@ -38,7 +38,7 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
 
     return (
         <div className={className}>
-            <button onClick={() => setIsOpen(true)} className={CommonStyles_module.secondaryButton}>
+            <button onClick={() => setIsOpen(true)} className={commonStyles.secondaryButton}>
                 Cart
             </button>
             {isOpen ? (
@@ -52,14 +52,14 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
                                     <CartItem key={item._id} cartItem={item} />
                                 ))}
                             </div>
-                            <div className={styles['subtotal-checkout']}>
-                                <label className={styles['subtotal-label']}>
+                            <div className={styles.subtotalCheckout}>
+                                <label className={styles.subtotalLabel}>
                                     <span>Subtotal:</span>
                                     {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
                                 </label>
                                 <button
                                     className={Classnames(
-                                        CommonStyles_module.primaryButton,
+                                        commonStyles.primaryButton,
                                         styles.checkout
                                     )}
                                     onClick={checkout}
