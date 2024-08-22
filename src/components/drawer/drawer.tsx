@@ -39,10 +39,19 @@ export const Drawer = ({
     }
 
     return (
-        <div onClick={handleClose} className={styles.background}>
+        <div
+            onClick={handleClose}
+            onKeyDown={handleClose}
+            role="button"
+            tabIndex={0}
+            className={styles.background}
+        >
             <div
                 className={cx(styles.drawer, className, { [styles.open]: isOpen })}
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+                role="button"
+                tabIndex={-1}
             >
                 <div className={styles.header}>
                     <h3>{title}</h3>

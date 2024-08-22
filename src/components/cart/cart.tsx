@@ -23,6 +23,7 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
         if (initialIsOpen !== undefined) {
             setIsOpen(initialIsOpen);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setIsOpen]);
 
     const ecomAPI = useEcomAPI();
