@@ -6,11 +6,15 @@ export interface PriceProps {
 }
 
 export const Price = ({ currentPrice, fullPrice }: PriceProps) => {
-    return currentPrice ? (
+    if (!currentPrice) {
+        return undefined;
+    }
+
+    return (
         <div className={styles.container}>
             {fullPrice !== currentPrice && <div className={styles.fullPrice}>{fullPrice}</div>}
 
             <div className={styles.currentPrice}>{currentPrice}</div>
         </div>
-    ) : undefined;
+    );
 };
