@@ -1,16 +1,12 @@
 import classNames from 'classnames';
 import styles from './price.module.scss';
 
-export interface PriceInfo {
+export interface PriceProps {
     fullPrice: string | undefined;
     price: string | undefined;
 }
 
-export interface PriceProps {
-    priceInfo: PriceInfo;
-}
-
-export const Price = ({ priceInfo: { price, fullPrice } }: PriceProps) => {
+export const Price = ({ price, fullPrice }: PriceProps) => {
     return price ? (
         <div className={styles.container}>
             {fullPrice !== price && (

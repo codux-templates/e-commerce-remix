@@ -12,7 +12,6 @@ import { ProductNotFound } from '~/components/product-not-found/product-not-foun
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
 import { Price } from '~/components/price/price';
-import { getProductPriceInfo } from '~/components/price/utils';
 
 const OptionType = {
     color: 'color',
@@ -69,7 +68,10 @@ export default function ProductDetailsPage() {
             />
             <div className={styles.right}>
                 <div>{product.name}</div>
-                <Price priceInfo={getProductPriceInfo(product.priceData)} />
+                <Price
+                    fullPrice={product.priceData?.formatted?.price}
+                    price={product.priceData?.formatted?.discountedPrice}
+                />
 
                 <div className={styles.addToCart}>
                     <label>

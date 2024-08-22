@@ -1,13 +1,12 @@
-import classNames from 'classnames';
-import styles from './cart-item.module.scss';
-import { cart } from '@wix/ecom';
-import { ChangeEvent } from 'react';
-import commonStyles from '~/styles/common-styles.module.scss';
-import { getImageHttpUrl } from '~/api/wix-image';
-import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { cart } from '@wix/ecom';
+import classNames from 'classnames';
+import { ChangeEvent } from 'react';
+import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
+import { getImageHttpUrl } from '~/api/wix-image';
 import { Price } from '~/components/price/price';
-import { getCartItemPriceInfo } from '~/components/price/utils';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './cart-item.module.scss';
 
 export interface CartItemProps {
     className?: string;
@@ -39,7 +38,10 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                 <div className={styles['item-line']}>
                     <div>
                         <h4 className={styles.description}>{name}</h4>
-                        <Price priceInfo={getCartItemPriceInfo(cartItem)} />
+                        <Price
+                            price={cartItem.price?.formattedConvertedAmount}
+                            fullPrice={cartItem.fullPrice?.formattedConvertedAmount}
+                        />
                     </div>
                     <button
                         onClick={() => removeItem(cartItem._id!)}

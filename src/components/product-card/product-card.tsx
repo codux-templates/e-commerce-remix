@@ -3,7 +3,6 @@ import styles from './product-card.module.scss';
 import { products } from '@wix/stores';
 import noImage from '~/assets/img/noImage/[160_200]_noImage.svg';
 import { Price } from '../price/price';
-import { getProductPriceInfo } from '../price/utils';
 
 export type GalleryCardProps = {
     name: string;
@@ -28,7 +27,10 @@ export const ProductCard = ({
             )}
             <div className={styles.cardContent}>
                 <p className={styles.description}>{name}</p>
-                <Price priceInfo={getProductPriceInfo(price)} />
+                <Price
+                    fullPrice={price?.formatted?.price}
+                    price={price?.formatted?.discountedPrice}
+                />
             </div>
         </div>
     );
