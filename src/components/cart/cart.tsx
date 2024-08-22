@@ -23,6 +23,7 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
         if (initialIsOpen !== undefined) {
             setIsOpen(initialIsOpen);
         }
+        // ignore `initialIsOpen` changes, cause it is only for initial state
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setIsOpen]);
 
