@@ -1,6 +1,6 @@
 import { products } from '@wix/stores';
 import classNames from 'classnames';
-import { RichText } from '../rich-text/rich-text';
+import { UnsafeRichText } from '../rich-text/rich-text';
 import styles from './product-info.module.scss';
 
 export interface ProductInfoProps {
@@ -14,7 +14,10 @@ export const ProductInfo = ({ className, productInfo }: ProductInfoProps) => {
             {productInfo?.map((info, index) => (
                 <div key={info.title || index}>
                     <div className={styles.infoTitle}>{info.title}</div>
-                    <RichText className={styles.infoDescription}>{info.description}</RichText>
+                    {/** use unsafe component for info description, because it comes from e-commerce site back-office */}
+                    <UnsafeRichText className={styles.infoDescription}>
+                        {info.description}
+                    </UnsafeRichText>
                 </div>
             ))}
         </div>

@@ -8,10 +8,10 @@ import { useCartOpen } from '~/components/cart/cart-open-context';
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
+import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
-import { RichText } from '~/components/rich-text/rich-text';
 
 const OptionType = {
     color: 'color',
@@ -88,7 +88,10 @@ export default function ProductDetailsPage() {
                 )}
 
                 {product.description && (
-                    <RichText className={styles.description}>{product.description}</RichText>
+                    /** use unsafe component for description, because it comes from e-commerce site back-office */
+                    <UnsafeRichText className={styles.description}>
+                        {product.description}
+                    </UnsafeRichText>
                 )}
 
                 <div className={styles.addToCart}>
