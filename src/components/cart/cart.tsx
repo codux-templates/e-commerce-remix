@@ -1,12 +1,12 @@
+import Classnames from 'classnames';
 import { useEffect } from 'react';
+import { useCart, useCartTotals } from '~/api/api-hooks';
+import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
 import CommonStyles_module from '~/styles/common-styles.module.scss';
-import { useCart, useCartTotals } from '~/api/api-hooks';
 import { CartItem } from './cart-item/cart-item';
-import styles from './cart.module.scss';
-import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { useCartOpen } from './cart-open-context';
-import Classnames from 'classnames';
+import styles from './cart.module.scss';
 
 export interface CartProps {
     className?: string;

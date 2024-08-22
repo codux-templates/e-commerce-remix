@@ -1,7 +1,7 @@
 import { currentCart } from '@wix/ecom';
+import { redirects } from '@wix/redirects';
 import { OAuthStrategy, createClient } from '@wix/sdk';
 import { products } from '@wix/stores';
-import { redirects } from '@wix/redirects';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
 

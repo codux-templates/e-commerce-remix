@@ -1,9 +1,9 @@
-import classNames from 'classnames';
-import styles from './header.module.scss';
-import { Cart } from '~/components/cart/cart';
 import { Link } from '@remix-run/react';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
+import classNames from 'classnames';
+import { Cart } from '~/components/cart/cart';
 import { ROUTES } from '~/router/config';
+import CommonStyles_module from '~/styles/common-styles.module.scss';
+import styles from './header.module.scss';
 
 export interface HeaderProps {
     className?: string;

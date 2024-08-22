@@ -1,6 +1,6 @@
+import { products } from '@wix/stores';
 import classNames from 'classnames';
 import styles from './product-info.module.scss';
-import { products } from '@wix/stores';
 
 export interface ProductInfoProps {
     className?: string;

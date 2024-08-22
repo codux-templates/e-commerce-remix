@@ -1,7 +1,7 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useSearchParams } from '@remix-run/react';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
 import { ROUTES } from '~/router/config';
+import CommonStyles_module from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
 

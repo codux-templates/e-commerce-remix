@@ -1,8 +1,8 @@
+import { Link } from '@remix-run/react';
+import classNames from 'classnames';
+import { ROUTES } from '~/router/config';
 import CommonStyles_module from '~/styles/common-styles.module.scss';
 import styles from './product-not-found.module.scss';
-import classNames from 'classnames';
-import { Link } from '@remix-run/react';
-import { ROUTES } from '~/router/config';
 
 export const ProductNotFound = () => {
     return (

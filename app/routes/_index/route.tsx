@@ -1,8 +1,8 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { HeroImage } from '~/components/hero-image/hero-image';
-import { ProductCard } from '~/components/product-card/product-card';
 import { Link, MetaFunction, useLoaderData, useNavigate } from '@remix-run/react';
 import { ecomApi } from '~/api/ecom-api';
+import { HeroImage } from '~/components/hero-image/hero-image';
+import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './index.module.scss';

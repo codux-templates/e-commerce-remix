@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import styles from './product-card.module.scss';
 import { products } from '@wix/stores';
+import classNames from 'classnames';
 import noImage from '~/assets/img/noImage/[160_200]_noImage.svg';
 import { Price } from '../price/price';
+import styles from './product-card.module.scss';
 
 export type GalleryCardProps = {
     name: string;

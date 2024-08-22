@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import useSwr, { Key } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { useEcomAPI } from './ecom-api-context-provider';
 import { findItemIdInCart } from './cart-helpers';
+import { useEcomAPI } from './ecom-api-context-provider';
 
 export const useCart = () => {
     const ecomApi = useEcomAPI();
