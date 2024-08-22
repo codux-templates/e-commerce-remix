@@ -6,6 +6,8 @@ import commonStyles from '~/styles/common-styles.module.scss';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { Price } from '~/components/price/price';
+import { getCartItemPriceInfo } from '~/components/price/utils';
 
 export interface CartItemProps {
     className?: string;
@@ -37,9 +39,7 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                 <div className={styles['item-line']}>
                     <div>
                         <h4 className={styles.description}>{name}</h4>
-                        <span className={commonStyles.price}>
-                            {cartItem.price?.formattedConvertedAmount}
-                        </span>
+                        <Price priceInfo={getCartItemPriceInfo(cartItem)} />
                     </div>
                     <button
                         onClick={() => removeItem(cartItem._id!)}

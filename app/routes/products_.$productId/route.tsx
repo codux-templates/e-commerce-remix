@@ -11,6 +11,8 @@ import { isRouteErrorResponse, useLoaderData, useRouteError, json } from '@remix
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
+import { Price } from '~/components/price/price';
+import { getProductPriceInfo } from '~/components/price/utils';
 
 const OptionType = {
     color: 'color',
@@ -67,9 +69,7 @@ export default function ProductDetailsPage() {
             />
             <div className={styles.right}>
                 <div>{product.name}</div>
-                {product.priceData && (
-                    <div className={commonStyles.price}>{product.price?.formatted?.price}</div>
-                )}
+                <Price priceInfo={getProductPriceInfo(product.priceData)} />
 
                 <div className={styles.addToCart}>
                     <label>

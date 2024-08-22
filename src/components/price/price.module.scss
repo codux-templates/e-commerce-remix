@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price {
+    margin-top: 2px;
+}
+
+.fullPrice {
+    font-size: small;
+    font-weight: normal;
+    text-decoration: line-through;
+}
+
+.currentPrice {
+    font-weight: 700;
+}
