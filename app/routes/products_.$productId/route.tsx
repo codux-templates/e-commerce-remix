@@ -68,10 +68,10 @@ export default function ProductDetailsPage() {
             />
             <div className={styles.right}>
                 <div>{product.name}</div>
-                {product.priceData?.formatted?.discountedPrice && (
+                {product.priceData?.formatted?.price && (
                     <Price
-                        previousPrice={product.priceData?.formatted?.price}
-                        currentPrice={product.priceData?.formatted?.discountedPrice}
+                        fullPrice={product.priceData?.formatted?.price}
+                        discountedPrice={product.priceData?.formatted?.discountedPrice}
                     />
                 )}
                 <div className={styles.addToCart}>

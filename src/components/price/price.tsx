@@ -1,22 +1,18 @@
 import styles from './price.module.scss';
 
 export interface PriceProps {
-    currentPrice: string;
-    previousPrice?: string;
+    discountedPrice?: string;
+    fullPrice: string;
 }
 
-export const Price = ({ currentPrice, previousPrice }: PriceProps) => {
-    if (!currentPrice) {
-        return undefined;
-    }
+export const Price = ({ fullPrice, discountedPrice }: PriceProps) => {
+    const hasDiscount = discountedPrice !== undefined && fullPrice !== discountedPrice;
 
     return (
         <div className={styles.container}>
-            {previousPrice !== currentPrice && (
-                <div className={styles.previousPrice}>{previousPrice}</div>
-            )}
+            {hasDiscount && <div className={styles.previousPrice}>{fullPrice}</div>}
 
-            <div className={styles.currentPrice}>{currentPrice}</div>
+            <div className={styles.currentPrice}>{hasDiscount ? discountedPrice : fullPrice}</div>
         </div>
     );
 };

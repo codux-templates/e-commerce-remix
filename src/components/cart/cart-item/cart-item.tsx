@@ -38,10 +38,10 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                 <div className={styles.itemLine}>
                     <div>
                         <h4 className={styles.description}>{name}</h4>
-                        {cartItem.price?.formattedConvertedAmount && (
+                        {cartItem.fullPrice?.formattedConvertedAmount && (
                             <Price
-                                currentPrice={cartItem.price?.formattedConvertedAmount}
-                                previousPrice={cartItem.fullPrice?.formattedConvertedAmount}
+                                fullPrice={cartItem.fullPrice?.formattedConvertedAmount}
+                                discountedPrice={cartItem.price?.formattedConvertedAmount}
                             />
                         )}
                     </div>
