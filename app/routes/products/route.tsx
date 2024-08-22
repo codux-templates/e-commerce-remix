@@ -1,8 +1,8 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { ProductCard } from '~/components/product-card/product-card';
-import { getImageHttpUrl } from '~/api/wix-image';
 import { ecomApi } from '~/api/ecom-api';
+import { getImageHttpUrl } from '~/api/wix-image';
+import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './products.module.scss';

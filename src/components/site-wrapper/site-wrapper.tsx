@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import styles from './site-wrapper.module.scss';
 import { Header } from '~/components/header/header';
 import { Footer } from '~/components/site-footer/site-footer';
+import styles from './site-wrapper.module.scss';
 
 export interface SiteWrapperProps {
     className?: string;

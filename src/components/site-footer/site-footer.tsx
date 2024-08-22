@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import styles from './site-footer.module.scss';
-import facebookIcon from '~/assets/svg/facebook.svg';
-import twitterxIcon from '~/assets/svg/twitterx.svg';
 import discordIcon from '~/assets/svg/discord.svg';
-import youtubeIcon from '~/assets/svg/youtube.svg';
-import mediumIcon from '~/assets/svg/medium.svg';
+import facebookIcon from '~/assets/svg/facebook.svg';
 import githubIcon from '~/assets/svg/github.svg';
+import mediumIcon from '~/assets/svg/medium.svg';
+import twitterxIcon from '~/assets/svg/twitterx.svg';
+import youtubeIcon from '~/assets/svg/youtube.svg';
+import styles from './site-footer.module.scss';
 
 export interface FooterProps {
     className?: string;

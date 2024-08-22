@@ -15,11 +15,11 @@ declare module 'raw-loader!.*' {
     export default value;
 }
 
-interface ImportMetaEnv {
-    readonly VITE_WIX_CLIENT_ID: string;
+interface ClientENV {
+    readonly WIX_CLIENT_ID?: string;
     // more env variables...
 }
 
-interface ImportMeta {
-    readonly env: ImportMetaEnv;
+declare interface Window {
+    ENV: ClientENV;
 }

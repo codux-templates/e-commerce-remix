@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
-import styles from './drawer.module.scss';
 import cx from 'classnames';
 import { useEffect, useState } from 'react';
+import styles from './drawer.module.scss';
 
 export interface DrawerProps {
     className?: string;

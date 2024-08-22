@@ -1,9 +1,9 @@
-import CommonStyles_module from '~/styles/common-styles.module.scss';
-import smallHeroImage from '~/assets/img/[430_340]_heroImage04.jpg';
-import mediumHeroImage from '~/assets/img/[760_460]_heroImage04.jpg';
+import classNames from 'classnames';
 import largeHeroImage from '~/assets/img/[1024_640]_heroImage04.jpg';
 import xLargeHeroImage from '~/assets/img/[1400_640]_heroImage04.jpg';
-import classNames from 'classnames';
+import smallHeroImage from '~/assets/img/[430_340]_heroImage04.jpg';
+import mediumHeroImage from '~/assets/img/[760_460]_heroImage04.jpg';
+import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './hero-image.module.scss';
 
 export interface HeroImageProps {
@@ -32,15 +32,12 @@ export const HeroImage = ({
                 <img src={smallHeroImage} className={styles.image} alt="Hero background" />
             </picture>
             <div className={styles.overlay}>
-                <p className={styles['small-title']}>{title}</p>
-                <h1 className={styles['big-title']}>{bottomLabel} </h1>
+                <p className={styles.smallTitle}>{title}</p>
+                <h1 className={styles.bigTitle}>{bottomLabel} </h1>
                 {buttonLabel && (
                     <button
                         onClick={onButtonClick}
-                        className={classNames(
-                            CommonStyles_module.primaryButton,
-                            styles['overlay-button']
-                        )}
+                        className={classNames(commonStyles.primaryButton, styles.overlayButton)}
                     >
                         {buttonLabel}
                     </button>

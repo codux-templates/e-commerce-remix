@@ -1,9 +1,9 @@
-import classNames from 'classnames';
-import styles from './header.module.scss';
-import { Cart } from '~/components/cart/cart';
 import { Link } from '@remix-run/react';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
+import classNames from 'classnames';
+import { Cart } from '~/components/cart/cart';
 import { ROUTES } from '~/router/config';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './header.module.scss';
 
 export interface HeaderProps {
     className?: string;
@@ -18,19 +18,19 @@ export const Header = ({ className }: HeaderProps) => {
             <div className={styles.menu}>
                 <Link
                     to={ROUTES.home.to()}
-                    className={classNames(CommonStyles_module.secondaryButton, styles.menuButton)}
+                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
                 >
                     Home
                 </Link>
                 <Link
                     to={ROUTES.products.to()}
-                    className={classNames(CommonStyles_module.secondaryButton, styles.menuButton)}
+                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
                 >
                     Products
                 </Link>
                 <Link
                     to={ROUTES.about.to()}
-                    className={classNames(CommonStyles_module.secondaryButton, styles.menuButton)}
+                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
                 >
                     About
                 </Link>

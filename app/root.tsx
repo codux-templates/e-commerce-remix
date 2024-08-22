@@ -5,6 +5,8 @@ import {
     Scripts,
     ScrollRestoration,
     isRouteErrorResponse,
+    json,
+    useLoaderData,
     useRouteError,
 } from '@remix-run/react';
 import { useEffect } from 'react';
@@ -14,7 +16,17 @@ import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
 import { ROUTES } from '~/router/config';
 import '~/styles/index.scss';
 
+export async function loader() {
+    return json({
+        ENV: {
+            WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
+        },
+    });
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+    const data = useLoaderData<typeof loader>();
+
     return (
         <html lang="en">
             <head>
@@ -24,6 +36,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `window.ENV = ${JSON.stringify(data?.ENV)}`,
+                    }}
+                />
                 {children}
                 <ScrollRestoration />
                 <Scripts />

@@ -1,8 +1,8 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { HeroImage } from '~/components/hero-image/hero-image';
-import { ProductCard } from '~/components/product-card/product-card';
 import { Link, MetaFunction, useLoaderData, useNavigate } from '@remix-run/react';
 import { ecomApi } from '~/api/ecom-api';
+import { HeroImage } from '~/components/hero-image/hero-image';
+import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './index.module.scss';
@@ -26,10 +26,10 @@ export default function HomePage() {
                 topLabel="Best Prices"
                 bottomLabel="Get more for less on selected brands"
                 buttonLabel="Shop Now"
-                topLabelClassName={styles['top-label-highlighted']}
+                topLabelClassName={styles.topLabelHighlighted}
                 onButtonClick={() => navigate('/products')}
             />
-            <h1 className={styles['hero-title']}>Best Sellers</h1>
+            <h1 className={styles.heroTitle}>Best Sellers</h1>
             <p className={styles.bestSeller}>Shop our best seller items</p>
             <div className={styles.cardsLayout}>
                 {products?.map((product) =>

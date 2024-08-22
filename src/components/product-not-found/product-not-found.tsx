@@ -1,8 +1,8 @@
-import CommonStyles_module from '~/styles/common-styles.module.scss';
-import styles from './product-not-found.module.scss';
-import classNames from 'classnames';
 import { Link } from '@remix-run/react';
+import classNames from 'classnames';
 import { ROUTES } from '~/router/config';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './product-not-found.module.scss';
 
 export const ProductNotFound = () => {
     return (
@@ -10,7 +10,7 @@ export const ProductNotFound = () => {
             <div className={styles.message}>Product not found</div>
             <Link
                 to={ROUTES.products.to()}
-                className={classNames(CommonStyles_module.primaryButton, styles['overlay-button'])}
+                className={classNames(commonStyles.primaryButton, styles.overlayButton)}
             >
                 Back to shopping
             </Link>

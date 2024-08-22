@@ -1,7 +1,7 @@
-import { products } from '@wix/stores';
-import { cart } from '@wix/ecom';
-import { EcomAPI } from '~/api/ecom-api-context-provider';
 import { faker } from '@faker-js/faker';
+import { cart } from '@wix/ecom';
+import { products } from '@wix/stores';
+import { EcomAPI } from '~/api/ecom-api-context-provider';
 
 type Product = Exclude<Awaited<ReturnType<EcomAPI['getProduct']>>, undefined>;
 type Media = Exclude<Exclude<Product['media'], undefined>['mainMedia'], undefined>;
@@ -108,6 +108,11 @@ export function createCartItem(product: products.Product): Cart['lineItems'][0] 
         price: createPrice(),
         descriptionLines: [],
         url: '',
+        couponScopes: [],
+        savePaymentMethod: false,
+        fixedQuantity: false,
+        priceUndetermined: false,
+        customLineItem: false,
     };
 }
 
