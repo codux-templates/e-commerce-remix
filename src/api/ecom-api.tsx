@@ -43,7 +43,9 @@ function getWixClient() {
     });
 }
 
-function createEcomApi(wixClient: ReturnType<typeof getWixClient>) {
+export function getEcomApi() {
+    const wixClient = getWixClient();
+
     return {
         getAllProducts: async () => {
             return (await wixClient.products.queryProducts().find()).items;
@@ -116,5 +118,3 @@ function createEcomApi(wixClient: ReturnType<typeof getWixClient>) {
         },
     };
 }
-
-export const getEcomApi = () => createEcomApi(getWixClient());
