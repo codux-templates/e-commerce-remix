@@ -5,20 +5,13 @@ import styles from './drawer.module.scss';
 
 export interface DrawerProps {
     className?: string;
-    initialIsOpen?: boolean;
     onClose?: () => void;
     title: string;
     children?: React.ReactNode;
 }
 
-export const Drawer = ({
-    className,
-    onClose: onclose,
-    title,
-    children,
-    initialIsOpen,
-}: DrawerProps) => {
-    const [isOpen, setIsOpen] = useState(initialIsOpen ?? false);
+export const Drawer = ({ className, onClose: onclose, title, children }: DrawerProps) => {
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         setIsOpen(true);
