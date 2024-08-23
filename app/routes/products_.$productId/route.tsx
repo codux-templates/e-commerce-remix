@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { ecomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
+import { Price } from '~/components/price/price';
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
@@ -67,10 +68,12 @@ export default function ProductDetailsPage() {
             />
             <div className={styles.right}>
                 <div>{product.name}</div>
-                {product.priceData && (
-                    <div className={commonStyles.price}>{product.price?.formatted?.price}</div>
+                {product.priceData?.formatted?.price && (
+                    <Price
+                        fullPrice={product.priceData?.formatted?.price}
+                        discountedPrice={product.priceData?.formatted?.discountedPrice}
+                    />
                 )}
-
                 <div className={styles.addToCart}>
                     <label>
                         Quantity: <br />
