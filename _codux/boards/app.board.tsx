@@ -1,6 +1,6 @@
 import { createRemixStub } from '@remix-run/testing';
 import { createBoard } from '@wixc3/react-board';
-import App, { ErrorBoundary as rootErrorBoundary } from 'app/root';
+import App, { ErrorBoundary as rootErrorBoundary, loader as rootLoader } from 'app/root';
 import HomePage, { loader as homePageLoader } from 'app/routes/_index/route';
 import AboutPage from 'app/routes/about/route';
 import ProductsPage, { loader as productsPageLoader } from 'app/routes/products/route';
@@ -16,6 +16,7 @@ const AppWrapper = createRemixStub([
         Component: () => {
             return <App />;
         },
+        loader: rootLoader,
         ErrorBoundary: rootErrorBoundary,
         children: [
             {
