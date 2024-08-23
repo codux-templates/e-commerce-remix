@@ -3,7 +3,7 @@ import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix
 import classNames from 'classnames';
 import { useRef } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
-import { ecomApi } from '~/api/ecom-api';
+import { getEcomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
 import { Price } from '~/components/price/price';
 import { ProductImages } from '~/components/product-images/product-images';
@@ -21,7 +21,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!params.productId) {
         throw new Error('Missing product id');
     }
-    const product = await ecomApi.getProduct(params.productId);
+    const product = await getEcomApi().getProduct(params.productId);
     if (product === undefined) {
         throw json('Product Not Found', { status: 404 });
     }

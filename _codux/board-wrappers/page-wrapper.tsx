@@ -1,6 +1,6 @@
 import { isRouteErrorResponse, useNavigate, useRouteError } from '@remix-run/react';
 import { createRemixStub } from '@remix-run/testing';
-import App from 'app/root';
+import App, { loader as rootLoader } from 'app/root';
 import { type PropsWithChildren } from 'react';
 import { ROUTES } from '~/router/config';
 
@@ -21,6 +21,7 @@ export function PageWrapper(props: PageWrapperProps) {
         {
             Component: () => <App />,
             id: 'root',
+            loader: rootLoader,
             children: [
                 ...Object.values(ROUTES).map(({ path }) => ({
                     path,
