@@ -25,8 +25,6 @@ export async function loader() {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-    const data = useLoaderData<typeof loader>();
-
     return (
         <html lang="en">
             <head>
@@ -36,11 +34,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Links />
             </head>
             <body>
-                <script
-                    dangerouslySetInnerHTML={{
-                        __html: `window.ENV = ${JSON.stringify(data?.ENV)}`,
-                    }}
-                />
                 {children}
                 <ScrollRestoration />
                 <Scripts />
@@ -50,6 +43,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+    const data = useLoaderData<typeof loader>();
+
+    if (typeof window !== 'undefined' && typeof window.ENV === 'undefined') {
+        window.ENV = data.ENV;
+    }
+
     return (
         <EcomAPIContextProvider>
             <CartOpenContextProvider>

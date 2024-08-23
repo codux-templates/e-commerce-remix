@@ -1,6 +1,6 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
-import { ecomApi } from '~/api/ecom-api';
+import { getEcomApi } from '~/api/ecom-api';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
@@ -8,7 +8,7 @@ import { getUrlOriginWithPath } from '~/utils';
 import styles from './products.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const products = await ecomApi.getAllProducts();
+    const products = await getEcomApi().getAllProducts();
 
     return { products, canonicalUrl: getUrlOriginWithPath(request.url) };
 };

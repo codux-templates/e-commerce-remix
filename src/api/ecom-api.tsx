@@ -7,12 +7,24 @@ import { ROUTES } from '~/router/config';
 
 // this is the static ID of the stores app
 const WIX_STORES_APP_ID = '1380b703-ce81-ff05-f115-39571d94dfcd';
-const CLIENT_ID =
-    globalThis?.process?.env?.WIX_CLIENT_ID ||
-    globalThis?.window?.ENV?.WIX_CLIENT_ID ||
-    /* this is the Wix demo store id (it's not a secret). */
-    '0c9d1ef9-f496-4149-b246-75a2514b8c99';
 export const WIX_SESSION_TOKEN = 'wix_refreshToken';
+
+function getWixClientId() {
+    /**
+     * this file is used on both sides: client and server,
+     * so we are trying to read WIX_CLIENT_ID from process.env on server side
+     * or from window.ENV on client side. for client, the root loader is populating window.ENV
+     */
+    let clientId: string | undefined;
+    if (typeof window !== 'undefined') {
+        clientId = window.ENV?.WIX_CLIENT_ID;
+    } else {
+        clientId = process.env?.WIX_CLIENT_ID;
+    }
+
+    /* fallback to the Wix demo store id (it's not a secret). */
+    return clientId ?? '0c9d1ef9-f496-4149-b246-75a2514b8c99';
+}
 
 function getTokensClient() {
     const tokens = Cookies.get(WIX_SESSION_TOKEN);
@@ -27,13 +39,13 @@ function getWixClient() {
             redirects,
         },
         auth: OAuthStrategy({
-            clientId: CLIENT_ID,
+            clientId: getWixClientId(),
             tokens: getTokensClient(),
         }),
     });
 }
 
-function getEcomApi(wixClient: ReturnType<typeof getWixClient>) {
+function createEcomApi(wixClient: ReturnType<typeof getWixClient>) {
     return {
         getAllProducts: async () => {
             return (await wixClient.products.queryProducts().find()).items;
@@ -107,4 +119,4 @@ function getEcomApi(wixClient: ReturnType<typeof getWixClient>) {
     };
 }
 
-export const ecomApi = getEcomApi(getWixClient());
+export const getEcomApi = () => createEcomApi(getWixClient());
