@@ -1,5 +1,4 @@
 import Classnames from 'classnames';
-import { useEffect } from 'react';
 import { useCart, useCartTotals } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
@@ -10,20 +9,13 @@ import styles from './cart.module.scss';
 
 export interface CartProps {
     className?: string;
-    initialIsOpen?: boolean;
 }
 
-export const Cart = ({ className, initialIsOpen }: CartProps) => {
+export const Cart = ({ className }: CartProps) => {
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
     const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
-
-    useEffect(() => {
-        if (initialIsOpen !== undefined) {
-            setIsOpen(initialIsOpen);
-        }
-    }, [setIsOpen]);
 
     const ecomAPI = useEcomAPI();
 
@@ -38,39 +30,31 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
 
     return (
         <div className={className}>
-            <button onClick={() => setIsOpen(true)} className={commonStyles.secondaryButton}>
-                Cart
-            </button>
-            {isOpen ? (
-                <Drawer title="Cart" onClose={() => setIsOpen(false)} initialIsOpen={initialIsOpen}>
-                    {isEmpty ? (
-                        <div className={styles.emptyCart}>Cart is empty</div>
-                    ) : (
-                        <div className={styles.cart}>
-                            <div className={styles.items}>
-                                {cart?.lineItems?.map((item) => (
-                                    <CartItem key={item._id} cartItem={item} />
-                                ))}
-                            </div>
-                            <div className={styles.subtotalCheckout}>
-                                <label className={styles.subtotalLabel}>
-                                    <span>Subtotal:</span>
-                                    {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
-                                </label>
-                                <button
-                                    className={Classnames(
-                                        commonStyles.primaryButton,
-                                        styles.checkout
-                                    )}
-                                    onClick={checkout}
-                                >
-                                    Checkout
-                                </button>
-                            </div>
+            <Drawer title="Cart" onClose={() => setIsOpen(false)} isOpen={isOpen}>
+                {isEmpty ? (
+                    <div className={styles.emptyCart}>Cart is empty</div>
+                ) : (
+                    <div className={styles.cart}>
+                        <div className={styles.items}>
+                            {cart?.lineItems?.map((item) => (
+                                <CartItem key={item._id} cartItem={item} />
+                            ))}
                         </div>
-                    )}
-                </Drawer>
-            ) : null}
+                        <div className={styles.subtotalCheckout}>
+                            <label className={styles.subtotalLabel}>
+                                <span>Subtotal:</span>
+                                {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
+                            </label>
+                            <button
+                                className={Classnames(commonStyles.primaryButton, styles.checkout)}
+                                onClick={checkout}
+                            >
+                                Checkout
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </Drawer>
         </div>
     );
 };

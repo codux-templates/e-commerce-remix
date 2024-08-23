@@ -17,6 +17,7 @@ export const useCartTotals = () => {
 
     useEffect(() => {
         cartTotals.mutate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     return cartTotals;

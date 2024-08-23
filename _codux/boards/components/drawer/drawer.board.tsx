@@ -9,11 +9,10 @@ export default createBoard({
         return (
             <div>
                 <button onClick={() => setIsOpen(true)}>Toggle Drawer</button>
-                {isOpen && (
-                    <Drawer title="Title" onClose={() => setIsOpen(false)}>
-                        <div>this is content</div>
-                    </Drawer>
-                )}
+
+                <Drawer title="Title" onClose={() => setIsOpen(false)} isOpen={isOpen}>
+                    <div>this is a drawer inner content</div>
+                </Drawer>
             </div>
         );
     },
