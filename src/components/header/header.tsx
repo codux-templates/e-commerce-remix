@@ -1,8 +1,8 @@
 import { Link } from '@remix-run/react';
 import classNames from 'classnames';
-import { Cart } from '~/components/cart/cart';
 import { ROUTES } from '~/router/config';
 import commonStyles from '~/styles/common-styles.module.scss';
+import { useCartOpen } from '../cart/cart-open-context';
 import styles from './header.module.scss';
 
 export interface HeaderProps {
@@ -10,6 +10,8 @@ export interface HeaderProps {
 }
 
 export const Header = ({ className }: HeaderProps) => {
+    const { setIsOpen: setCartOpen } = useCartOpen();
+
     return (
         <div className={classNames(styles.root, className)}>
             <Link to={ROUTES.home.to()} className={styles.logo}>
@@ -34,7 +36,10 @@ export const Header = ({ className }: HeaderProps) => {
                 >
                     About
                 </Link>
-                <Cart className={styles.menuButton} />
+
+                <button onClick={() => setCartOpen(true)} className={commonStyles.secondaryButton}>
+                    Cart
+                </button>
             </div>
         </div>
     );
