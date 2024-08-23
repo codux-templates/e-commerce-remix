@@ -1,4 +1,4 @@
-import { Cart } from './ecom-api-context-provider';
+import { Cart } from '~/types';
 
 export function findItemIdInCart(
     cart: Cart,

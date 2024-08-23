@@ -43,7 +43,7 @@ function getWixClient() {
     });
 }
 
-export function getEcomApi() {
+function createApi() {
     const wixClient = getWixClient();
 
     return {
@@ -117,4 +117,15 @@ export function getEcomApi() {
             return { success: true, url: redirectSession?.fullUrl };
         },
     };
+}
+
+export type EcomAPI = ReturnType<typeof createApi>;
+
+let api: EcomAPI | undefined;
+export function getEcomApi() {
+    if (api === undefined) {
+        api = createApi();
+    }
+
+    return api;
 }

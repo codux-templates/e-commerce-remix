@@ -1,12 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { cart } from '@wix/ecom';
 import { products } from '@wix/stores';
-import { EcomAPI } from '~/api/ecom-api-context-provider';
-
-type Product = Exclude<Awaited<ReturnType<EcomAPI['getProduct']>>, undefined>;
-type Media = Exclude<Exclude<Product['media'], undefined>['mainMedia'], undefined>;
-type Cart = Awaited<ReturnType<EcomAPI['getCart']>>;
-type CartTotals = Exclude<Awaited<ReturnType<EcomAPI['getCartTotals']>>, undefined>;
+import type { EcomAPI } from '~/api/ecom-api';
+import type { Cart, CartTotals, Media, Product } from '~/types';
 
 export type FakeDataSettings = {
     numberOfCartItems?: number;

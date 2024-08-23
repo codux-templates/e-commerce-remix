@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
 import { SWRConfig } from 'swr';
-import { getEcomApi } from './ecom-api';
-
-export type EcomAPI = ReturnType<typeof getEcomApi>;
-export type Cart = Awaited<ReturnType<EcomAPI['getCart']>>;
+import { type EcomAPI, getEcomApi } from './ecom-api';
 
 export const EcomAPIContext = React.createContext<EcomAPI | null>(null);
 
