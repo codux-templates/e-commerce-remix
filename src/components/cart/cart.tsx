@@ -1,5 +1,4 @@
 import Classnames from 'classnames';
-import { useEffect } from 'react';
 import { useCart, useCartTotals } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
@@ -10,20 +9,13 @@ import styles from './cart.module.scss';
 
 export interface CartProps {
     className?: string;
-    initialIsOpen?: boolean;
 }
 
-export const Cart = ({ className, initialIsOpen }: CartProps) => {
+export const Cart = ({ className }: CartProps) => {
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
     const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
-
-    useEffect(() => {
-        if (initialIsOpen !== undefined) {
-            setIsOpen(initialIsOpen);
-        }
-    }, [initialIsOpen, setIsOpen]);
 
     const ecomAPI = useEcomAPI();
 
@@ -42,7 +34,7 @@ export const Cart = ({ className, initialIsOpen }: CartProps) => {
                 Cart
             </button>
             {isOpen ? (
-                <Drawer title="Cart" onClose={() => setIsOpen(false)} initialIsOpen={initialIsOpen}>
+                <Drawer title="Cart" onClose={() => setIsOpen(false)} initialIsOpen={isOpen}>
                     {isEmpty ? (
                         <div className={styles.emptyCart}>Cart is empty</div>
                     ) : (

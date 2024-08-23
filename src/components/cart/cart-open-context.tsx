@@ -13,8 +13,15 @@ export const useCartOpen = () => {
     return context;
 };
 
-export function CartOpenContextProvider({ children }: { children: React.ReactNode }) {
-    const [isOpen, setIsOpen] = useState(false);
+interface CartOpenContextProviderProps extends React.PropsWithChildren {
+    initialIsOpen?: boolean;
+}
+
+export function CartOpenContextProvider({
+    children,
+    initialIsOpen = false,
+}: CartOpenContextProviderProps) {
+    const [isOpen, setIsOpen] = useState(initialIsOpen);
 
     const providerValue = useMemo(() => ({ isOpen, setIsOpen }), [isOpen, setIsOpen]);
 

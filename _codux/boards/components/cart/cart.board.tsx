@@ -9,8 +9,8 @@ export default createBoard({
     Board: () => (
         <ComponentWrapper>
             <MockEcomAPIContextProvider>
-                <CartOpenContextProvider>
-                    <Cart initialIsOpen />
+                <CartOpenContextProvider initialIsOpen>
+                    <Cart />
                 </CartOpenContextProvider>
             </MockEcomAPIContextProvider>
         </ComponentWrapper>
