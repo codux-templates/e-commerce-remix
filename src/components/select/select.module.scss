@@ -1,0 +1,28 @@
+@import '@styles/theme.module.scss';
+
+.root {
+    position: relative;
+    display: inline-block;
+    border: solid 1px $black;
+    cursor: pointer;
+
+    select {
+        padding: 4px 8px;
+        width: 100%;
+    }
+}
+
+.root::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(calc(-50% + 3px));
+    width: 5px;
+    height: 5px;
+    pointer-events: none;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 5px;
+    border-top: solid 5px $black;
+}

@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
 import classNames from 'classnames';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
@@ -9,13 +9,10 @@ import { Price } from '~/components/price/price';
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
+import { ProductOption } from '~/components/product-option/product-option';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
-
-const OptionType = {
-    color: 'color',
-} as const;
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!params.productId) {
@@ -38,24 +35,15 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+
     async function addToCartHandler() {
         if (!product?._id) {
             return;
         }
         const quantity = parseInt(quantityInput.current?.value || '1', 10);
-        const options: Record<string, string> = {};
-        //we are selecting here the first option for each product
-        //most products in the default store do not have options.
-        //but, for those who do, we need to specify the option value when we add to cart.
-        product.productOptions?.forEach((option) => {
-            if (option.name && option.choices?.length && option.choices[0].value) {
-                options[option.name] =
-                    option.optionType === OptionType.color
-                        ? option.choices[0].description!
-                        : option.choices[0].value;
-            }
-        });
-        await addToCart({ id: product._id, quantity, options });
+
+        await addToCart({ id: product._id, quantity, options: selectedOptions });
         setIsOpen(true);
     }
 
@@ -74,6 +62,25 @@ export default function ProductDetailsPage() {
                         discountedPrice={product.priceData?.formatted?.discountedPrice}
                     />
                 )}
+
+                {product.productOptions?.map((option) =>
+                    option.name && option.choices ? (
+                        <ProductOption
+                            key={option.name}
+                            name={option.name}
+                            choices={option.choices}
+                            type={option.optionType}
+                            selectedValue={selectedOptions[option.name]}
+                            onChange={(value) =>
+                                setSelectedOptions((prev) => ({
+                                    ...prev,
+                                    [option.name!]: value,
+                                }))
+                            }
+                        />
+                    ) : undefined
+                )}
+
                 <div className={styles.addToCart}>
                     <label>
                         Quantity: <br />
