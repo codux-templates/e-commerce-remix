@@ -4,6 +4,7 @@ import CommonStyles_module from '~/styles/common-styles.module.scss';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
+import { OrderSummery } from '../../../src/components/order-summery/order-summery';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     return { canonicalUrl: getUrlOriginWithPath(request.url) };
@@ -21,6 +22,8 @@ export default function ThankYouPage() {
                     You will receive a confirmation email soon. Your order number: {orderId}
                 </p>
             </div>
+            <OrderSummery
+             />
             <Link to={ROUTES.products.to()}>
                 <button className={CommonStyles_module.primaryButton} type="button">
                     Continue Shopping
