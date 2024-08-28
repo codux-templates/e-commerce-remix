@@ -10,6 +10,10 @@
         padding: 4px 8px;
         width: 100%;
     }
+
+    &.error {
+        border-color: $error;
+    }
 }
 
 .root::after {

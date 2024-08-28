@@ -36,4 +36,12 @@
             border: solid 1px $grey;
         }
     }
+
+    &.colorChoiceError {
+        border-color: $error;
+    }
+}
+
+.error {
+    color: $error;
 }
