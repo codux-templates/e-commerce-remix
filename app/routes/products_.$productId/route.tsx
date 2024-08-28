@@ -31,6 +31,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();
+    const [submitClicked, setSubmitClicked] = useState(false);
 
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
@@ -41,8 +42,16 @@ export default function ProductDetailsPage() {
         if (!product?._id) {
             return;
         }
-        const quantity = parseInt(quantityInput.current?.value || '1', 10);
 
+        setSubmitClicked(true);
+        if (
+            product.productOptions &&
+            product.productOptions.some((c) => selectedOptions[c.name || ''] === undefined)
+        ) {
+            return;
+        }
+
+        const quantity = parseInt(quantityInput.current?.value || '1', 10);
         await addToCart({ id: product._id, quantity, options: selectedOptions });
         setIsOpen(true);
     }
@@ -66,6 +75,11 @@ export default function ProductDetailsPage() {
                 {product.productOptions?.map((option) => (
                     <ProductOption
                         key={option.name}
+                        error={
+                            submitClicked && selectedOptions[option.name ?? ''] === undefined
+                                ? `Select ${option.name}`
+                                : undefined
+                        }
                         option={option}
                         selectedValue={selectedOptions[option.name ?? '']}
                         onChange={(value) =>
