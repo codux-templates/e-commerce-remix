@@ -1,14 +1,14 @@
 import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { UnsafeRichText } from '../rich-text/rich-text';
-import styles from './product-info.module.scss';
+import styles from './product-additional-info.module.scss';
 
-export interface ProductInfoProps {
+export interface ProductAdditionalInfoProps {
     className?: string;
     productInfo?: products.AdditionalInfoSection[];
 }
 
-export const ProductInfo = ({ className, productInfo }: ProductInfoProps) => {
+export const ProductAdditionalInfo = ({ className, productInfo }: ProductAdditionalInfoProps) => {
     return (
         <div className={classNames(styles.root, className)}>
             {productInfo?.map((info, index) => (

@@ -11,16 +11,15 @@
     padding-bottom: 60px;
 }
 
-.left {
+.media {
     flex: 2;
 }
 
-.right {
-    padding-top: 20px;
+.productInfo {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 40px;
 }
 
 .productName {
@@ -28,30 +27,22 @@
 }
 
 .sku {
-    font-size: small;
+    font: $extra-small-text;
 }
 
 .description {
-    padding: 8px 0;
+    font: $extra-small-text;
+}
+
+.quantity {
+    & input {
+        margin-top: 13px;
+    }
 }
 
 .addToCartBtn {
     width: 140px;
     height: 40px;
-}
-
-.productInfo {
-    margin-top: 20px;
-}
-
-.quantity {
-    margin-top: 12px;
-}
-
-.addToCart {
-    display: flex;
-    align-items: end;
-    justify-content: space-between;
 }
 
 @media (width <= 450px) {
