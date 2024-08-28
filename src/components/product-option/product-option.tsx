@@ -17,7 +17,7 @@ export const ProductOption = ({
     onChange,
 }: ProductOptionProps) => {
     if (name === undefined || choices === undefined) {
-        return undefined;
+        return null;
     }
 
     const selectedChoice = choices.find(
