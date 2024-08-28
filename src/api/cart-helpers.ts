@@ -18,11 +18,11 @@ export function findItemIdInCart(
         if (!options || !catalogOptions) {
             return true;
         }
-        Object.keys(options).forEach((key) => {
-            if (options![key] !== catalogOptions[key]) {
+        for (const optionName of Object.keys(options)) {
+            if (options![optionName] !== catalogOptions[optionName]) {
                 return false;
             }
-        });
+        }
         return true;
     });
 }

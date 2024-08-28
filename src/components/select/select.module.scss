@@ -21,8 +21,9 @@
     width: 5px;
     height: 5px;
     pointer-events: none;
+    // border for select triangle
     border-style: solid;
     border-color: transparent;
     border-width: 5px;
-    border-top: solid 5px $black;
+    border-top: $black;
 }

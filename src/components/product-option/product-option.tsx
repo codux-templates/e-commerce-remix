@@ -4,22 +4,23 @@ import styles from './product-option.module.scss';
 import { Select } from '../select/select';
 
 export interface ProductOptionProps {
-    name: string;
-    choices: products.Choice[];
-    type: products.OptionType | undefined;
+    option: products.ProductOption;
     selectedValue: string | undefined;
     onChange: (value: string) => void;
 }
 
 export const ProductOption = ({
-    name,
-    type,
-    choices,
+    option: { name, optionType, choices },
     selectedValue,
     onChange,
 }: ProductOptionProps) => {
+    if (name === undefined || choices === undefined) {
+        return undefined;
+    }
+
     const selectedChoice = choices.find(
-        (c) => (type === products.OptionType.color ? c.description : c.value) === selectedValue
+        (c) =>
+            (optionType === products.OptionType.color ? c.description : c.value) === selectedValue
     );
 
     return (
@@ -29,10 +30,10 @@ export const ProductOption = ({
                 {selectedChoice?.description ? `: ${selectedChoice.description}` : undefined}
             </div>
 
-            {type === products.OptionType.color ? (
+            {optionType === products.OptionType.color ? (
                 <div className={styles.colorChoicesContainer}>
                     {choices.map((c) =>
-                        c.value ? (
+                        c.value && c.description ? (
                             <button
                                 key={c.value}
                                 className={classNames(styles.colorChoice, {
@@ -52,10 +53,12 @@ export const ProductOption = ({
                 </div>
             ) : (
                 <Select
-                    options={choices.map((c) => ({
-                        name: c.description!,
-                        value: c.value!,
-                    }))}
+                    options={choices
+                        .filter((c) => c.value && c.description)
+                        .map((c) => ({
+                            name: c.description!,
+                            value: c.value!,
+                        }))}
                     value={selectedValue}
                     placeholder={`Select ${name}`}
                     onChange={onChange}
