@@ -19,7 +19,7 @@ export function findItemIdInCart(
             return true;
         }
         for (const optionName of Object.keys(options)) {
-            if (options![optionName] !== catalogOptions[optionName]) {
+            if (options[optionName] !== catalogOptions[optionName]) {
                 return false;
             }
         }

@@ -1,7 +1,7 @@
 import { products } from '@wix/stores';
 import classNames from 'classnames';
-import styles from './product-option.module.scss';
 import { Select } from '../select/select';
+import styles from './product-option.module.scss';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
