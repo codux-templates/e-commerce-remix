@@ -94,6 +94,19 @@ export default function ProductDetailsPage() {
                         />
                     ) : undefined
                 )}
+                {product.productOptions?.map((option) => (
+                    <ProductOption
+                        key={option.name}
+                        option={option}
+                        selectedValue={selectedOptions[option.name ?? '']}
+                        onChange={(value) =>
+                            setSelectedOptions((prev) => ({
+                                ...prev,
+                                [option.name!]: value,
+                            }))
+                        }
+                    />
+                ))}
 
                 <div className={styles.addToCart}>
                     <label>
