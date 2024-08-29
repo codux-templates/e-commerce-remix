@@ -17,7 +17,7 @@ export interface SelectProps {
 export const Select = ({ options, value, onChange, placeholder, hasError }: SelectProps) => {
     return (
         <div className={classNames(styles.root, { [styles.error]: hasError })}>
-            <select defaultValue="" value={value} onChange={(e) => onChange(e.target.value)}>
+            <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}>
                 <option value="" disabled hidden>
                     {placeholder}
                 </option>

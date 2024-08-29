@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
@@ -10,6 +11,7 @@ import { ProductImages } from '~/components/product-images/product-images';
 import { ProductInfo } from '~/components/product-info/product-info';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import { ProductOption } from '~/components/product-option/product-option';
+import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
@@ -37,12 +39,7 @@ export default function ProductDetailsPage() {
     const quantityInput = useRef<HTMLInputElement>(null);
 
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string | null>>(
-        product.productOptions
-            ?.filter((o) => o.name)
-            .reduce<Record<string, string | null>>(
-                (acc, option) => ({ ...acc, [option.name!]: null }),
-                {}
-            ) ?? {}
+        getInitialSelectedOptions(product.productOptions)
     );
 
     async function addToCartHandler() {
@@ -205,3 +202,19 @@ export const links: LinksFunction = () => {
         },
     ];
 };
+
+function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
+    const result: Record<string, string | null> = {};
+    for (const option of productOptions ?? []) {
+        if (option.name) {
+            const initialChoice = getInitialChoice(option?.choices);
+            result[option.name] = getChoiceValue(option, initialChoice) ?? null;
+        }
+    }
+
+    return result;
+}
+
+function getInitialChoice(choices: products.Choice[] | undefined): products.Choice | undefined {
+    return choices?.length === 1 ? choices[0] : undefined;
+}
