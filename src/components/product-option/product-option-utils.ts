@@ -5,11 +5,11 @@ export function getChoiceValue(
     choice: products.Choice | undefined
 ): string | undefined {
     if (option !== undefined && choice !== undefined) {
-        if (option.optionType === products.OptionType.color && choice.description !== undefined) {
-            return choice.description;
-        }
-
-        return choice.value;
+        /**
+         * for color options, `description` field contains color value
+         * and `value` field contains hex color representation
+         */
+        return option.optionType === products.OptionType.color ? choice.description : choice.value;
     }
 
     return undefined;
