@@ -207,14 +207,10 @@ function getInitialSelectedOptions(productOptions: products.ProductOption[] | un
     const result: Record<string, string | null> = {};
     for (const option of productOptions ?? []) {
         if (option.name) {
-            const initialChoice = getInitialChoice(option?.choices);
+            const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
             result[option.name] = getChoiceValue(option, initialChoice) ?? null;
         }
     }
 
     return result;
-}
-
-function getInitialChoice(choices: products.Choice[] | undefined): products.Choice | undefined {
-    return choices?.length === 1 ? choices[0] : undefined;
 }
