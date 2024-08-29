@@ -38,7 +38,7 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | null>>(
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
         getInitialSelectedOptions(product.productOptions)
     );
 
@@ -48,7 +48,7 @@ export default function ProductDetailsPage() {
         }
 
         setAddToCartAttempted(true);
-        if (Object.values(selectedOptions).includes(null)) {
+        if (Object.values(selectedOptions).includes(undefined)) {
             return;
         }
 
@@ -81,12 +81,12 @@ export default function ProductDetailsPage() {
                     <ProductOption
                         key={option.name}
                         error={
-                            addToCartAttempted && selectedOptions[option.name!] === null
+                            addToCartAttempted && selectedOptions[option.name!] === undefined
                                 ? `Select ${option.name}`
                                 : undefined
                         }
                         option={option}
-                        selectedValue={selectedOptions[option.name!] ?? undefined}
+                        selectedValue={selectedOptions[option.name!]}
                         onChange={(value) =>
                             setSelectedOptions((prev) => ({
                                 ...prev,
@@ -204,11 +204,11 @@ export const links: LinksFunction = () => {
 };
 
 function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
-    const result: Record<string, string | null> = {};
+    const result: Record<string, string | undefined> = {};
     for (const option of productOptions ?? []) {
         if (option.name) {
             const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
-            result[option.name] = getChoiceValue(option, initialChoice) ?? null;
+            result[option.name] = getChoiceValue(option, initialChoice);
         }
     }
 
