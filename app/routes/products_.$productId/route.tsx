@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
@@ -11,6 +12,7 @@ import { ProductImages } from '~/components/product-images/product-images';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
+import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
@@ -32,28 +34,31 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();
-    const [submitClicked, setSubmitClicked] = useState(false);
+    const [addToCartAttempted, setAddToCartAttempted] = useState(false);
 
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
+        getInitialSelectedOptions(product.productOptions)
+    );
 
     async function addToCartHandler() {
         if (!product?._id) {
             return;
         }
 
-        setSubmitClicked(true);
-        if (
-            product.productOptions &&
-            product.productOptions.some((c) => selectedOptions[c.name || ''] === undefined)
-        ) {
+        setAddToCartAttempted(true);
+        if (Object.values(selectedOptions).includes(undefined)) {
             return;
         }
 
-        const quantity = parseInt(quantityInput.current?.value || '1', 10);
-        await addToCart({ id: product._id, quantity, options: selectedOptions });
+        const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
+        await addToCart({
+            id: product._id,
+            quantity,
+            options: selectedOptions as Record<string, string>,
+        });
         setIsOpen(true);
     }
 
@@ -89,12 +94,12 @@ export default function ProductDetailsPage() {
                     <ProductOption
                         key={option.name}
                         error={
-                            submitClicked && selectedOptions[option.name ?? ''] === undefined
+                            addToCartAttempted && selectedOptions[option.name!] === undefined
                                 ? `Select ${option.name}`
                                 : undefined
                         }
                         option={option}
-                        selectedValue={selectedOptions[option.name ?? '']}
+                        selectedValue={selectedOptions[option.name!]}
                         onChange={(value) =>
                             setSelectedOptions((prev) => ({
                                 ...prev,
@@ -109,6 +114,7 @@ export default function ProductDetailsPage() {
                         <div>Quantity:</div>
                         <input
                             ref={quantityInput}
+                            defaultValue={1}
                             className={classNames(commonStyles.numberInput, styles.quantity)}
                             type="number"
                             min={1}
@@ -210,3 +216,15 @@ export const links: LinksFunction = () => {
         },
     ];
 };
+
+function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
+    const result: Record<string, string | undefined> = {};
+    for (const option of productOptions ?? []) {
+        if (option.name) {
+            const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
+            result[option.name] = getChoiceValue(option, initialChoice);
+        }
+    }
+
+    return result;
+}

@@ -1,6 +1,7 @@
 import { products } from '@wix/stores';
-import classNames from 'classnames';
-import { Select } from '../select/select';
+import { ColorSelect } from '~/components/color-select/color-select';
+import { Select } from '~/components/select/select';
+import { getChoiceValue } from './product-option-utils';
 import styles from './product-option.module.scss';
 
 export interface ProductOptionProps {
@@ -10,20 +11,14 @@ export interface ProductOptionProps {
     onChange: (value: string) => void;
 }
 
-export const ProductOption = ({
-    option: { name, optionType, choices },
-    selectedValue,
-    error,
-    onChange,
-}: ProductOptionProps) => {
+export const ProductOption = ({ option, selectedValue, error, onChange }: ProductOptionProps) => {
+    const { name, optionType, choices } = option;
+
     if (name === undefined || choices === undefined) {
         return null;
     }
 
-    const selectedChoice = choices.find(
-        (c) =>
-            (optionType === products.OptionType.color ? c.description : c.value) === selectedValue
-    );
+    const selectedChoice = choices.find((c) => getChoiceValue(option, c) === selectedValue);
 
     return (
         <div className={styles.root}>
@@ -33,27 +28,17 @@ export const ProductOption = ({
             </div>
 
             {optionType === products.OptionType.color ? (
-                <div className={styles.colorChoicesContainer}>
-                    {choices.map((c) =>
-                        c.value && c.description ? (
-                            <button
-                                key={c.value}
-                                className={classNames(styles.colorChoice, {
-                                    [styles.selected]: selectedValue === c.description,
-                                    [styles.colorChoiceError]: error !== undefined,
-                                })}
-                                onClick={() => onChange(c.description!)}
-                            >
-                                <div
-                                    className={styles.value}
-                                    style={{
-                                        backgroundColor: c.value,
-                                    }}
-                                ></div>
-                            </button>
-                        ) : undefined
-                    )}
-                </div>
+                <ColorSelect
+                    hasError={error !== undefined}
+                    options={choices
+                        .filter((c) => c.value && c.description)
+                        .map((c) => ({
+                            name: c.description!,
+                            hexValue: c.value!,
+                        }))}
+                    onChange={onChange}
+                    selectedName={selectedValue}
+                />
             ) : (
                 <Select
                     hasError={error !== undefined}
