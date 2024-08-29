@@ -36,7 +36,14 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | null>>(
+        product.productOptions
+            ?.filter((o) => o.name)
+            .reduce<Record<string, string | null>>(
+                (acc, option) => ({ ...acc, [option.name!]: null }),
+                {}
+            ) ?? {}
+    );
 
     async function addToCartHandler() {
         if (!product?._id) {
@@ -44,15 +51,16 @@ export default function ProductDetailsPage() {
         }
 
         setAddToCartAttempted(true);
-        if (
-            product.productOptions &&
-            product.productOptions.some((c) => selectedOptions[c.name ?? ''] === undefined)
-        ) {
+        if (Object.values(selectedOptions).includes(null)) {
             return;
         }
 
         const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
-        await addToCart({ id: product._id, quantity, options: selectedOptions });
+        await addToCart({
+            id: product._id,
+            quantity,
+            options: selectedOptions as Record<string, string>,
+        });
         setIsOpen(true);
     }
 
@@ -76,12 +84,12 @@ export default function ProductDetailsPage() {
                     <ProductOption
                         key={option.name}
                         error={
-                            addToCartAttempted && selectedOptions[option.name ?? ''] === undefined
+                            addToCartAttempted && selectedOptions[option.name!] === null
                                 ? `Select ${option.name}`
                                 : undefined
                         }
                         option={option}
-                        selectedValue={selectedOptions[option.name ?? '']}
+                        selectedValue={selectedOptions[option.name!] ?? undefined}
                         onChange={(value) =>
                             setSelectedOptions((prev) => ({
                                 ...prev,
@@ -96,6 +104,7 @@ export default function ProductDetailsPage() {
                         Quantity: <br />
                         <input
                             ref={quantityInput}
+                            defaultValue={1}
                             className={classNames(commonStyles.numberInput, styles.quantity)}
                             type="number"
                             min={1}
