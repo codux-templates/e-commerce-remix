@@ -38,11 +38,11 @@ export const ProductOption = ({
                     options={choices
                         .filter((c) => c.value && c.description)
                         .map((c) => ({
-                            colorName: c.description!,
-                            color: c.value!,
+                            name: c.description!,
+                            hexValue: c.value!,
                         }))}
                     onChange={onChange}
-                    value={selectedValue}
+                    selectedName={selectedValue}
                 />
             ) : (
                 <Select

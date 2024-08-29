@@ -2,33 +2,33 @@ import classNames from 'classnames';
 import styles from './color-select.module.scss';
 
 export interface ColorSelectOption {
-    colorName: string;
-    color: string;
+    name: string;
+    hexValue: string;
 }
 
 export interface ColorSelectProps {
     options: ColorSelectOption[];
-    value?: string;
+    selectedName?: string;
     hasError: boolean;
-    onChange: (value: string) => void;
+    onChange: (name: string) => void;
 }
 
-export const ColorSelect = ({ options, value, onChange, hasError }: ColorSelectProps) => {
+export const ColorSelect = ({ options, selectedName, onChange, hasError }: ColorSelectProps) => {
     return (
         <div className={styles.root}>
             {options.map((o) => (
                 <button
-                    key={o.colorName}
+                    key={o.name}
                     className={classNames(styles.option, {
-                        [styles.selected]: value === o.colorName,
+                        [styles.selected]: selectedName === o.name,
                         [styles.hasError]: hasError,
                     })}
-                    onClick={() => onChange(o.colorName!)}
+                    onClick={() => onChange(o.name!)}
                 >
                     <div
                         className={styles.colorBox}
                         style={{
-                            backgroundColor: o.color,
+                            backgroundColor: o.hexValue,
                         }}
                     ></div>
                 </button>
