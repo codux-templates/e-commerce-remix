@@ -17,10 +17,16 @@ export interface SelectProps {
 export const Select = ({ options, value, onChange, placeholder, hasError }: SelectProps) => {
     return (
         <div className={classNames(styles.root, { [styles.error]: hasError })}>
-            <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}>
-                <option value="" disabled hidden>
-                    {placeholder}
-                </option>
+            <select
+                className={classNames({ [styles.placeholder]: value === undefined })}
+                value={value ?? ''}
+                onChange={(e) => onChange(e.target.value)}
+            >
+                {value === undefined ? (
+                    <option value="" disabled>
+                        {placeholder}
+                    </option>
+                ) : null}
 
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
