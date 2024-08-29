@@ -1,7 +1,7 @@
 import { products } from '@wix/stores';
-import classNames from 'classnames';
 import styles from './product-option.module.scss';
 import { Select } from '../select/select';
+import { ColorSelect } from '../color-select/color-select';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
@@ -33,27 +33,17 @@ export const ProductOption = ({
             </div>
 
             {optionType === products.OptionType.color ? (
-                <div className={styles.colorChoicesContainer}>
-                    {choices.map((c) =>
-                        c.value && c.description ? (
-                            <button
-                                key={c.value}
-                                className={classNames(styles.colorChoice, {
-                                    [styles.selected]: selectedValue === c.description,
-                                    [styles.colorChoiceError]: error !== undefined,
-                                })}
-                                onClick={() => onChange(c.description!)}
-                            >
-                                <div
-                                    className={styles.value}
-                                    style={{
-                                        backgroundColor: c.value,
-                                    }}
-                                ></div>
-                            </button>
-                        ) : undefined
-                    )}
-                </div>
+                <ColorSelect
+                    hasError={error !== undefined}
+                    options={choices
+                        .filter((c) => c.value && c.description)
+                        .map((c) => ({
+                            colorName: c.description!,
+                            color: c.value!,
+                        }))}
+                    onChange={onChange}
+                    value={selectedValue}
+                />
             ) : (
                 <Select
                     hasError={error !== undefined}
