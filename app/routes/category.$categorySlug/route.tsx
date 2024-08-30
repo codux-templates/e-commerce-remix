@@ -4,7 +4,7 @@ import { getEcomApi } from '~/api/ecom-api';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
-/** import commonStyles from '~/styles/common-styles.module.scss'; */
+import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './category.module.scss';
 
@@ -28,13 +28,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 };
 
 export default function CategoryProductsPage() {
-    const { categoryProducts, currentCategory /*, allCategories */ } =
-        useLoaderData<typeof loader>();
+    const { categoryProducts, currentCategory, allCategories } = useLoaderData<typeof loader>();
 
     return (
         <div className={styles.root}>
-            {/* uncomment this div if you want to allow filtering products by category */}
-            {/* <div className={styles.filters}>
+            <div className={styles.filters}>
                 <div className={styles.filterSection}>
                     <div className={styles.filterSectionName}>Browse by</div>
 
@@ -52,7 +50,7 @@ export default function CategoryProductsPage() {
                         )}
                     </div>
                 </div>
-            </div> */}
+            </div>
 
             <div className={styles.products}>
                 <h1 className={styles.title}>{currentCategory?.name}</h1>

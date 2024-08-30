@@ -28,6 +28,25 @@ This project is more than just an example - it's a starter. The main goal here i
 
 Now all you have to do is deploy your Remix app and manage your store through Wix!
 
+## Advanced features
+
+### Product categories
+
+You may categorize your products on a headless CMS back-office. Once product categories are added, they will appear on product category page in filter section.
+
+You may also want to add a link to a particular category directly to site header, in this case, please add this code snippet to a [header](./src/components/header/header.tsx) file:
+
+```
+    <Link
+        to={ROUTES.category.to('my-category')}
+        className={classNames(commonStyles.secondaryButton, styles.menuButton)}
+    >
+        Products
+    </Link>
+```
+
+and replace `my-category` with your existing category name.
+
 ## Using Test Data
 
 Most of our boards are wrapped in a context provider that returns mock data (using Faker) instead of fetching it from Wix Headless. We do this for a few reasons:

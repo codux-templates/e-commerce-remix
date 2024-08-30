@@ -31,14 +31,6 @@ export const Header = ({ className }: HeaderProps) => {
                     Products
                 </Link>
 
-                {/* uncomment this link and add your own product categories if you want to categorize them */}
-                {/* <Link
-                    to={ROUTES.category.to('furniture')}
-                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
-                >
-                    Furniture
-                </Link> */}
-
                 <Link
                     to={ROUTES.about.to()}
                     className={classNames(commonStyles.secondaryButton, styles.menuButton)}
