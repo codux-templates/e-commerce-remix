@@ -11,7 +11,7 @@ export const ROUTES = {
     home: { path: HOME, to: () => HOME },
     about: { path: ABOUT, to: () => ABOUT },
     category: {
-        path: PRODUCT,
+        path: CATEGORY,
         to: (slug?: string) => generatePath(CATEGORY, { categorySlug: slug ?? 'all-products' }),
     },
     thankYou: { path: THANK_YOU, to: () => THANK_YOU },

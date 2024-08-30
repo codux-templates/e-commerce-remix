@@ -27,7 +27,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     };
 };
 
-export default function CategoryProductsPage() {
+export default function ProductsCategoryPage() {
     const { categoryProducts, currentCategory, allCategories } = useLoaderData<typeof loader>();
 
     return (
