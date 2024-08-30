@@ -1,7 +1,7 @@
 import { currentCart } from '@wix/ecom';
 import { redirects } from '@wix/redirects';
 import { OAuthStrategy, createClient } from '@wix/sdk';
-import { products } from '@wix/stores';
+import { products, collections } from '@wix/stores';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
 
@@ -35,6 +35,7 @@ function getWixClient() {
             products,
             currentCart,
             redirects,
+            collections,
         },
         auth: OAuthStrategy({
             clientId: getWixClientId(),
@@ -47,8 +48,15 @@ function createApi() {
     const wixClient = getWixClient();
 
     return {
-        getAllProducts: async () => {
-            return (await wixClient.products.queryProducts().find()).items;
+        getProductsByCategory: async (categorySlug: string) => {
+            const getCategoryResult = await wixClient.collections.getCollectionBySlug(categorySlug);
+
+            return (
+                await wixClient.products
+                    .queryProducts()
+                    .hasSome('collectionIds', [getCategoryResult.collection?._id])
+                    .find()
+            ).items;
         },
         getPromotedProducts: async () => {
             return (await wixClient.products.queryProducts().limit(4).find()).items;
@@ -115,6 +123,12 @@ function createApi() {
                 },
             });
             return { success: true, url: redirectSession?.fullUrl };
+        },
+        getAllCategories: async () => {
+            return (await wixClient.collections.queryCollections().find()).items;
+        },
+        getCategoryBySlug: async (slug: string) => {
+            return (await wixClient.collections.getCollectionBySlug(slug)).collection;
         },
     };
 }

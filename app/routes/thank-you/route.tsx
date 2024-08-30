@@ -21,7 +21,7 @@ export default function ThankYouPage() {
                     You will receive a confirmation email soon. Your order number: {orderId}
                 </p>
             </div>
-            <Link to={ROUTES.products.to()}>
+            <Link to={ROUTES.category.to()}>
                 <button className={commonStyles.primaryButton} type="button">
                     Continue Shopping
                 </button>

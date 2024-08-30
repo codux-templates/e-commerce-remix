@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { cart } from '@wix/ecom';
 import { products } from '@wix/stores';
 import type { EcomAPI } from '~/api/ecom-api';
-import type { Cart, CartTotals, Media, Product } from '~/types';
+import type { Cart, CartTotals, Category, Media, Product } from '~/types';
 
 export type FakeDataSettings = {
     numberOfCartItems?: number;
@@ -18,7 +18,7 @@ export type FakeDataSettings = {
 
 export function createProducts(
     settings?: FakeDataSettings
-): Awaited<ReturnType<EcomAPI['getAllProducts']>> {
+): Awaited<ReturnType<EcomAPI['getProductsByCategory']>> {
     return Array.from(new Array(settings?.numberOfProducts || 10)).map((id) =>
         createProduct(id, settings)
     );
@@ -135,5 +135,16 @@ export function getCartTotals(): CartTotals {
         priceSummary: {
             subtotal: createPrice(),
         },
+    };
+}
+
+export function createCategory(settings?: FakeDataSettings): Category {
+    return {
+        _id: faker.string.uuid(),
+        numberOfProducts: 1,
+        name: faker.lorem.words(),
+        description: faker.lorem.words(settings?.numberOfWordsInTitle || 2),
+        media: { items: [] },
+        slug: faker.lorem.words(),
     };
 }

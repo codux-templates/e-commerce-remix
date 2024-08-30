@@ -1,13 +1,13 @@
 import { createBoard } from '@wixc3/react-board';
 import { PageWrapper } from '_codux/board-wrappers/page-wrapper';
-import ProductsPage, { loader } from 'app/routes/products/route';
+import CategoryProductsPage, { loader } from 'app/routes/category.$categorySlug/route';
 import { sleep } from '../utils';
 
 export default createBoard({
-    name: 'Page - Products',
+    name: 'Page - Category Products',
     Board: () => (
         <PageWrapper pageRouteParams={{ loader }}>
-            <ProductsPage />
+            <CategoryProductsPage />
         </PageWrapper>
     ),
     tags: ['Page'],
