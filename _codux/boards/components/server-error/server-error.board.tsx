@@ -1,7 +1,7 @@
 import { createBoard } from '@wixc3/react-board';
-import { ReactComponent as ServererrorSvg } from '../../../src/assets/svg/servererror.svg';
+import { ReactComponent as ServererrorSvg } from '../../../../src/assets/svg/servererror.svg';
 import styles from './server-error.board.module.scss';
-import commonStylesStyles from '../../../src/styles/common-styles.module.scss';
+import commonStylesStyles from '../../../../src/styles/common-styles.module.scss';
 import Classnames from 'classnames';
 
 export default createBoard({
