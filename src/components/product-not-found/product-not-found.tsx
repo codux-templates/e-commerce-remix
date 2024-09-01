@@ -11,15 +11,9 @@ export const ProductNotFound = () => {
             <div className={commonStylesStyles.dividedStrip}>
                 <div className={commonStylesStyles.section}>
                     <div className={styles.div1}>
-                        <h1 className={commonStylesStyles.p2}>Product not found.</h1>
-                        <p className={Classnames(styles.p, styles.h4)}></p>
+                        <h1 className={styles.paragraph}>Product not found.</h1>
                         <Link to={ROUTES.products.to()}>
-                            <button
-                                className={Classnames(
-                                    styles.secondaryButtonVar1,
-                                    commonStylesStyles.linkButton
-                                )}
-                            >
+                            <button className={commonStylesStyles.linkButton}>
                                 Click here to see other products
                             </button>
                         </Link>

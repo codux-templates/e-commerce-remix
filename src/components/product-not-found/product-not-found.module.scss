@@ -50,8 +50,9 @@
 
 .div1 {
     margin-bottom: 4px;
-    display: grid;
+    display: flex;
     justify-items: start;
+    flex-direction: column;
 }
 
 .secondaryButtonVar1 {
@@ -119,4 +120,12 @@
     background-clip: border-box;
     background-color: #981f1f;
     border: 1px solid $charcoal-black;
+}
+.paragraph {
+    font-family: $my-prettyfont;
+    font-size: 24px;
+    font-weight: 300;
+    font-style: italic;
+    text-align: center;
+    justify-self: center;
 }
