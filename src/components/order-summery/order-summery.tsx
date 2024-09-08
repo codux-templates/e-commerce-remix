@@ -11,18 +11,24 @@ export interface OrderSummeryProps {
  * To create custom component templates, see https://help.codux.com/kb/en/article/kb16522
  */
 
-export const OrderSummery = ({
-    className,
-}: OrderSummeryProps) => {
+export const OrderSummery = ({ className }: OrderSummeryProps) => {
     return (
         <div>
             <div className={cx(className, styles.itemInformationContainer)}>
-                <ProductCard
-                    name='Shel 50" Class LED 4K UHD Smart TV'
-                    price={{ formatted: { price: '$85' } }}
-                    style={{ width: '300px' }}
-                    imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
-                />
+                <div className={styles.div2}>
+                    <ProductCard
+                        name='Shel 50" Class LED 4K UHD Smart TV'
+                        price={{ formatted: { price: '$85' } }}
+                        style={{ width: '100%', display: 'flex' }}
+                        imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
+                    />
+                    <div className={styles.paymentContainer}>
+                        <div className={styles.spacing}>
+                            <span className={styles.span1}>QTy:1</span>
+                            <span className={styles.span2}>$85.00</span>
+                        </div>
+                    </div>
+                </div>
                 <hr className={styles.divider} />
                 <div className={styles.div1}>
                     <div className={styles.emptyDiv} />
