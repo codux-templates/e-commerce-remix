@@ -75,7 +75,7 @@ export const OrderSummery = ({ className }: OrderSummeryProps) => {
                 <div className={styles.payment}>
                     <h6 className={styles.header3}>Payment method</h6>
                     <ul className={styles.ul3}>
-                        <li>Coffee</li>
+                        <li>351171736893243</li>
                     </ul>
                 </div>
             </div>
