@@ -5,6 +5,7 @@ import type { EcomAPI } from '~/api/ecom-api';
 import { EcomAPIContext } from '~/api/ecom-api-context-provider';
 import {
     createCart,
+    createOrder,
     createProduct,
     createProducts,
     getCartTotals,
@@ -55,6 +56,9 @@ function getEcomApi(settings?: Settings): EcomAPI {
         checkout: () => {
             alert('Checkout');
             return Promise.resolve({ success: true, url: '' });
+        },
+        getOrder: (id: string) => {
+            return Promise.resolve(createOrder(id));
         },
     };
 

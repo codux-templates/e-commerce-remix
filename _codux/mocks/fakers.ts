@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { cart } from '@wix/ecom';
+import { cart, orders } from '@wix/ecom';
 import { products } from '@wix/stores';
 import type { EcomAPI } from '~/api/ecom-api';
 import type { Cart, CartTotals, Media, Product } from '~/types';
@@ -135,5 +135,46 @@ export function getCartTotals(): CartTotals {
         priceSummary: {
             subtotal: createPrice(),
         },
+    };
+}
+
+export function createOrder(id: string): orders.Order & orders.OrderNonNullableFields {
+    return {
+        _id: id,
+        number: `${faker.number.int({ min: 1000, max: 9999 })}`,
+        appliedDiscounts: [],
+        attributionSource: orders.AttributionSource.UNSPECIFIED,
+        activities: [],
+        additionalFees: [],
+        customFields: [],
+        fulfillmentStatus: orders.FulfillmentStatus.NOT_FULFILLED,
+        isInternalOrderCreate: false,
+        status: orders.OrderStatus.APPROVED,
+        paymentStatus: orders.PaymentStatus.NOT_PAID,
+        taxIncludedInPrices: false,
+        weightUnit: orders.WeightUnit.UNSPECIFIED_WEIGHT_UNIT,
+        lineItems: [
+            {
+                _id: faker.string.uuid(),
+                quantity: 1,
+                paymentOption: orders.PaymentOptionType.FULL_PAYMENT_OFFLINE,
+                productName: {
+                    original: faker.lorem.paragraph(),
+                    translated: faker.lorem.paragraph(),
+                },
+                image: 'https://static.wixstatic.com/media/22e53e_efc1552d8050407f82ea158302d0debd~mv2.jpg/v1/fit/w_200,h_200,q_90/file.jpg',
+                locations: [],
+                descriptionLines: [
+                    {
+                        color: 'Black',
+                        name: {
+                            translated: 'Color',
+                            original: 'Color',
+                        },
+                        lineType: orders.DescriptionLineType.COLOR,
+                    },
+                ],
+            },
+        ],
     };
 }

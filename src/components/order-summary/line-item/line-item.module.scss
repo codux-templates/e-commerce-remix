@@ -1,0 +1,29 @@
+@import '@styles/theme.module.scss';
+
+.root {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.productInfo {
+    display: flex;
+    gap: 12px;
+}
+
+.productName {
+    font: $medium-title;
+    color: $black;
+    margin-bottom: 12px;
+}
+
+.productDetails {
+    display: flex;
+    flex-direction: column;
+    color: $grey;
+}
+
+.orderDetails {
+    display: flex;
+    justify-content: space-around;
+}

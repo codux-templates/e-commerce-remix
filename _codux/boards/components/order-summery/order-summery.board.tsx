@@ -1,8 +1,8 @@
 import { createBoard } from '@wixc3/react-board';
-import { OrderSummery } from '../../../../src/components/order-summery/order-summery';
+import { OrderSummary } from '../../../../src/components/order-summary/order-summary';
 
 export default createBoard({
-    name: 'OrderSummery',
-    Board: () => <OrderSummery />,
+    name: 'OrderSummary',
+    Board: () => <OrderSummary order={{}} />,
     isSnippet: true,
 });
