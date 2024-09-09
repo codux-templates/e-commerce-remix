@@ -6,6 +6,7 @@ import { EcomAPIContext } from '~/api/ecom-api-context-provider';
 import {
     createCart,
     createOrder,
+    createCategory,
     createProduct,
     createProducts,
     getCartTotals,
@@ -19,7 +20,7 @@ function getEcomApi(settings?: Settings): EcomAPI {
     const products = createProducts(settings);
 
     const api: EcomAPI = {
-        getAllProducts: async () => {
+        getProductsByCategory: async () => {
             return Promise.resolve(products);
         },
         getProduct: async (id: string | undefined) => {
@@ -56,6 +57,12 @@ function getEcomApi(settings?: Settings): EcomAPI {
         checkout: () => {
             alert('Checkout');
             return Promise.resolve({ success: true, url: '' });
+        },
+        getAllCategories: () => {
+            return Promise.resolve([createCategory(settings)]);
+        },
+        getCategoryBySlug: () => {
+            return Promise.resolve(createCategory(settings));
         },
         getOrder: (id: string) => {
             return Promise.resolve(createOrder(id));

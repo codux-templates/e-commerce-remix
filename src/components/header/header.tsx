@@ -25,11 +25,12 @@ export const Header = ({ className }: HeaderProps) => {
                     Home
                 </Link>
                 <Link
-                    to={ROUTES.products.to()}
+                    to={ROUTES.category.to()}
                     className={classNames(commonStyles.secondaryButton, styles.menuButton)}
                 >
                     Products
                 </Link>
+
                 <Link
                     to={ROUTES.about.to()}
                     className={classNames(commonStyles.secondaryButton, styles.menuButton)}

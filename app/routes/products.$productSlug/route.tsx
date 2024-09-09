@@ -18,10 +18,11 @@ import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-    if (!params.productId) {
-        throw new Error('Missing product id');
+    const productSlug = params.productSlug;
+    if (!productSlug) {
+        throw new Error('Missing product slug');
     }
-    const product = await getEcomApi().getProduct(params.productId);
+    const product = await getEcomApi().getProduct(productSlug);
     if (product === undefined) {
         throw json('Product Not Found', { status: 404 });
     }

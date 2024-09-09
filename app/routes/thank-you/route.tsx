@@ -40,7 +40,7 @@ export default function ThankYouPage() {
 
             {order ? <OrderSummary order={order} /> : null}
 
-            <Link to={ROUTES.products.to()}>
+            <Link to={ROUTES.category.to()}>
                 <button className={commonStyles.primaryButton} type="button">
                     Continue Shopping
                 </button>

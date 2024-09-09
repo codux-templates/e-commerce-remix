@@ -9,7 +9,7 @@ export const ProductNotFound = () => {
         <div className={styles.root}>
             <div className={styles.message}>Product not found</div>
             <Link
-                to={ROUTES.products.to()}
+                to={ROUTES.category.to()}
                 className={classNames(commonStyles.primaryButton, styles.overlayButton)}
             >
                 Back to shopping

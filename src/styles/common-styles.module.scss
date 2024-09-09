@@ -42,7 +42,6 @@
     display: flex;
     align-items: center;
     font: $small-text;
-    border: 1px solid transparent;
     cursor: pointer;
     padding-right: 22px;
     padding-left: 22px;
@@ -53,6 +52,20 @@
         background-color: $white;
         border: 1px solid black;
         border-radius: 35px;
+    }
+}
+
+.linkButton {
+    height: 42px;
+    display: flex;
+    align-items: center;
+    font: $small-text;
+    cursor: pointer;
+    z-index: 1;
+
+    &:hover {
+        color: $grey;
+        text-decoration: underline;
     }
 }
 

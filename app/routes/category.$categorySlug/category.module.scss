@@ -2,13 +2,39 @@
 
 .root {
     padding-top: 20px;
+    display: flex;
+
+    padding-top: 50px;
+    padding-bottom: 60px;
+}
+
+.filters {
+    padding-top: 30px;
+    padding-left: 50px;
+}
+
+.filterSection {
+    width: 150px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filterSectionName {
+    text-transform: uppercase;
+    user-select: none;
+    padding-bottom: 10px;
+    border-bottom: solid 1px $grey;
+}
+
+.products {
+    flex: 1;
 }
 
 .title {
     font: $large-paragraph;
     text-align: center;
-    margin-top: 50px;
-    margin-bottom: 60px;
 }
 
 .gallery {
