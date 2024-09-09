@@ -1,6 +1,6 @@
-import { ErrorComponent } from '~/components/error-component/error-component';
 import { createBoard } from '@wixc3/react-board';
 import ComponentWrapper from '_codux/board-wrappers/component-wrapper';
+import { ErrorComponent } from '~/components/error-component/error-component';
 
 export default createBoard({
     name: 'ErrorComponent',

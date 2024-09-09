@@ -35,5 +35,10 @@
       "~/*": "./src/*"
     }
   },
-  "svgLoader": "both"
+  "svgLoader": "both",
+  "previewConfiguration": {
+    "environmentVariables": {
+      "WIX_CLIENT_ID": "0c9d1ef9-f496-4149-b246-75a2514b8c99"
+    }
+  }
 }

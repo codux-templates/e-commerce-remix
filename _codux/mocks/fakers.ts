@@ -1,12 +1,8 @@
-import { products } from '@wix/stores';
-import { cart } from '@wix/ecom';
-import { EcomAPI } from '~/api/ecom-api-context-provider';
 import { faker } from '@faker-js/faker';
-
-type Product = Exclude<Awaited<ReturnType<EcomAPI['getProduct']>>, undefined>;
-type Media = Exclude<Exclude<Product['media'], undefined>['mainMedia'], undefined>;
-type Cart = Awaited<ReturnType<EcomAPI['getCart']>>;
-type CartTotals = Exclude<Awaited<ReturnType<EcomAPI['getCartTotals']>>, undefined>;
+import { cart } from '@wix/ecom';
+import { products } from '@wix/stores';
+import type { EcomAPI } from '~/api/ecom-api';
+import type { Cart, CartTotals, Media, Product } from '~/types';
 
 export type FakeDataSettings = {
     numberOfCartItems?: number;
@@ -108,6 +104,11 @@ export function createCartItem(product: products.Product): Cart['lineItems'][0] 
         price: createPrice(),
         descriptionLines: [],
         url: '',
+        couponScopes: [],
+        savePaymentMethod: false,
+        fixedQuantity: false,
+        priceUndetermined: false,
+        customLineItem: false,
     };
 }
 

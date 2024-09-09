@@ -1,6 +1,6 @@
 @import './theme.module.scss';
 
-.intro-button {
+.introButton {
     text-align: center;
     font: $small-text;
     background-color: $snow-white;
@@ -64,11 +64,6 @@
     width: 60px;
     padding-right: 10px;
     font: $extra-small-text;
-}
-
-.price {
-    font-weight: 700;
-    margin-top: 2px;
 }
 
 .loading {

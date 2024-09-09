@@ -1,54 +1,50 @@
 import { ChevronRightIcon } from '@radix-ui/react-icons';
+import classnames from 'classnames';
+import { useEffect } from 'react';
 import styles from './drawer.module.scss';
-import cx from 'classnames';
-import { useEffect, useState } from 'react';
 
 export interface DrawerProps {
     className?: string;
-    initialIsOpen?: boolean;
-    onClose?: () => void;
+    onClose: () => void;
     title: string;
     children?: React.ReactNode;
+    isOpen: boolean;
 }
 
-export const Drawer = ({
-    className,
-    onClose: onclose,
-    title,
-    children,
-    initialIsOpen,
-}: DrawerProps) => {
-    const [isOpen, setIsOpen] = useState(initialIsOpen ?? false);
-
+export const Drawer = ({ className, onClose, title, isOpen, children }: DrawerProps) => {
     useEffect(() => {
-        setIsOpen(true);
-        const scrollBarWidth = window.innerWidth - document.body.clientWidth;
-        if (scrollBarWidth > 0) {
-            document.body.style.paddingRight = `${scrollBarWidth}px`;
-        }
-        document.body.style.overflow = 'hidden';
-    }, []);
-
-    function handleClose() {
-        setIsOpen(false);
-        setTimeout(() => {
-            onclose && onclose();
+        if (isOpen) {
+            const scrollBarWidth = window.innerWidth - document.body.clientWidth;
+            if (scrollBarWidth > 0) {
+                document.body.style.paddingRight = `${scrollBarWidth}px`;
+            }
+            document.body.style.overflow = 'hidden';
+        } else {
             document.body.style.paddingRight = `0px`;
             document.body.style.overflow = 'auto';
-        }, 300);
-    }
+        }
+    }, [isOpen]);
 
     return (
-        <div onClick={handleClose} className={styles.background}>
+        <div
+            onClick={onClose}
+            onKeyDown={onClose}
+            role="button"
+            tabIndex={0}
+            className={classnames(styles.background, { [styles.open]: isOpen })}
+        >
             <div
-                className={cx(styles.drawer, className, { [styles.open]: isOpen })}
+                className={classnames(styles.drawer, className, { [styles.open]: isOpen })}
                 onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+                role="button"
+                tabIndex={-1}
             >
                 <div className={styles.header}>
                     <h3>{title}</h3>
                     <ChevronRightIcon
                         className={styles.arrowIcon}
-                        onClick={handleClose}
+                        onClick={onClose}
                         height={35}
                         width={35}
                     />

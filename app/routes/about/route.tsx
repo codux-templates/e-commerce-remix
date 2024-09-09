@@ -1,5 +1,5 @@
-import { LoaderFunctionArgs } from 'react-router-dom';
 import { LinksFunction, MetaFunction } from '@remix-run/node';
+import { LoaderFunctionArgs } from 'react-router-dom';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './about.module.scss';
 

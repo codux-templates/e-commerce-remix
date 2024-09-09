@@ -1,7 +1,7 @@
 import { createBoard } from '@wixc3/react-board';
-import { CartItem } from '~/components/cart/cart-item/cart-item';
-import { mockCartItem } from '_codux/mocks/cart-item';
 import ComponentWrapper from '_codux/board-wrappers/component-wrapper';
+import { mockCartItem } from '_codux/mocks/cart-item';
+import { CartItem } from '~/components/cart/cart-item/cart-item';
 
 export default createBoard({
     name: 'Cart Item',

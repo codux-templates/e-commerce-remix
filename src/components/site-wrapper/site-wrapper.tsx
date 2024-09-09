@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import styles from './site-wrapper.module.scss';
+import { Cart } from '~/components/cart/cart';
 import { Header } from '~/components/header/header';
 import { Footer } from '~/components/site-footer/site-footer';
+import styles from './site-wrapper.module.scss';
 
 export interface SiteWrapperProps {
     className?: string;
@@ -16,6 +17,7 @@ export const SiteWrapper = ({ className, children }: SiteWrapperProps) => {
     return (
         <div className={classNames(styles.root, className)}>
             <Header />
+            <Cart />
             <div className={styles.content}>{children}</div>
             <Footer />
         </div>

@@ -1,14 +1,15 @@
+import { faker } from '@faker-js/faker';
 import React, { FC, useMemo, useState } from 'react';
+import { SWRConfig } from 'swr';
+import type { EcomAPI } from '~/api/ecom-api';
+import { EcomAPIContext } from '~/api/ecom-api-context-provider';
 import {
-    createProducts,
-    createProduct,
     createCart,
+    createProduct,
+    createProducts,
     getCartTotals,
     FakeDataSettings as Settings,
 } from './fakers';
-import { EcomAPI, EcomAPIContext } from '~/api/ecom-api-context-provider';
-import { faker } from '@faker-js/faker';
-import { SWRConfig } from 'swr';
 
 export type FakeDataSettings = Settings;
 

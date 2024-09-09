@@ -1,16 +1,19 @@
-import ComponentWrapper from '_codux/board-wrappers/component-wrapper';
-import { Cart } from '~/components/cart/cart';
 import { createBoard } from '@wixc3/react-board';
-import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
+import ComponentWrapper from '_codux/board-wrappers/component-wrapper';
+import { sleep } from '_codux/boards/utils';
 import { MockEcomAPIContextProvider } from '_codux/mocks/mock-ecom-api-context-provider';
+import { Cart } from '~/components/cart/cart';
+import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
+import { CartOpener } from './cart-opener';
 
 export default createBoard({
     name: 'Cart',
     Board: () => (
         <ComponentWrapper>
             <MockEcomAPIContextProvider>
-                <CartOpenContextProvider>
-                    <Cart initialIsOpen />
+                <CartOpenContextProvider initialIsOpen>
+                    <CartOpener />
+                    <Cart />
                 </CartOpenContextProvider>
             </MockEcomAPIContextProvider>
         </ComponentWrapper>
@@ -20,4 +23,5 @@ export default createBoard({
     environmentProps: {
         windowWidth: 350,
     },
+    readyToSnapshot: () => sleep(10),
 });

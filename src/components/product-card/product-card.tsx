@@ -1,8 +1,8 @@
-import classNames from 'classnames';
-import styles from './product-card.module.scss';
 import { products } from '@wix/stores';
-import CommonStyles_module from '~/styles/common-styles.module.scss';
+import classNames from 'classnames';
 import noImage from '~/assets/img/noImage/[160_200]_noImage.svg';
+import { Price } from '../price/price';
+import styles from './product-card.module.scss';
 
 export type GalleryCardProps = {
     name: string;
@@ -27,8 +27,11 @@ export const ProductCard = ({
             )}
             <div className={styles.cardContent}>
                 <p className={styles.description}>{name}</p>
-                {price?.formatted && (
-                    <p className={CommonStyles_module.price}>{price.formatted.price}</p>
+                {price?.formatted?.price && (
+                    <Price
+                        fullPrice={price?.formatted?.price}
+                        discountedPrice={price?.formatted?.discountedPrice}
+                    />
                 )}
             </div>
         </div>

@@ -5,6 +5,8 @@ import {
     Scripts,
     ScrollRestoration,
     isRouteErrorResponse,
+    json,
+    useLoaderData,
     useRouteError,
 } from '@remix-run/react';
 import { useEffect } from 'react';
@@ -13,6 +15,14 @@ import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
 import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
 import { ROUTES } from '~/router/config';
 import '~/styles/index.scss';
+
+export async function loader() {
+    return json({
+        ENV: {
+            WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
+        },
+    });
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
@@ -33,6 +43,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+    const data = useLoaderData<typeof loader>();
+
+    if (typeof window !== 'undefined' && typeof window.ENV === 'undefined') {
+        window.ENV = data.ENV;
+    }
+
     return (
         <EcomAPIContextProvider>
             <CartOpenContextProvider>

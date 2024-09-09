@@ -1,0 +1,15 @@
+@import '@styles/theme.module.scss';
+
+.root {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.title {
+    text-transform: uppercase;
+}
+
+.error {
+    color: $error;
+}

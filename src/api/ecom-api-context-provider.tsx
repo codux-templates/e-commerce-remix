@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
 import { SWRConfig } from 'swr';
-import { ecomApi } from './ecom-api';
-
-export type EcomAPI = typeof ecomApi;
-export type Cart = Awaited<ReturnType<EcomAPI['getCart']>>;
+import { type EcomAPI, getEcomApi } from './ecom-api';
 
 export const EcomAPIContext = React.createContext<EcomAPI | null>(null);
 
@@ -26,7 +23,7 @@ export const EcomAPIContextProvider: FC<React.PropsWithChildren> = ({ children }
                 keepPreviousData: true,
             }}
         >
-            <EcomAPIContext.Provider value={ecomApi}>{children}</EcomAPIContext.Provider>
+            <EcomAPIContext.Provider value={getEcomApi()}>{children}</EcomAPIContext.Provider>
         </SWRConfig>
     );
 };

@@ -1,11 +1,12 @@
-import classNames from 'classnames';
-import styles from './cart-item.module.scss';
-import { cart } from '@wix/ecom';
-import { ChangeEvent } from 'react';
-import commonStyles from '~/styles/common-styles.module.scss';
-import { getImageHttpUrl } from '~/api/wix-image';
-import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { cart } from '@wix/ecom';
+import classNames from 'classnames';
+import { ChangeEvent } from 'react';
+import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
+import { getImageHttpUrl } from '~/api/wix-image';
+import { Price } from '~/components/price/price';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './cart-item.module.scss';
 
 export interface CartItemProps {
     className?: string;
@@ -34,12 +35,15 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
         <div className={classNames(styles.root, { [styles.divider]: !isLast }, className)}>
             <img src={imageUrl} alt={name || ''} className={styles.image} />
             <div className={styles.infoContainer}>
-                <div className={styles['item-line']}>
+                <div className={styles.itemLine}>
                     <div>
                         <h4 className={styles.description}>{name}</h4>
-                        <span className={commonStyles.price}>
-                            {cartItem.price?.formattedConvertedAmount}
-                        </span>
+                        {cartItem.fullPrice?.formattedConvertedAmount && (
+                            <Price
+                                fullPrice={cartItem.fullPrice?.formattedConvertedAmount}
+                                discountedPrice={cartItem.price?.formattedConvertedAmount}
+                            />
+                        )}
                     </div>
                     <button
                         onClick={() => removeItem(cartItem._id!)}

@@ -3,11 +3,14 @@
 .background {
     position: fixed;
     top: 0px;
-    bottom: 0px;
     right: 0px;
-    left: 0px;
+    bottom: 0;
     background-color: rgba(148, 148, 148, 0.5);
     z-index: 999;
+
+    &.open {
+        left: 0;
+    }
 }
 .drawer {
     right: -480px;
@@ -17,6 +20,7 @@
     position: absolute;
     display: flex;
     flex-direction: column;
+
     &.open {
         right: 0;
     }

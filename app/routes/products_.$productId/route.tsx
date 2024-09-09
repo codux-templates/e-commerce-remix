@@ -1,26 +1,27 @@
-import { useRef } from 'react';
-import classNames from 'classnames';
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import commonStyles from '~/styles/common-styles.module.scss';
-import { ProductImages } from '~/components/product-images/product-images';
-import { ProductInfo } from '~/components/product-info/product-info';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ecomApi } from '~/api/ecom-api';
+import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import { products } from '@wix/stores';
+import classNames from 'classnames';
+import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
-import { isRouteErrorResponse, useLoaderData, useRouteError, json } from '@remix-run/react';
+import { getEcomApi } from '~/api/ecom-api';
+import { useCartOpen } from '~/components/cart/cart-open-context';
+import { Price } from '~/components/price/price';
+import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
+import { ProductImages } from '~/components/product-images/product-images';
 import { ProductNotFound } from '~/components/product-not-found/product-not-found';
+import { ProductOption } from '~/components/product-option/product-option';
+import { UnsafeRichText } from '~/components/rich-text/rich-text';
+import { getChoiceValue } from '~/components/product-option/product-option-utils';
+import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
-
-const OptionType = {
-    color: 'color',
-} as const;
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!params.productId) {
         throw new Error('Missing product id');
     }
-    const product = await ecomApi.getProduct(params.productId);
+    const product = await getEcomApi().getProduct(params.productId);
     if (product === undefined) {
         throw json('Product Not Found', { status: 404 });
     }
@@ -33,28 +34,31 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();
+    const [addToCartAttempted, setAddToCartAttempted] = useState(false);
 
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
+
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
+        getInitialSelectedOptions(product.productOptions)
+    );
 
     async function addToCartHandler() {
         if (!product?._id) {
             return;
         }
-        const quantity = parseInt(quantityInput.current?.value || '1', 10);
-        const options: Record<string, string> = {};
-        //we are selecting here the first option for each product
-        //most products in the default store do not have options.
-        //but, for those who do, we need to specify the option value when we add to cart.
-        product.productOptions?.forEach((option) => {
-            if (option.name && option.choices?.length && option.choices[0].value) {
-                options[option.name] =
-                    option.optionType === OptionType.color
-                        ? option.choices[0].description!
-                        : option.choices[0].value;
-            }
+
+        setAddToCartAttempted(true);
+        if (Object.values(selectedOptions).includes(undefined)) {
+            return;
+        }
+
+        const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
+        await addToCart({
+            id: product._id,
+            quantity,
+            options: selectedOptions as Record<string, string>,
         });
-        await addToCart({ id: product._id, quantity, options });
         setIsOpen(true);
     }
 
@@ -63,25 +67,63 @@ export default function ProductDetailsPage() {
             <ProductImages
                 mainImage={product.media?.mainMedia}
                 images={product.media?.items}
-                className={styles.left}
+                className={styles.media}
             />
-            <div className={styles.right}>
-                <div>{product.name}</div>
-                {product.priceData && (
-                    <div className={commonStyles.price}>{product.price?.formatted?.price}</div>
+            <div className={styles.productInfo}>
+                <div>
+                    <div className={styles.productName}>{product.name}</div>
+                    {product.sku !== undefined && (
+                        <div className={styles.sku}>SKU: {product.sku}</div>
+                    )}
+                    {product.priceData?.formatted?.price && (
+                        <Price
+                            fullPrice={product.priceData?.formatted?.price}
+                            discountedPrice={product.priceData?.formatted?.discountedPrice}
+                        />
+                    )}
+                </div>
+
+                {product.description && (
+                    /** use unsafe component for description, because it comes from e-commerce site back-office */
+                    <UnsafeRichText className={styles.description}>
+                        {product.description}
+                    </UnsafeRichText>
                 )}
 
-                <div className={styles.addToCart}>
+                {product.productOptions?.map((option) => (
+                    <ProductOption
+                        key={option.name}
+                        error={
+                            addToCartAttempted && selectedOptions[option.name!] === undefined
+                                ? `Select ${option.name}`
+                                : undefined
+                        }
+                        option={option}
+                        selectedValue={selectedOptions[option.name!]}
+                        onChange={(value) =>
+                            setSelectedOptions((prev) => ({
+                                ...prev,
+                                [option.name!]: value,
+                            }))
+                        }
+                    />
+                ))}
+
+                <div className={styles.quantity}>
                     <label>
-                        Quantity: <br />
+                        <div>Quantity:</div>
                         <input
                             ref={quantityInput}
+                            defaultValue={1}
                             className={classNames(commonStyles.numberInput, styles.quantity)}
                             type="number"
                             min={1}
                             placeholder="1"
                         />
                     </label>
+                </div>
+
+                <div>
                     <button
                         onClick={addToCartHandler}
                         className={classNames(commonStyles.primaryButton, styles.addToCartBtn)}
@@ -89,10 +131,8 @@ export default function ProductDetailsPage() {
                         Add to Cart
                     </button>
                 </div>
-                <ProductInfo
-                    className={styles.productInfo}
-                    productInfo={product.additionalInfoSections}
-                />
+
+                <ProductAdditionalInfo productInfo={product.additionalInfoSections} />
             </div>
         </div>
     );
@@ -176,3 +216,15 @@ export const links: LinksFunction = () => {
         },
     ];
 };
+
+function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
+    const result: Record<string, string | undefined> = {};
+    for (const option of productOptions ?? []) {
+        if (option.name) {
+            const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
+            result[option.name] = getChoiceValue(option, initialChoice);
+        }
+    }
+
+    return result;
+}
