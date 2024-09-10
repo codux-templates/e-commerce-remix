@@ -17,13 +17,13 @@ export default function ThankYouPage() {
     const [search] = useSearchParams();
     const orderId = search.get('orderId');
 
-    const [order, setOrder] = useState<orders.Order>();
+    const [order, setOrder] = useState<orders.Order & orders.OrderNonNullableFields>();
 
     const api = getEcomApi();
 
     useEffect(() => {
         if (orderId) {
-            api.getOrder(orderId).then((o) => setOrder(o));
+            api.getOrder(orderId).then((order) => setOrder(order));
         }
     }, [api, orderId]);
 

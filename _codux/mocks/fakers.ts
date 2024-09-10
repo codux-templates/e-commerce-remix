@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { cart, orders } from '@wix/ecom';
-import { products } from '@wix/stores';
+import { products, collections } from '@wix/stores';
 import type { EcomAPI } from '~/api/ecom-api';
-import type { Cart, CartTotals, Category, Media, Product } from '~/types';
 
 export type FakeDataSettings = {
     numberOfCartItems?: number;
@@ -24,7 +23,7 @@ export function createProducts(
     );
 }
 
-export function createProduct(id?: string, settings?: FakeDataSettings): Product {
+export function createProduct(id?: string, settings?: FakeDataSettings): products.Product {
     const numOfImages = faker.number.int({ min: 2, max: 4 });
     const images = Array.from(new Array(numOfImages)).map(() => createImage());
     const mainImage = images[faker.number.int({ min: 0, max: numOfImages - 1 })];
@@ -67,7 +66,7 @@ export function createProduct(id?: string, settings?: FakeDataSettings): Product
     };
 }
 
-function createImage(): Media {
+function createImage(): products.MediaItem {
     const image = faker.image.dataUri();
 
     return {
@@ -80,7 +79,7 @@ function createImage(): Media {
     };
 }
 
-export function createCart(products: products.Product[]): Cart {
+export function createCart(products: products.Product[]): cart.Cart & cart.CartNonNullableFields {
     return {
         _id: faker.string.uuid(),
         currency: '$',
@@ -91,7 +90,9 @@ export function createCart(products: products.Product[]): Cart {
     };
 }
 
-export function createCartItem(product: products.Product): Cart['lineItems'][0] {
+export function createCartItem(
+    product: products.Product
+): cart.LineItem & cart.CartNonNullableFields['lineItems'][0] {
     return {
         _id: faker.string.uuid(),
         productName: {
@@ -124,7 +125,8 @@ function createPrice() {
     };
 }
 
-export function getCartTotals(): CartTotals {
+export function getCartTotals(): cart.EstimateTotalsResponse &
+    cart.EstimateTotalsResponseNonNullableFields {
     return {
         currency: '$',
         additionalFees: [],
@@ -138,7 +140,9 @@ export function getCartTotals(): CartTotals {
     };
 }
 
-export function createCategory(settings?: FakeDataSettings): Category {
+export function createCategory(
+    settings?: FakeDataSettings
+): collections.Collection & collections.CollectionNonNullableFields {
     return {
         _id: faker.string.uuid(),
         numberOfProducts: 1,

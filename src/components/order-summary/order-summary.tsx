@@ -4,7 +4,7 @@ import { LineItem } from './line-item/line-item';
 import styles from './order-summary.module.scss';
 
 export interface OrderSummaryProps {
-    order: orders.Order;
+    order: orders.Order & orders.OrderNonNullableFields;
 }
 
 export const OrderSummary = ({ order }: OrderSummaryProps) => {
@@ -36,7 +36,7 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
         <div className={styles.root}>
             <div className={cx(styles.section, styles.lineItemsSection)}>
                 <div className={styles.lineItems}>
-                    {lineItems?.map((lineItem) => (
+                    {lineItems.map((lineItem) => (
                         <LineItem key={lineItem._id} item={lineItem} />
                     ))}
                 </div>

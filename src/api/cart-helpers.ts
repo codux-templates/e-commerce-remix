@@ -1,7 +1,7 @@
-import { Cart } from '~/types';
+import { cart } from '@wix/ecom';
 
 export function findItemIdInCart(
-    cart: Cart,
+    cart: cart.Cart & cart.CartNonNullableFields,
     catalogItemId: string,
     options?: Record<string, string>
 ) {
