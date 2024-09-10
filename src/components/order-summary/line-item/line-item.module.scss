@@ -40,10 +40,16 @@
 
 .quantity {
     flex-grow: 2;
-    text-align: center;
+
+    @media (width >= 1024px) {
+        text-align: center;
+    }
 }
 
 .subtotal {
     flex-grow: 1;
-    text-align: right;
+
+    @media (width >= 1024px) {
+        text-align: right;
+    }
 }

@@ -42,7 +42,7 @@ export const LineItem = ({ item }: LineItemProps) => {
 
             <div className={styles.orderDetails}>
                 <div className={styles.quantity}>QTy: {item.quantity}</div>
-                <div className={styles.subTotal}>{item.totalPriceBeforeTax?.formattedAmount}</div>
+                <div className={styles.subtotal}>{item.totalPriceBeforeTax?.formattedAmount}</div>
             </div>
         </div>
     );
