@@ -27,7 +27,7 @@ export default function HomePage() {
                 bottomLabel="Get more for less on selected brands"
                 buttonLabel="Shop Now"
                 topLabelClassName={styles.topLabelHighlighted}
-                onButtonClick={() => navigate('/products')}
+                onButtonClick={() => navigate(ROUTES.category.to())}
             />
             <h1 className={styles.heroTitle}>Best Sellers</h1>
             <p className={styles.bestSeller}>Shop our best seller items</p>
