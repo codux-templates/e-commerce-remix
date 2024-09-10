@@ -15,7 +15,7 @@ export interface OrderSummaryProps {
 export const OrderSummary = ({ order }: OrderSummaryProps) => {
     return (
         <div className={styles.root}>
-            <div className={cx(styles.section)}>
+            <div className={cx(styles.section, styles.lineItemsSection)}>
                 <div className={styles.lineItems}>
                     {order.lineItems?.map((i) => (
                         <LineItem key={i._id} item={i} />
@@ -25,8 +25,6 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
                 <hr className={styles.divider} />
 
                 <div className={styles.priceDetailsWrapper}>
-                    <div />
-
                     <div className={styles.priceDetails}>
                         <div className={styles.priceItems}>
                             <div>Subtotal</div>

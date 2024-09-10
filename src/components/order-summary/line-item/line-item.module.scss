@@ -2,8 +2,11 @@
 
 .root {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 12px;
+
+    @media (width >= 1024px) {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 .productInfo {
@@ -26,4 +29,10 @@
 .orderDetails {
     display: flex;
     justify-content: space-around;
+
+    @media (width < 1024px) {
+        flex-direction: column;
+        margin-left: 212px;
+        gap: 12px;
+    }
 }
