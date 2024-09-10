@@ -33,12 +33,11 @@ export default function ThankYouPage() {
                 <h1 className={styles.title}>Thank You!</h1>
                 <div className={styles.paragraph}>
                     <div>You will receive a confirmation email soon.</div>
-                    <br />
-                    {order ? <div>Your order number: {order.number}</div> : null}
+                    {order && <div>Your order number: {order.number}</div>}
                 </div>
             </div>
 
-            {order ? <OrderSummary order={order} /> : null}
+            {order && <OrderSummary order={order} />}
 
             <Link to={ROUTES.category.to()}>
                 <button className={commonStyles.primaryButton} type="button">

@@ -14,9 +14,12 @@
 }
 
 .paragraph {
-    margin-bottom: 24px;
     font: $medium-title;
     text-align: center;
+
+    div:first-child {
+        margin-bottom: 24px;
+    }
 }
 
 .text {

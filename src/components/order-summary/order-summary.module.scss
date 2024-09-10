@@ -3,6 +3,10 @@
 .root {
     display: grid;
     gap: 48px;
+
+    @media (width < 1024px) {
+        padding: 24px;
+    }
 }
 
 .section {
@@ -31,10 +35,33 @@
     margin-bottom: 20px;
 }
 
-.priceDetailsWrapper {
+.summaryWrapper {
+    display: grid;
+
     @media (width >= 1024px) {
-        margin-left: 50%;
+        grid-template-columns: 1fr 1fr;
     }
+}
+
+.buyerNoteSeparator {
+    @media (width >= 1024px) {
+        display: none;
+    }
+}
+
+.noteWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.noteTitle {
+    font: $small-title;
+    color: $charcoal-black;
+}
+
+.noteValue {
+    color: $grey;
 }
 
 .priceDetails {

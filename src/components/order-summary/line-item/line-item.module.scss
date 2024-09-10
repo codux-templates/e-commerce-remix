@@ -27,12 +27,23 @@
 }
 
 .orderDetails {
+    margin-top: 3px;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 
     @media (width < 1024px) {
         flex-direction: column;
         margin-left: 212px;
         gap: 12px;
     }
+}
+
+.quantity {
+    flex-grow: 2;
+    text-align: center;
+}
+
+.subtotal {
+    flex-grow: 1;
+    text-align: right;
 }
