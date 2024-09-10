@@ -82,6 +82,7 @@ export const mockOrder: orders.Order & orders.OrderNonNullableFields = {
         contactDetails: {
             firstName: 'John',
             lastName: 'Doe',
+            phone: '+123 456 78 90',
         },
         address: {
             country: 'USA',
@@ -97,6 +98,7 @@ export const mockOrder: orders.Order & orders.OrderNonNullableFields = {
                 contactDetails: {
                     firstName: 'John',
                     lastName: 'Doe',
+                    phone: '+123 456 78 90',
                 },
                 address: {
                     country: 'USA',
