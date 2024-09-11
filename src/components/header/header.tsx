@@ -1,7 +1,6 @@
-import { Link } from '@remix-run/react';
+import { NavLink } from '@remix-run/react';
 import classNames from 'classnames';
 import { ROUTES } from '~/router/config';
-import commonStyles from '~/styles/common-styles.module.scss';
 import { useCartOpen } from '../cart/cart-open-context';
 import styles from './header.module.scss';
 
@@ -14,31 +13,40 @@ export const Header = ({ className }: HeaderProps) => {
 
     return (
         <div className={classNames(styles.root, className)}>
-            <Link to={ROUTES.home.to()} className={styles.logo}>
+            <NavLink to={ROUTES.home.to()} className={styles.logo}>
                 LOGO
-            </Link>
+            </NavLink>
             <div className={styles.menu}>
-                <Link
+                <NavLink
                     to={ROUTES.home.to()}
-                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
+                    className={({ isActive }) =>
+                        classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })
+                    }
                 >
                     Home
-                </Link>
-                <Link
+                </NavLink>
+                <NavLink
                     to={ROUTES.category.to()}
-                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
+                    className={({ isActive }) =>
+                        classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })
+                    }
                 >
                     Products
-                </Link>
+                </NavLink>
 
-                <Link
+                <NavLink
                     to={ROUTES.about.to()}
-                    className={classNames(commonStyles.secondaryButton, styles.menuButton)}
+                    className={({ isActive }) =>
+                        classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })
+                    }
                 >
                     About
-                </Link>
+                </NavLink>
 
-                <button onClick={() => setCartOpen(true)} className={commonStyles.secondaryButton}>
+                <button
+                    onClick={() => setCartOpen(true)}
+                    className={classNames(styles.menuButton, styles.cartButton)}
+                >
                     Cart
                 </button>
             </div>

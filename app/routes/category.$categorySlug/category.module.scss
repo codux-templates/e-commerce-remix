@@ -54,6 +54,10 @@
     height: 100%;
 }
 
+.activeCategory {
+    font-weight: bold;
+}
+
 @media (1400px < width) {
     .gallery {
         grid-template-columns: 1fr 1fr 1fr 1fr;

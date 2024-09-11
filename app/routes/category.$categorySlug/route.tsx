@@ -1,5 +1,6 @@
+import classNames from 'classnames';
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
+import { NavLink, useLoaderData } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
@@ -39,13 +40,17 @@ export default function ProductsCategoryPage() {
                     <div>
                         {allCategories.map((category) =>
                             category.slug ? (
-                                <Link
+                                <NavLink
                                     key={category._id}
                                     to={ROUTES.category.to(category.slug)}
-                                    className={commonStyles.linkButton}
+                                    className={({ isActive }) =>
+                                        classNames(commonStyles.linkButton, {
+                                            [styles.activeCategory]: isActive,
+                                        })
+                                    }
                                 >
                                     {category.name}
-                                </Link>
+                                </NavLink>
                             ) : null
                         )}
                     </div>
@@ -59,7 +64,7 @@ export default function ProductsCategoryPage() {
                         (item) =>
                             item.slug &&
                             item.name && (
-                                <Link to={ROUTES.product.to(item.slug)} key={item.slug}>
+                                <NavLink to={ROUTES.product.to(item.slug)} key={item.slug}>
                                     <ProductCard
                                         imageUrl={getImageHttpUrl(
                                             item.media?.items?.at(0)?.image?.url,
@@ -69,7 +74,7 @@ export default function ProductsCategoryPage() {
                                         price={item.priceData ?? undefined}
                                         className={styles.productCard}
                                     />
-                                </Link>
+                                </NavLink>
                             )
                     )}
                 </div>

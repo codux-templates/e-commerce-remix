@@ -19,6 +19,14 @@
     padding-left: 22px;
 }
 
+.menuButton:hover, .activeMenuItem {
+    font-weight: bold;
+}
+
+.cartButton {
+    cursor: pointer;
+}
+
 .logo {
     font: 700 18px/1.5 $my-prettyfont;
     height: fit-content;
