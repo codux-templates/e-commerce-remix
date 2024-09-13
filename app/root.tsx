@@ -7,6 +7,7 @@ import {
     json,
     useLoaderData,
     useNavigate,
+    useRouteError,
 } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
 import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
@@ -61,6 +62,8 @@ export function ErrorBoundary() {
         typeof window !== 'undefined' ? window.location.href : undefined
     );
 
+    const error = useRouteError();
+
     useEffect(() => {
         const interval = setInterval(() => {
             if (window.location.href !== locationRef.current) {
@@ -78,8 +81,8 @@ export function ErrorBoundary() {
     return (
         <ContentWrapper>
             <ErrorComponent
-                title="Unknown error"
-                message="Oops, something went wrong"
+                title="Oops, something went wrong"
+                message={toError(error).message}
                 actionButtonText="Back to shopping"
                 onActionButtonClick={() => navigate(ROUTES.category.to())}
             />
@@ -95,4 +98,27 @@ function ContentWrapper({ children }: React.PropsWithChildren) {
             </CartOpenContextProvider>
         </EcomAPIContextProvider>
     );
+}
+
+function toError(value: unknown): Error {
+    if (value instanceof Error) {
+        return value;
+    }
+
+    if (typeof value === 'undefined') {
+        return new Error();
+    }
+
+    let errorMessage = String(value);
+    if (typeof value === 'object' && value !== null) {
+        if ('message' in value) {
+            errorMessage = String(value.message);
+        }
+
+        if ('data' in value) {
+            errorMessage = String(value.data);
+        }
+    }
+
+    return new Error(errorMessage);
 }
