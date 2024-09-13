@@ -3,7 +3,7 @@
 .root {
     display: flex;
     flex-direction: row;
-    background-color: $snow-white;
+    background-color: var(--snow-white);
     column-gap: 80px;
     justify-content: center;
     align-content: center;

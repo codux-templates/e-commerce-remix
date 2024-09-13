@@ -3,36 +3,36 @@
 .introButton {
     text-align: center;
     font: $small-text;
-    background-color: $snow-white;
+    background-color: var(--snow-white);
     padding: 10px;
     width: 160px;
-    color: $charcoal-black;
+    color: var(--charcoal-black);
     border-radius: 30px;
     margin-top: 20px;
     cursor: pointer;
     &:hover {
         background-color: #b6c1f0;
-        color: $black;
+        color: var(--black);
     }
 }
 
 .primaryButton {
-    background-color: $charcoal-black;
+    background-color: var(--charcoal-black);
     display: flex;
     align-items: center;
     font: $small-text;
-    color: $snow-white;
+    color: var(--snow-white);
     border-radius: 35px;
     height: 42px;
     padding-left: 22px;
     padding-right: 22px;
-    border: 1px solid $charcoal-black;
+    border: 1px solid var(--charcoal-black);
     z-index: 1;
 
     &:hover {
-        background-color: $white;
-        border: 1px solid $charcoal-black;
-        color: $charcoal-black;
+        background-color: var(--white);
+        border: 1px solid var(--charcoal-black);
+        color: var(--charcoal-black);
         cursor: pointer;
     }
 }
@@ -49,7 +49,7 @@
     z-index: 1;
 
     &:hover {
-        background-color: $white;
+        background-color: var(--white);
         border: 1px solid black;
         border-radius: 35px;
     }
@@ -64,13 +64,13 @@
     z-index: 1;
 
     &:hover {
-        color: $grey;
+        color: var(--grey);
         text-decoration: underline;
     }
 }
 
 .numberInput {
-    border: 1px solid $black;
+    border: 1px solid var(--black);
     border-radius: 5px;
     padding-left: 10px;
     height: 25px;

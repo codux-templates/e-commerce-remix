@@ -10,7 +10,7 @@
     height: 20px;
     width: 20px;
     transition: padding 100ms;
-    border: solid 1px $grey;
+    border: solid 1px var(--grey);
 
     & .colorBox {
         width: 100%;
@@ -19,15 +19,15 @@
 
     &:hover,
     &.selected {
-        border-color: $charcoal-black;
+        border-color: var(--charcoal-black);
         padding: 2px;
 
         & .colorBox {
-            border: solid 1px $grey;
+            border: solid 1px var(--grey);
         }
     }
 
     &.hasError {
-        border-color: $error;
+        border-color: var(--error);
     }
 }

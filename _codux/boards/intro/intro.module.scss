@@ -5,7 +5,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: $white;
+    background-color: var(--white);
     border-radius: 10px;
     display: grid;
     justify-content: center;
@@ -14,22 +14,22 @@
 
 .myStyle {
     font: $medium-paragraph;
-    color: $snow-white;
+    color: var(--snow-white);
     padding: 40px 100px;
     text-align: center;
     margin-bottom: 8px;
-    background-color: $charcoal-black;
+    background-color: var(--charcoal-black);
     text-wrap: pretty;
     letter-spacing: 10px;
     border-radius: 20px 20px 0 0;
 }
 
 .myParagraph {
-    color: $snow-white;
+    color: var(--snow-white);
     padding: 70px 120px;
     text-align: center;
     font: $medium-paragraph;
-    background-color: $charcoal-black;
+    background-color: var(--charcoal-black);
     text-wrap: pretty;
     display: flex;
     flex-direction: column;
@@ -43,14 +43,16 @@
         width: 100vw;
         margin-top: unset;
     }
-    
-    .myStyle, .myParagraph {
+
+    .myStyle,
+    .myParagraph {
         padding: 50px 40px;
     }
 }
 
 @media (width <= $mobile-width) {
-    .myStyle, .myParagraph {
+    .myStyle,
+    .myParagraph {
         font-size: 20px;
     }
 }

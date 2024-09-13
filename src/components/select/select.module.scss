@@ -3,7 +3,7 @@
 .root {
     position: relative;
     display: inline-block;
-    border: solid 1px $black;
+    border: solid 1px var(--black);
     cursor: pointer;
 
     select {
@@ -12,7 +12,7 @@
     }
 
     &.error {
-        border-color: $error;
+        border-color: var(--error);
     }
 }
 
@@ -29,9 +29,9 @@
     border-style: solid;
     border-color: transparent;
     border-width: 5px;
-    border-top-color: $black;
+    border-top-color: var(--black);
 }
 
 .placeholder {
-    color: $grey;
+    color: var(--grey);
 }

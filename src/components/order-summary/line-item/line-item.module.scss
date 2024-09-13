@@ -16,14 +16,14 @@
 
 .productName {
     font: $medium-title;
-    color: $black;
+    color: var(--black);
     margin-bottom: 12px;
 }
 
 .productDetails {
     display: flex;
     flex-direction: column;
-    color: $grey;
+    color: var(--grey);
 }
 
 .orderDetails {

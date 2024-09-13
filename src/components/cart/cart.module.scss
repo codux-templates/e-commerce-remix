@@ -1,7 +1,7 @@
 @import '@styles/theme.module.scss';
 
 .cart {
-    background-color: $white;
+    background-color: var(--white);
     padding: 15px 10px 10px;
     display: flex;
     flex-direction: column;

@@ -11,7 +11,7 @@
 
 .section {
     padding: 24px;
-    border: solid 1px $grey;
+    border: solid 1px var(--grey);
 }
 
 .lineItemsSection {
@@ -30,7 +30,7 @@
 }
 
 .divider {
-    border-top: solid 1px $grey;
+    border-top: solid 1px var(--grey);
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -57,11 +57,11 @@
 
 .noteTitle {
     font: $small-title;
-    color: $charcoal-black;
+    color: var(--charcoal-black);
 }
 
 .noteValue {
-    color: $grey;
+    color: var(--grey);
 }
 
 .priceDetails {
@@ -71,7 +71,7 @@
 
 .priceItems {
     font: $small-title;
-    color: $charcoal-black;
+    color: var(--charcoal-black);
 
     display: grid;
     grid-template-columns: 1fr auto;
@@ -87,7 +87,7 @@
 }
 
 .deliveryBilling {
-    color: $charcoal-black;
+    color: var(--charcoal-black);
     display: grid;
     gap: 48px;
 
@@ -102,7 +102,7 @@
 }
 
 .addressLines {
-    color: $charcoal-black;
+    color: var(--charcoal-black);
     font-weight: normal;
 }
 
