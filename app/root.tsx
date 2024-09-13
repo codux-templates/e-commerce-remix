@@ -62,7 +62,6 @@ export function ErrorBoundary() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log('interval fired');
             if (window.location.href !== locationRef.current) {
                 locationRef.current = window.location.href;
                 clearInterval(interval);
