@@ -1,23 +1,34 @@
-import { Link } from '@remix-run/react';
-import { ROUTES } from '~/router/config';
+import classNames from 'classnames';
 import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './error-component.module.scss';
 
-const unknownErrorTitle = 'Ooops, something went wrong';
-
-export interface ErrorProps {
-    title: string | undefined | null;
-    message: string | undefined | null;
+export interface ErrorComponentProps {
+    title: string;
+    message?: string;
+    actionButtonText?: string;
+    onActionButtonClick?: () => void;
 }
 
-export const ErrorComponent = ({ title, message }: ErrorProps) => {
+export const ErrorComponent = ({
+    title,
+    message,
+    actionButtonText,
+    onActionButtonClick,
+}: ErrorComponentProps) => {
+    const shouldRenderActionButton = actionButtonText && onActionButtonClick;
+
     return (
         <div className={styles.root}>
-            <h1>{title ?? unknownErrorTitle}</h1>
-            {message && <div>{message}</div>}
-            <Link className={commonStyles.primaryButton} to={ROUTES.home.to()}>
-                Navigate to Home Page
-            </Link>
+            <h1 className={styles.title}>{title}</h1>
+            {message && <div className={styles.message}>{message}</div>}
+            {shouldRenderActionButton && (
+                <button
+                    className={classNames(commonStyles.primaryButton, styles.actionButton)}
+                    onClick={onActionButtonClick}
+                >
+                    {actionButtonText}
+                </button>
+            )}
         </div>
     );
 };

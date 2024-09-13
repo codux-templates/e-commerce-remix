@@ -1,19 +1,26 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { isRouteErrorResponse, json, useLoaderData, useRouteError } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    json,
+    useLoaderData,
+    useNavigate,
+    useRouteError,
+} from '@remix-run/react';
 import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
 import { useCartOpen } from '~/components/cart/cart-open-context';
+import { ErrorComponent } from '~/components/error-component/error-component';
 import { Price } from '~/components/price/price';
 import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
 import { ProductImages } from '~/components/product-images/product-images';
-import { ProductNotFound } from '~/components/product-not-found/product-not-found';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import commonStyles from '~/styles/common-styles.module.scss';
+import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
 
@@ -141,11 +148,19 @@ export default function ProductDetailsPage() {
 
 export function ErrorBoundary() {
     const error = useRouteError();
+    const navigate = useNavigate();
 
     if (isRouteErrorResponse(error)) {
         switch (error.status) {
             case 404:
-                return <ProductNotFound />;
+                return (
+                    <ErrorComponent
+                        title="Product Not Found"
+                        message="Unfortunately product you trying to open doesn't exist"
+                        actionButtonText="Back to shopping"
+                        onActionButtonClick={() => navigate(ROUTES.category.to())}
+                    />
+                );
         }
     }
 
