@@ -15,10 +15,7 @@ function getWixClientId() {
      * so we are trying to read WIX_CLIENT_ID from process.env on server side
      * or from window.ENV on client side. for client, the root loader is populating window.ENV
      */
-    const env =
-        typeof window !== 'undefined' && typeof window.ENV !== 'undefined'
-            ? window.ENV
-            : process.env;
+    const env = typeof window !== 'undefined' ? window.ENV ?? {} : process.env;
 
     /* fallback to the Wix demo store id (it's not a secret). */
     return env.WIX_CLIENT_ID ?? '0c9d1ef9-f496-4149-b246-75a2514b8c99';

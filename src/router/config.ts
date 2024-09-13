@@ -5,7 +5,6 @@ const ABOUT = '/about';
 const CATEGORY = '/category/:categorySlug';
 const PRODUCT = `/products/:productSlug`;
 const THANK_YOU = '/thank-you';
-const ERROR = '/error';
 
 export const ROUTES = {
     home: { path: HOME, to: () => HOME },
@@ -18,10 +17,6 @@ export const ROUTES = {
     product: {
         path: PRODUCT,
         to: (slug: string) => generatePath(PRODUCT, { productSlug: slug }),
-    },
-    error: {
-        path: ERROR,
-        to: (title: string, message?: string) => `${ERROR}?title=${title}&message=${message}`,
     },
 };
 
