@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { SWRConfig } from 'swr';
-import { type EcomAPI, getEcomApi } from './ecom-api';
+import { getEcomApi } from './ecom-api';
+import { EcomAPI } from './types';
 
 export const EcomAPIContext = React.createContext<EcomAPI | null>(null);
 
