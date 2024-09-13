@@ -4,6 +4,7 @@ import {
     Outlet,
     Scripts,
     ScrollRestoration,
+    isRouteErrorResponse,
     json,
     useLoaderData,
     useNavigate,
@@ -78,11 +79,13 @@ export function ErrorBoundary() {
 
     const navigate = useNavigate();
 
+    const isPageNotFoundError = isRouteErrorResponse(error) && error.status === 404;
+
     return (
         <ContentWrapper>
             <ErrorComponent
-                title="Oops, something went wrong"
-                message={toError(error).message}
+                title={isPageNotFoundError ? 'Page Not Found' : 'Oops, something went wrong'}
+                message={isPageNotFoundError ? undefined : toError(error).message}
                 actionButtonText="Back to shopping"
                 onActionButtonClick={() => navigate(ROUTES.category.to())}
             />
