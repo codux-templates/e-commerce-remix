@@ -11,23 +11,24 @@
     width: 20px;
     transition: padding 100ms;
     border: solid 1px var(--grey);
+}
 
-    & .colorBox {
-        width: 100%;
-        height: 100%;
-    }
+.option .colorBox {
+    width: 100%;
+    height: 100%;
+}
 
-    &:hover,
-    &.selected {
-        border-color: var(--charcoal-black);
-        padding: 2px;
+.option:hover,
+.option.selected {
+    border-color: var(--charcoal-black);
+    padding: 2px;
+}
 
-        & .colorBox {
-            border: solid 1px var(--grey);
-        }
-    }
+.option:hover .colorBox,
+.option.selected .colorBox {
+    border: solid 1px var(--grey);
+}
 
-    &.hasError {
-        border-color: var(--error);
-    }
+.option.hasError {
+    border-color: var(--error);
 }

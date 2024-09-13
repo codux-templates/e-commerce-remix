@@ -5,7 +5,7 @@ export const CartOpener = () => {
     const { setIsOpen } = useCartOpen();
 
     return (
-        <button onClick={() => setIsOpen(true)} className={commonStyles.secondaryButton}>
+        <button onClick={() => setIsOpen(true)} className={commonStyles.primaryButton}>
             Cart
         </button>
     );

@@ -1,4 +1,5 @@
 @import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .root {
     display: flex;
@@ -34,10 +35,8 @@
     font: $extra-small-text;
 }
 
-.quantity {
-    & input {
-        margin-top: 13px;
-    }
+.quantity .input {
+    margin-top: 13px;
 }
 
 .addToCartBtn {
@@ -45,7 +44,7 @@
     height: 40px;
 }
 
-@media (width <= 450px) {
+@media (width <= $mobile-width) {
     .root {
         flex-direction: column;
         align-items: center;

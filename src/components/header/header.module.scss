@@ -1,4 +1,5 @@
 @import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .root {
     display: flex;
@@ -19,7 +20,8 @@
     padding-left: 22px;
 }
 
-.menuButton:hover, .activeMenuItem {
+.menuButton:hover,
+.activeMenuItem {
     font-weight: bold;
 }
 
@@ -32,12 +34,13 @@
     height: fit-content;
 }
 
-@media (width < 455px) {
+@media (width < $mobile-width) {
     .root {
         display: flex;
         justify-content: center;
         padding: 0px;
     }
+
     .logo {
         display: none;
     }

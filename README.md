@@ -37,12 +37,14 @@ You may categorize your products on a headless CMS back-office. Once product cat
 You may also want to add a link to a particular category directly to site header, in this case, please add this code snippet to a [header](./src/components/header/header.tsx) file:
 
 ```
-    <Link
+    <NavLink
         to={ROUTES.category.to('my-category')}
-        className={classNames(commonStyles.secondaryButton, styles.menuButton)}
+        className={({ isActive }) =>
+            classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })
+        }
     >
-        Products
-    </Link>
+        My Category
+    </NavLink>
 ```
 
 and replace `my-category` with your existing category name.

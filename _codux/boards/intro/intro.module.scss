@@ -38,7 +38,7 @@
     border-radius: 0 0 20px 20px;
 }
 
-@media (width <= 768px) {
+@media (width <= $tablet-width) {
     .container {
         width: 100vw;
         margin-top: unset;

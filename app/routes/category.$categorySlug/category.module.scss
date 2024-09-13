@@ -1,9 +1,9 @@
 @import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .root {
     padding-top: 20px;
     display: flex;
-
     padding-top: 50px;
     padding-bottom: 60px;
 }
@@ -58,7 +58,7 @@
     font-weight: bold;
 }
 
-@media (1400px < width) {
+@media (width > $desktop-width) {
     .gallery {
         grid-template-columns: 1fr 1fr 1fr 1fr;
         max-width: 1400px;
@@ -67,7 +67,7 @@
     }
 }
 
-@media (430px <=width) and (width < 980px) {
+@media ($mobile-width <= width < $tablet-width) {
     .gallery {
         grid-template-columns: 1fr 1fr;
         margin-right: 80px;
@@ -75,7 +75,7 @@
     }
 }
 
-@media (width < 430px) {
+@media (width < $mobile-width) {
     .gallery {
         grid-template-columns: 1fr;
         margin-left: 60px;

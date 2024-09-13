@@ -10,10 +10,11 @@
     border-radius: 30px;
     margin-top: 20px;
     cursor: pointer;
-    &:hover {
-        background-color: #b6c1f0;
-        color: var(--black);
-    }
+}
+
+.introButton:hover {
+    background-color: #b6c1f0;
+    color: var(--black);
 }
 
 .primaryButton {
@@ -28,31 +29,13 @@
     padding-right: 22px;
     border: 1px solid var(--charcoal-black);
     z-index: 1;
-
-    &:hover {
-        background-color: var(--white);
-        border: 1px solid var(--charcoal-black);
-        color: var(--charcoal-black);
-        cursor: pointer;
-    }
 }
 
-.secondaryButton {
-    height: 42px;
-    display: flex;
-    align-items: center;
-    font: $small-text;
+.primaryButton:hover {
+    background-color: var(--white);
+    border: 1px solid var(--charcoal-black);
+    color: var(--charcoal-black);
     cursor: pointer;
-    padding-right: 22px;
-    padding-left: 22px;
-    border: 1px solid white;
-    z-index: 1;
-
-    &:hover {
-        background-color: var(--white);
-        border: 1px solid black;
-        border-radius: 35px;
-    }
 }
 
 .linkButton {
@@ -62,11 +45,11 @@
     font: $small-text;
     cursor: pointer;
     z-index: 1;
+}
 
-    &:hover {
-        color: var(--grey);
-        text-decoration: underline;
-    }
+.linkButton:hover {
+    color: var(--grey);
+    text-decoration: underline;
 }
 
 .numberInput {

@@ -7,11 +7,12 @@
     bottom: 0;
     background-color: rgba(148, 148, 148, 0.5);
     z-index: 999;
-
-    &.open {
-        left: 0;
-    }
 }
+
+.background.open {
+    left: 0;
+}
+
 .drawer {
     right: -480px;
     height: 100%;
@@ -20,11 +21,12 @@
     position: absolute;
     display: flex;
     flex-direction: column;
-
-    &.open {
-        right: 0;
-    }
 }
+
+.drawer.open {
+    right: 0;
+}
+
 .header {
     background-color: var(--black);
     color: var(--white);
@@ -36,6 +38,7 @@
     padding: 10px;
     letter-spacing: 2px;
 }
+
 .arrowIcon {
     position: absolute;
     left: 0px;

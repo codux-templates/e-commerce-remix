@@ -16,10 +16,10 @@
 .paragraph {
     font: $medium-title;
     text-align: center;
+}
 
-    div:first-child {
-        margin-bottom: 24px;
-    }
+.paragraph div:first-child {
+    margin-bottom: 24px;
 }
 
 .text {

@@ -1,26 +1,14 @@
 @import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .root {
     display: grid;
     gap: 48px;
-
-    @media (width < 1024px) {
-        padding: 24px;
-    }
 }
 
 .section {
     padding: 24px;
     border: solid 1px var(--grey);
-}
-
-.lineItemsSection {
-    @media (width < 1024px) {
-        border-left: 0;
-        border-right: 0;
-        padding-left: 0;
-        padding-right: 0;
-    }
 }
 
 .lineItems {
@@ -37,16 +25,6 @@
 
 .summaryWrapper {
     display: grid;
-
-    @media (width >= 1024px) {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.buyerNoteSeparator {
-    @media (width >= 1024px) {
-        display: none;
-    }
 }
 
 .noteWrapper {
@@ -90,15 +68,11 @@
     color: var(--charcoal-black);
     display: grid;
     gap: 48px;
+}
 
-    @media (width >= 1024px) {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    & .title {
-        font: $medium-bold-title;
-        margin-bottom: 12px;
-    }
+.deliveryBilling .title {
+    font: $medium-bold-title;
+    margin-bottom: 12px;
 }
 
 .addressLines {
@@ -108,4 +82,31 @@
 
 .deliveryTime {
     margin-top: 12px;
+}
+
+@media (width < $desktop-width) {
+    .root {
+        padding: 24px;
+    }
+
+    .lineItemsSection {
+        border-left: 0;
+        border-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (width >= $desktop-width) {
+    .summaryWrapper {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .buyerNoteSeparator {
+        display: none;
+    }
+
+    .deliveryBilling {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
 }

@@ -1,4 +1,5 @@
 @import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .root {
     position: relative;
@@ -43,7 +44,7 @@
 
 // --- MEDIA QUERIES ---
 
-@media (width >= $large-desktop) {
+@media (width >= $desktop-width) {
     .smallTitle {
         font-size: 42px;
     }

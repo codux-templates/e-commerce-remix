@@ -5,15 +5,15 @@
     display: inline-block;
     border: solid 1px var(--black);
     cursor: pointer;
+}
 
-    select {
-        padding: 4px 8px;
-        width: 100%;
-    }
+.root select {
+    padding: 4px 8px;
+    width: 100%;
+}
 
-    &.error {
-        border-color: var(--error);
-    }
+.root.error {
+    border-color: var(--error);
 }
 
 .root::after {
