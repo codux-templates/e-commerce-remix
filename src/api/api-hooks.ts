@@ -50,7 +50,7 @@ export const useAddToCart = () => {
             }
             const itemInCart = findItemIdInCart(cart, arg.id, arg.options);
             return itemInCart
-                ? ecomApi.updateCartItemQuantity(itemInCart._id, (itemInCart.quantity || 0) + arg.quantity)
+                ? ecomApi.updateCartItemQuantity(itemInCart._id, (itemInCart.quantity ?? 0) + arg.quantity)
                 : ecomApi.addToCart(arg.id, arg.quantity, arg.options);
         },
         {
