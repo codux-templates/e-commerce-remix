@@ -1,5 +1,5 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
+import { Link, MetaFunction, useLoaderData, useNavigate } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
 import { HeroImage } from '~/components/hero-image/hero-image';
 import { ProductCard } from '~/components/product-card/product-card';
@@ -8,12 +8,10 @@ import { getUrlOriginWithPath } from '~/utils';
 import styles from './index.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const productsResponse = await getEcomApi().getPromotedProducts();
-    if (productsResponse.status === 'failure') {
-        throw json(productsResponse.error);
-    }
+    const products = await getEcomApi().getPromotedProducts();
+    const canonicalUrl = getUrlOriginWithPath(request.url);
 
-    return { products: productsResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) };
+    return { products, canonicalUrl };
 };
 
 export default function HomePage() {

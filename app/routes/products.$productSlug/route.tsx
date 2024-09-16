@@ -1,5 +1,11 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import {
+    isRouteErrorResponse,
+    json,
+    useLoaderData,
+    useNavigate,
+    useRouteError,
+} from '@remix-run/react';
 import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
@@ -17,19 +23,20 @@ import commonStyles from '~/styles/common-styles.module.scss';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './product-details.module.scss';
-import { EcomApiErrorCodes } from '~/api/types';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const productSlug = params.productSlug;
     if (!productSlug) {
         throw new Error('Missing product slug');
     }
-    const productResponse = await getEcomApi().getProductBySlug(productSlug);
-    if (productResponse.status === 'failure') {
-        throw json(productResponse.error);
+    const product = await getEcomApi().getProduct(productSlug);
+    if (product === undefined) {
+        throw json('Product Not Found', { status: 404 });
     }
 
-    return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
+    const canonicalUrl = getUrlOriginWithPath(request.url);
+
+    return json({ product, canonicalUrl });
 };
 
 export default function ProductDetailsPage() {
@@ -73,7 +80,9 @@ export default function ProductDetailsPage() {
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
-                    {product.sku !== undefined && <div className={styles.sku}>SKU: {product.sku}</div>}
+                    {product.sku !== undefined && (
+                        <div className={styles.sku}>SKU: {product.sku}</div>
+                    )}
                     {product.priceData?.formatted?.price && (
                         <Price
                             fullPrice={product.priceData?.formatted?.price}
@@ -84,7 +93,9 @@ export default function ProductDetailsPage() {
 
                 {product.description && (
                     /** use unsafe component for description, because it comes from e-commerce site back-office */
-                    <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
+                    <UnsafeRichText className={styles.description}>
+                        {product.description}
+                    </UnsafeRichText>
                 )}
 
                 {product.productOptions?.map((option) => (
@@ -140,24 +151,17 @@ export function ErrorBoundary() {
     const navigate = useNavigate();
 
     if (isRouteErrorResponse(error)) {
-        let title: string;
-        let message: string | undefined;
-        if (error.data.code === EcomApiErrorCodes.ProductNotFound) {
-            title = 'Product Not Found';
-            message = "Unfortunately product you trying to open doesn't exist";
-        } else {
-            title = 'Failed to load product details';
-            message = error.data.message;
+        switch (error.status) {
+            case 404:
+                return (
+                    <ErrorComponent
+                        title="Product Not Found"
+                        message="Unfortunately product you trying to open doesn't exist"
+                        actionButtonText="Back to shopping"
+                        onActionButtonClick={() => navigate(ROUTES.category.to())}
+                    />
+                );
         }
-
-        return (
-            <ErrorComponent
-                title={title}
-                message={message}
-                actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to())}
-            />
-        );
     }
 
     throw error;
@@ -170,7 +174,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
     const title = data.product.name ?? 'Product Details';
     const description = data.product.description ?? 'Product Description';
-    const coverImage = data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
+    const coverImage =
+        data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
 
     return [
         { title: title },

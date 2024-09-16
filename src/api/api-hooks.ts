@@ -6,28 +6,14 @@ import { useEcomAPI } from './ecom-api-context-provider';
 
 export const useCart = () => {
     const ecomApi = useEcomAPI();
-    return useSwr('cart', async () => {
-        const cartResponse = await ecomApi.getCart();
-        if (cartResponse.status === 'failure') {
-            throw cartResponse.error;
-        }
-
-        return cartResponse.body;
-    });
+    return useSwr('cart', ecomApi.getCart);
 };
 
 export const useCartTotals = () => {
     const ecomApi = useEcomAPI();
     const { data } = useCart();
 
-    const cartTotals = useSwr('cart-totals', async () => {
-        const cartTotalsResponse = await ecomApi.getCartTotals();
-        if (cartTotalsResponse.status === 'failure') {
-            throw cartTotalsResponse.error;
-        }
-
-        return cartTotalsResponse.body;
-    });
+    const cartTotals = useSwr('cart-totals', ecomApi.getCartTotals);
 
     useEffect(() => {
         cartTotals.mutate();
@@ -50,7 +36,10 @@ export const useAddToCart = () => {
             }
             const itemInCart = findItemIdInCart(cart, arg.id, arg.options);
             return itemInCart
-                ? ecomApi.updateCartItemQuantity(itemInCart._id, (itemInCart.quantity ?? 0) + arg.quantity)
+                ? ecomApi.updateCartItemQuantity(
+                      itemInCart._id,
+                      (itemInCart.quantity || 0) + arg.quantity
+                  )
                 : ecomApi.addToCart(arg.id, arg.quantity, arg.options);
         },
         {
@@ -74,8 +63,12 @@ export const useUpdateCartItemQuantity = () => {
 
 export const useRemoveItemFromCart = () => {
     const ecomApi = useEcomAPI();
-    return useSWRMutation('cart', (_key: Key, { arg }: { arg: string }) => ecomApi.removeItemFromCart(arg), {
-        revalidate: false,
-        populateCache: true,
-    });
+    return useSWRMutation(
+        'cart',
+        (_key: Key, { arg }: { arg: string }) => ecomApi.removeItemFromCart(arg),
+        {
+            revalidate: false,
+            populateCache: true,
+        }
+    );
 };

@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
+import { NavLink, useLoaderData } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
@@ -8,8 +8,6 @@ import { ROUTES } from '~/router/config';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './category.module.scss';
-import { EcomApiErrorCodes } from '~/api/types';
-import { ErrorComponent } from '~/components/error-component/error-component';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const categorySlug = params.categorySlug;
@@ -18,24 +16,14 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     }
 
     const api = getEcomApi();
-    const currentCategoryResponse = await api.getCategoryBySlug(categorySlug);
-    if (currentCategoryResponse.status === 'failure') {
-        throw json(currentCategoryResponse.error);
-    }
-    const allCategoriesResponse = await api.getAllCategories();
-    if (allCategoriesResponse.status === 'failure') {
-        throw json(allCategoriesResponse.error);
-    }
-
-    const categoryProductsResponse = await api.getProductsByCategory(categorySlug);
-    if (categoryProductsResponse.status === 'failure') {
-        throw json(categoryProductsResponse.error);
-    }
+    const currentCategory = await api.getCategoryBySlug(categorySlug);
+    const allCategories = await api.getAllCategories();
+    const categoryProducts = await api.getProductsByCategory(categorySlug);
 
     return {
-        categoryProducts: categoryProductsResponse.body,
-        currentCategory: currentCategoryResponse.body,
-        allCategories: allCategoriesResponse.body,
+        categoryProducts,
+        currentCategory,
+        allCategories,
         canonicalUrl: getUrlOriginWithPath(request.url),
     };
 };
@@ -78,7 +66,10 @@ export default function ProductsCategoryPage() {
                             item.name && (
                                 <NavLink to={ROUTES.product.to(item.slug)} key={item.slug}>
                                     <ProductCard
-                                        imageUrl={getImageHttpUrl(item.media?.items?.at(0)?.image?.url, 240)}
+                                        imageUrl={getImageHttpUrl(
+                                            item.media?.items?.at(0)?.image?.url,
+                                            240
+                                        )}
                                         name={item.name}
                                         price={item.priceData ?? undefined}
                                         className={styles.productCard}
@@ -90,34 +81,6 @@ export default function ProductsCategoryPage() {
             </div>
         </div>
     );
-}
-
-export function ErrorBoundary() {
-    const error = useRouteError();
-    const navigate = useNavigate();
-
-    if (isRouteErrorResponse(error)) {
-        let title: string;
-        let message: string | undefined;
-        if (error.data.code === EcomApiErrorCodes.CategoryNotFound) {
-            title = 'Category Not Found';
-            message = "Unfortunately category you trying to open doesn't exist";
-        } else {
-            title = 'Failed to load category products';
-            message = error.data.message;
-        }
-
-        return (
-            <ErrorComponent
-                title={title}
-                message={message}
-                actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to())}
-            />
-        );
-    }
-
-    throw error;
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
