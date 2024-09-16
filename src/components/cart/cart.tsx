@@ -15,15 +15,16 @@ export const Cart = ({ className }: CartProps) => {
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
-    const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
-
     const ecomAPI = useEcomAPI();
 
+    const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
+
     async function checkout() {
-        const { success, url } = await ecomAPI.checkout();
-        if (success && url) {
-            window.location.href = url;
-        } else if (!success) {
+        const checkoutResponse = await ecomAPI.checkout();
+
+        if (checkoutResponse.status === 'success') {
+            window.location.href = checkoutResponse.body.checkoutUrl;
+        } else {
             alert('checkout is not configured');
         }
     }

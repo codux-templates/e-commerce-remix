@@ -17,6 +17,7 @@ import { ErrorComponent } from '~/components/error-component/error-component';
 import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
 import { ROUTES } from '~/router/config';
 import '~/styles/index.scss';
+import { toError } from '~/utils';
 
 export async function loader() {
     return json({
@@ -59,9 +60,7 @@ export default function App() {
 }
 
 export function ErrorBoundary() {
-    const locationRef = useRef<string | undefined>(
-        typeof window !== 'undefined' ? window.location.href : undefined
-    );
+    const locationRef = useRef<string | undefined>(typeof window !== 'undefined' ? window.location.href : undefined);
 
     const error = useRouteError();
 
@@ -101,27 +100,4 @@ function ContentWrapper({ children }: React.PropsWithChildren) {
             </CartOpenContextProvider>
         </EcomAPIContextProvider>
     );
-}
-
-function toError(value: unknown): Error {
-    if (value instanceof Error) {
-        return value;
-    }
-
-    if (typeof value === 'undefined') {
-        return new Error();
-    }
-
-    let errorMessage = String(value);
-    if (typeof value === 'object' && value !== null) {
-        if ('message' in value) {
-            errorMessage = String(value.message);
-        }
-
-        if ('data' in value) {
-            errorMessage = String(value.data);
-        }
-    }
-
-    return new Error(errorMessage);
 }
