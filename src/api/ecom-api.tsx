@@ -4,7 +4,9 @@ import { OAuthStrategy, createClient } from '@wix/sdk';
 import { products, collections } from '@wix/stores';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
+import { toError } from '~/utils';
 import { DEMO_STORE_WIX_CLIENT_ID, WIX_SESSION_TOKEN_COOKIE_KEY, WIX_STORES_APP_ID } from './constants';
+import { EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomAPIError, EcomAPI } from './types';
 
 function getWixClientId() {
     /**
@@ -241,6 +243,6 @@ function successResponse<T>(body: T): EcomAPISuccessResponse<T> {
     };
 }
 
-function getErrorMessage(e: unknown, defaultMessage?: string) {
-    return isEcomAPIError(e) ? e.message : defaultMessage;
+function getErrorMessage(e: unknown): string {
+    return isEcomAPIError(e) ? e.message : toError(e).message;
 }
