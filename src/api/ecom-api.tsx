@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
 import { toError } from '~/utils';
 import { DEMO_STORE_WIX_CLIENT_ID, WIX_SESSION_TOKEN_COOKIE_KEY, WIX_STORES_APP_ID } from './constants';
-import { EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomAPIError, EcomAPI } from './types';
+import { EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError, EcomAPI } from './types';
 
 function getWixClientId() {
     /**
@@ -195,7 +195,7 @@ function createApi(): EcomAPI {
 
                 return successResponse(category);
             } catch (e) {
-                if (isEcomAPIError(e) && e.details.applicationError.code === 404) {
+                if (isEcomSDKError(e) && e.details.applicationError.code === 404) {
                     return failureResponse(EcomApiErrorCodes.CategoryNotFound);
                 }
 
@@ -211,7 +211,7 @@ function createApi(): EcomAPI {
 
                 return successResponse(order);
             } catch (e) {
-                if (isEcomAPIError(e) && e.details.applicationError.code === 404) {
+                if (isEcomSDKError(e) && e.details.applicationError.code === 404) {
                     return failureResponse(EcomApiErrorCodes.OrderNotFound);
                 }
                 return failureResponse(EcomApiErrorCodes.GetOrderFailure);
@@ -244,5 +244,5 @@ function successResponse<T>(body: T): EcomAPISuccessResponse<T> {
 }
 
 function getErrorMessage(e: unknown): string {
-    return isEcomAPIError(e) ? e.message : toError(e).message;
+    return isEcomSDKError(e) ? e.message : toError(e).message;
 }

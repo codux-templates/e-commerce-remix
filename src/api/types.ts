@@ -45,7 +45,7 @@ export type EcomSdkError = {
     };
 };
 
-export function isEcomAPIError(error: unknown): error is EcomSdkError {
+export function isEcomSDKError(error: unknown): error is EcomSdkError {
     return (
         error instanceof Object &&
         'message' in error &&
