@@ -1,6 +1,5 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useSearchParams } from '@remix-run/react';
-import { orders } from '@wix/ecom';
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
 import { ROUTES } from '~/router/config';
@@ -8,6 +7,7 @@ import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import { OrderSummary } from '../../../src/components/order-summary/order-summary';
 import styles from './thank-you.module.scss';
+import { OrderDetails } from '~/api/types';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
     return { canonicalUrl: getUrlOriginWithPath(request.url) };
@@ -17,13 +17,20 @@ export default function ThankYouPage() {
     const [search] = useSearchParams();
     const orderId = search.get('orderId');
 
-    const [order, setOrder] = useState<orders.Order & orders.OrderNonNullableFields>();
+    const [order, setOrder] = useState<OrderDetails>();
+    const [error, setError] = useState<string>();
 
     const api = getEcomApi();
 
     useEffect(() => {
         if (orderId) {
-            api.getOrder(orderId).then((order) => setOrder(order));
+            api.getOrder(orderId).then((getOrderResponse) => {
+                if (getOrderResponse.status === 'success') {
+                    setOrder(getOrderResponse.body);
+                } else {
+                    setError(getOrderResponse.error.message ?? 'Unknown error');
+                }
+            });
         }
     }, [api, orderId]);
 
@@ -36,6 +43,13 @@ export default function ThankYouPage() {
                     {order && <div>Your order number: {order.number}</div>}
                 </div>
             </div>
+
+            {error && (
+                <div className={styles.errorWrapper}>
+                    <h2>Could not load you order:</h2>
+                    <div>{error}</div>
+                </div>
+            )}
 
             {order && <OrderSummary order={order} />}
 

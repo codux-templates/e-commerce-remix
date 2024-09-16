@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { cart, orders } from '@wix/ecom';
 import { products, collections } from '@wix/stores';
-import type { EcomAPI } from '~/api/ecom-api';
 
 export type FakeDataSettings = {
     numberOfCartItems?: number;
@@ -15,15 +14,11 @@ export type FakeDataSettings = {
     priceMaxValue?: number;
 };
 
-export function createProducts(
-    settings?: FakeDataSettings
-): Awaited<ReturnType<EcomAPI['getProductsByCategory']>> {
-    return Array.from(new Array(settings?.numberOfProducts || 10)).map((id) =>
-        createProduct(id, settings)
-    );
+export function createProducts(settings?: FakeDataSettings): products.Product[] {
+    return Array.from(new Array(settings?.numberOfProducts || 10)).map((id) => createProduct(id, settings));
 }
 
-export function createProduct(id?: string, settings?: FakeDataSettings): products.Product {
+export function createProduct(slug?: string, settings?: FakeDataSettings): products.Product {
     const numOfImages = faker.number.int({ min: 2, max: 4 });
     const images = Array.from(new Array(numOfImages)).map(() => createImage());
     const mainImage = images[faker.number.int({ min: 0, max: numOfImages - 1 })];
@@ -34,8 +29,8 @@ export function createProduct(id?: string, settings?: FakeDataSettings): product
         max: settings?.priceMaxValue,
     });
     return {
-        _id: id ?? faker.string.uuid(),
-        slug: faker.lorem.word(),
+        _id: faker.string.uuid(),
+        slug: slug ?? faker.lorem.word(),
         name: faker.lorem.words(settings?.numberOfWordsInTitle || 2),
         description: faker.commerce.productDescription(),
         media: {
@@ -90,9 +85,7 @@ export function createCart(products: products.Product[]): cart.Cart & cart.CartN
     };
 }
 
-export function createCartItem(
-    product: products.Product
-): cart.LineItem & cart.CartNonNullableFields['lineItems'][0] {
+export function createCartItem(product: products.Product): cart.LineItem & cart.CartNonNullableFields['lineItems'][0] {
     return {
         _id: faker.string.uuid(),
         productName: {
@@ -125,8 +118,7 @@ function createPrice() {
     };
 }
 
-export function getCartTotals(): cart.EstimateTotalsResponse &
-    cart.EstimateTotalsResponseNonNullableFields {
+export function getCartTotals(): cart.EstimateTotalsResponse & cart.EstimateTotalsResponseNonNullableFields {
     return {
         currency: '$',
         additionalFees: [],

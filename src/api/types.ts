@@ -27,10 +27,15 @@ export enum EcomApiErrorCodes {
 }
 
 export type EcomAPISuccessResponse<T> = { status: 'success'; body: T };
-export type EcomAPIFailureResponse = { status: 'failure'; error: { code: EcomApiErrorCodes; message?: string } };
+export type EcomAPIFailureResponse = { status: 'failure'; error: EcomAPIError };
 export type EcomAPIResponse<T> = EcomAPISuccessResponse<T> | EcomAPIFailureResponse;
 
 export type EcomAPIError = {
+    code: EcomApiErrorCodes;
+    message?: string;
+};
+
+export type EcomSdkError = {
     message: string;
     details: {
         applicationError: {
@@ -40,7 +45,7 @@ export type EcomAPIError = {
     };
 };
 
-export function isEcomAPIError(error: unknown): error is EcomAPIError {
+export function isEcomAPIError(error: unknown): error is EcomSdkError {
     return (
         error instanceof Object &&
         'message' in error &&
