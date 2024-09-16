@@ -23,7 +23,6 @@ function getWixClientId() {
             ? process.env
             : {};
 
-    /* fallback to the Wix demo store id (it's not a secret). */
     return env.WIX_CLIENT_ID ?? DEMO_STORE_WIX_CLIENT_ID;
 }
 
