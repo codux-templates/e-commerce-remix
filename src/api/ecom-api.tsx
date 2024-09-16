@@ -4,16 +4,17 @@ import { OAuthStrategy, createClient } from '@wix/sdk';
 import { products, collections } from '@wix/stores';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
-
-// this is the static ID of the stores app
-const WIX_STORES_APP_ID = '1380b703-ce81-ff05-f115-39571d94dfcd';
-export const WIX_SESSION_TOKEN = 'wix_refreshToken';
+import {
+    DEMO_STORE_WIX_CLIENT_ID,
+    WIX_SESSION_TOKEN_COOKIE_KEY,
+    WIX_STORES_APP_ID,
+} from './constants';
 
 function getWixClientId() {
     /**
      * this file is used on both sides: client and server,
      * so we are trying to read WIX_CLIENT_ID from process.env on server side
-     * or from window.ENV on client side. for client, the root loader is populating window.ENV
+     * or from window.ENV (created by the root loader) on client side.
      */
     const env =
         typeof window !== 'undefined' && window.ENV
@@ -23,11 +24,11 @@ function getWixClientId() {
             : {};
 
     /* fallback to the Wix demo store id (it's not a secret). */
-    return env.WIX_CLIENT_ID ?? '0c9d1ef9-f496-4149-b246-75a2514b8c99';
+    return env.WIX_CLIENT_ID ?? DEMO_STORE_WIX_CLIENT_ID;
 }
 
 function getTokensClient() {
-    const tokens = Cookies.get(WIX_SESSION_TOKEN);
+    const tokens = Cookies.get(WIX_SESSION_TOKEN_COOKIE_KEY);
     return tokens ? JSON.parse(tokens) : undefined;
 }
 
@@ -103,7 +104,7 @@ function createApi() {
                 ],
             });
             const tokens = wixClient.auth.getTokens();
-            Cookies.set(WIX_SESSION_TOKEN, JSON.stringify(tokens));
+            Cookies.set(WIX_SESSION_TOKEN_COOKIE_KEY, JSON.stringify(tokens));
 
             return result.cart;
         },
