@@ -1,5 +1,3 @@
-@import '@styles/theme.module.scss';
-
 .root {
     display: flex;
     flex-direction: column;
@@ -14,7 +12,7 @@
 }
 
 .paragraph {
-    font: $medium-title;
+    font: var(--medium-title);
     text-align: center;
 }
 
@@ -31,7 +29,7 @@
 }
 
 .title {
-    font: $extra-large-thin-title;
+    font: var(--extra-large-thin-title);
     text-align: center;
     letter-spacing: 6px;
 }

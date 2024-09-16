@@ -1,4 +1,3 @@
-@import '@styles/theme.module.scss';
 @import '@styles/general.scss';
 
 .root {
@@ -24,14 +23,14 @@
 }
 
 .smallTitle {
-    font: $medium-paragraph-bold;
+    font: var(--medium-paragraph-bold);
     margin-top: 80px;
     font-size: 38px;
 }
 
 .bigTitle {
     max-width: 80%;
-    font: $extra-large-thin-title;
+    font: var(--extra-large-thin-title);
     line-height: 1.2;
     font-size: 85px;
     letter-spacing: 2px;

@@ -1,4 +1,3 @@
-@import '@styles/theme.module.scss';
 @import '@styles/general.scss';
 
 .root {
@@ -34,7 +33,7 @@
 }
 
 .noteTitle {
-    font: $small-title;
+    font: var(--small-title);
     color: var(--charcoal-black);
 }
 
@@ -48,7 +47,7 @@
 }
 
 .priceItems {
-    font: $small-title;
+    font: var(--small-title);
     color: var(--charcoal-black);
 
     display: grid;
@@ -61,7 +60,7 @@
 }
 
 .totalPrice {
-    font: $medium-bold-title;
+    font: var(--medium-bold-title);
 }
 
 .deliveryBilling {
@@ -71,7 +70,7 @@
 }
 
 .deliveryBilling .title {
-    font: $medium-bold-title;
+    font: var(--medium-bold-title);
     margin-bottom: 12px;
 }
 

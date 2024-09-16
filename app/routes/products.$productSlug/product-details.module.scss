@@ -1,4 +1,3 @@
-@import '@styles/theme.module.scss';
 @import '@styles/general.scss';
 
 .root {
@@ -28,11 +27,11 @@
 }
 
 .sku {
-    font: $extra-small-text;
+    font: var(--extra-small-text);
 }
 
 .description {
-    font: $extra-small-text;
+    font: var(--extra-small-text);
 }
 
 .quantity input {

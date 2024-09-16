@@ -1,8 +1,6 @@
-@import './theme.module.scss';
-
 .introButton {
     text-align: center;
-    font: $small-text;
+    font: var(--small-text);
     background-color: var(--snow-white);
     padding: 10px;
     width: 160px;
@@ -21,7 +19,7 @@
     background-color: var(--charcoal-black);
     display: flex;
     align-items: center;
-    font: $small-text;
+    font: var(--small-text);
     color: var(--snow-white);
     border-radius: 35px;
     height: 42px;
@@ -42,7 +40,7 @@
     height: 42px;
     display: flex;
     align-items: center;
-    font: $small-text;
+    font: var(--small-text);
     cursor: pointer;
     z-index: 1;
 }
@@ -59,10 +57,10 @@
     height: 25px;
     width: 60px;
     padding-right: 10px;
-    font: $extra-small-text;
+    font: var(--extra-small-text);
 }
 
 .loading {
     padding: 30px;
-    font: $extra-large-text;
+    font: var(--extra-large-text);
 }

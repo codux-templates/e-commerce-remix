@@ -1,4 +1,4 @@
-@import '@styles/theme.module.scss';
+@import '@styles/general.scss';
 
 .container {
     position: absolute;
@@ -13,7 +13,7 @@
 }
 
 .myStyle {
-    font: $medium-paragraph;
+    font: var(--medium-paragraph);
     color: var(--snow-white);
     padding: 40px 100px;
     text-align: center;
@@ -28,7 +28,7 @@
     color: var(--snow-white);
     padding: 70px 120px;
     text-align: center;
-    font: $medium-paragraph;
+    font: var(--medium-paragraph);
     background-color: var(--charcoal-black);
     text-wrap: pretty;
     display: flex;
