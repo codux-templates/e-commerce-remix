@@ -8,20 +8,19 @@ export function toError(value: unknown): Error {
         return value;
     }
 
-    if (typeof value === 'undefined') {
+    if (typeof value === 'undefined' || value === null) {
         return new Error();
     }
 
-    let errorMessage = String(value);
-    if (typeof value === 'object' && value !== null) {
+    if (typeof value === 'object') {
         if ('message' in value) {
-            errorMessage = String(value.message);
+            throw new Error(String(value.message));
         }
 
         if ('data' in value) {
-            errorMessage = String(value.data);
+            throw new Error(String(value.data));
         }
     }
 
-    return new Error(errorMessage);
+    return new Error(String(value));
 }
