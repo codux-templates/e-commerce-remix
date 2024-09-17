@@ -42,6 +42,7 @@ export default function HomePage() {
                                 name={product.name}
                                 price={product.priceData ?? undefined}
                                 className={styles.productCard}
+                                outOfStock={product.stock?.inventoryStatus === 'OUT_OF_STOCK'}
                             />
                         </Link>
                     ) : null
