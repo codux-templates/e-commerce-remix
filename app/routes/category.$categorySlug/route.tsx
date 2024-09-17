@@ -81,6 +81,7 @@ export default function ProductsCategoryPage() {
                                         imageUrl={getImageHttpUrl(item.media?.items?.at(0)?.image?.url, 240)}
                                         name={item.name}
                                         price={item.priceData ?? undefined}
+                                        inStock={item.stock?.inventoryStatus !== 'OUT_OF_STOCK'}
                                         className={styles.productCard}
                                     />
                                 </NavLink>

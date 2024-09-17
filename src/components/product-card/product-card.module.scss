@@ -22,6 +22,14 @@
     font: var(--paragraph1);
 }
 
+.outOfStock {
+    color: var(--grey);
+}
+
+.outOfStockMessage {
+    font: var(--extra-small-text);
+}
+
 // --- MEDIA QUERIES ---
 
 @media ($mobile-width <= width < $tablet-width) {
