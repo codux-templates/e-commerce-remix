@@ -8,13 +8,13 @@ export type GalleryCardProps = {
     name: string;
     imageUrl?: string;
     className?: string;
-    inStock?: boolean;
+    outOfStock?: boolean;
     price?: products.PriceData;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export const ProductCard = ({ name, imageUrl, className, price, inStock, ...divProps }: GalleryCardProps) => {
+export const ProductCard = ({ name, imageUrl, className, price, outOfStock, ...divProps }: GalleryCardProps) => {
     return (
-        <div className={classNames(styles.root, className, { [styles.outOfStock]: !inStock })} {...divProps}>
+        <div className={classNames(styles.root, className, { [styles.outOfStock]: outOfStock })} {...divProps}>
             {imageUrl ? (
                 <img src={imageUrl} alt={name} className={styles.image} data-testid="product-img" />
             ) : (
@@ -25,7 +25,7 @@ export const ProductCard = ({ name, imageUrl, className, price, inStock, ...divP
                 {price?.formatted?.price && (
                     <Price fullPrice={price?.formatted?.price} discountedPrice={price?.formatted?.discountedPrice} />
                 )}
-                {!inStock && <div className={styles.outOfStockMessage}>Out of stock</div>}
+                {outOfStock && <div className={styles.outOfStockMessage}>Out of stock</div>}
             </div>
         </div>
     );
