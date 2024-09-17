@@ -1,10 +1,11 @@
 import { collections, products } from '@wix/stores';
-import { currentCart, orders } from '@wix/ecom';
+import { cart, currentCart, orders } from '@wix/ecom';
 
 export type Product = products.Product;
 export type Collection = collections.Collection;
 export type CollectionDetails = collections.Collection & collections.CollectionNonNullableFields;
 export type Cart = currentCart.Cart & currentCart.CartNonNullableFields;
+export type CartItemDetails = cart.LineItem & cart.CartNonNullableFields['lineItems'][0];
 export type CartTotals = currentCart.EstimateTotalsResponse & currentCart.EstimateTotalsResponseNonNullableFields;
 export type OrderDetails = orders.Order & orders.OrderNonNullableFields;
 
@@ -26,11 +27,12 @@ export enum EcomApiErrorCodes {
     GetOrderFailure = 'GetOrderFailure',
 }
 
+export type EcomAPIError = { code: EcomApiErrorCodes; message?: string };
 export type EcomAPISuccessResponse<T> = { status: 'success'; body: T };
-export type EcomAPIFailureResponse = { status: 'failure'; error: { code: EcomApiErrorCodes; message?: string } };
+export type EcomAPIFailureResponse = { status: 'failure'; error: EcomAPIError };
 export type EcomAPIResponse<T> = EcomAPISuccessResponse<T> | EcomAPIFailureResponse;
 
-export type EcomAPIError = {
+export type EcomSDKError = {
     message: string;
     details: {
         applicationError: {
@@ -40,7 +42,7 @@ export type EcomAPIError = {
     };
 };
 
-export function isEcomAPIError(error: unknown): error is EcomAPIError {
+export function isEcomSDKError(error: unknown): error is EcomSDKError {
     return (
         error instanceof Object &&
         'message' in error &&

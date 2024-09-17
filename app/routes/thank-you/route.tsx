@@ -1,11 +1,11 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Link, useSearchParams } from '@remix-run/react';
-import { orders } from '@wix/ecom';
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
 import { ROUTES } from '~/router/config';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
+import { OrderDetails } from '~/api/types';
 import { OrderSummary } from '../../../src/components/order-summary/order-summary';
 import styles from './thank-you.module.scss';
 
@@ -17,13 +17,21 @@ export default function ThankYouPage() {
     const [search] = useSearchParams();
     const orderId = search.get('orderId');
 
-    const [order, setOrder] = useState<orders.Order & orders.OrderNonNullableFields>();
+    const [order, setOrder] = useState<OrderDetails>();
+    const [error, setError] = useState<string>();
 
     const api = getEcomApi();
 
     useEffect(() => {
         if (orderId) {
-            api.getOrder(orderId).then((order) => setOrder(order));
+            api.getOrder(orderId).then((response) => {
+                if (response.status === 'success') {
+                    setOrder(response.body);
+                    setError(undefined);
+                } else {
+                    setError(response.error.message ?? 'Unknown error');
+                }
+            });
         }
     }, [api, orderId]);
 
@@ -38,6 +46,12 @@ export default function ThankYouPage() {
             </div>
 
             {order && <OrderSummary order={order} />}
+            {error && (
+                <div className={styles.errorContainer}>
+                    <h2>Could not load you order:</h2>
+                    <div>{error}</div>
+                </div>
+            )}
 
             <Link to={ROUTES.category.to()}>
                 <button className={commonStyles.primaryButton} type="button">

@@ -33,3 +33,9 @@
     text-align: center;
     letter-spacing: 6px;
 }
+
+.errorContainer {
+    font: var(--medium-title);
+    color: var(--error-red);
+    text-align: center;
+}
