@@ -45,7 +45,7 @@ export default function ProductDetailsPage() {
     );
 
     const getIsOutOfStock = () => {
-        if (product.stock?.inventoryStatus === 'OUT_OF_STOCK') {
+        if (product.stock?.inventoryStatus === products.InventoryStatus.OUT_OF_STOCK) {
             return true;
         }
 

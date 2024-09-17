@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { products as wixStoresProducts } from '@wix/stores';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
 import { getImageHttpUrl } from '~/api/wix-image';
@@ -81,7 +82,10 @@ export default function ProductsCategoryPage() {
                                         imageUrl={getImageHttpUrl(item.media?.items?.at(0)?.image?.url, 240)}
                                         name={item.name}
                                         price={item.priceData ?? undefined}
-                                        outOfStock={item.stock?.inventoryStatus === 'OUT_OF_STOCK'}
+                                        outOfStock={
+                                            item.stock?.inventoryStatus ===
+                                            wixStoresProducts.InventoryStatus.OUT_OF_STOCK
+                                        }
                                         className={styles.productCard}
                                     />
                                 </NavLink>
