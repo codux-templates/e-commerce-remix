@@ -9,7 +9,6 @@ export default createBoard({
             price={{ formatted: { price: '$85' } }}
             style={{ width: '300px' }}
             imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
-            inStock={true}
         />
     ),
     tags: ['Component'],
