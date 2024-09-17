@@ -48,7 +48,7 @@ export default function ThankYouPage() {
             {order && <OrderSummary order={order} />}
             {error && (
                 <div className={styles.errorContainer}>
-                    <h2>Could not load you order:</h2>
+                    <h2>Could not load your order:</h2>
                     <div>{error}</div>
                 </div>
             )}
