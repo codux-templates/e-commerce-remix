@@ -13,5 +13,4 @@ export default createBoard({
         />
     ),
     tags: ['Component'],
-    isSnippet: true,
 });
