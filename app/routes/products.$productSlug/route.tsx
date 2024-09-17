@@ -44,8 +44,31 @@ export default function ProductDetailsPage() {
         getInitialSelectedOptions(product.productOptions)
     );
 
+    const getIsOutOfStock = () => {
+        if (product.stock?.inventoryStatus === 'OUT_OF_STOCK') {
+            return true;
+        }
+
+        const selectedVariant = product.variants?.find((variant) => {
+            for (const [option, value] of Object.entries(selectedOptions)) {
+                if (variant.choices?.[option] !== value) {
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        if (selectedVariant) {
+            return !selectedVariant.stock?.inStock;
+        }
+
+        return false;
+    };
+
+    const isOutOfStock = getIsOutOfStock();
+
     async function addToCartHandler() {
-        if (!product?._id) {
+        if (!product?._id || isOutOfStock) {
             return;
         }
 
@@ -87,24 +110,28 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {product.productOptions?.map((option) => (
-                    <ProductOption
-                        key={option.name}
-                        error={
-                            addToCartAttempted && selectedOptions[option.name!] === undefined
-                                ? `Select ${option.name}`
-                                : undefined
-                        }
-                        option={option}
-                        selectedValue={selectedOptions[option.name!]}
-                        onChange={(value) =>
-                            setSelectedOptions((prev) => ({
-                                ...prev,
-                                [option.name!]: value,
-                            }))
-                        }
-                    />
-                ))}
+                {product.productOptions && product.productOptions.length > 0 && (
+                    <div className={styles.productVariants}>
+                        {product.productOptions?.map((option) => (
+                            <ProductOption
+                                key={option.name}
+                                error={
+                                    addToCartAttempted && selectedOptions[option.name!] === undefined
+                                        ? `Select ${option.name}`
+                                        : undefined
+                                }
+                                option={option}
+                                selectedValue={selectedOptions[option.name!]}
+                                onChange={(value) => {
+                                    setSelectedOptions((prev) => ({
+                                        ...prev,
+                                        [option.name!]: value,
+                                    }));
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 <div className={styles.quantity}>
                     <label>
@@ -121,9 +148,11 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <div>
+                    {isOutOfStock && <div className={styles.outOfStockMessage}>Item is out of stock</div>}
                     <button
                         onClick={addToCartHandler}
                         className={classNames(commonStyles.primaryButton, styles.addToCartBtn)}
+                        disabled={isOutOfStock}
                     >
                         Add to Cart
                     </button>

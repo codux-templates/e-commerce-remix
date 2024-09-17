@@ -60,6 +60,13 @@
     }
 }
 
+.primaryButton:disabled {
+    cursor: initial;
+    color: var(--white);
+    background-color: var(--grey);
+    border-color: var(--grey);
+}
+
 .linkButton {
     height: 42px;
     display: flex;
