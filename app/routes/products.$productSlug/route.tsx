@@ -13,11 +13,11 @@ import { ProductImages } from '~/components/product-images/product-images';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
-import commonStyles from '~/styles/common-styles.module.scss';
 import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath } from '~/utils';
-import styles from './product-details.module.scss';
+import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { EcomApiErrorCodes } from '~/api/types';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const productSlug = params.productSlug;
@@ -40,32 +40,23 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
-        getInitialSelectedOptions(product.productOptions)
-    );
-
-    const isOutOfStock = () => {
-        if (product.stock?.inventoryStatus === products.InventoryStatus.OUT_OF_STOCK) {
-            return true;
-        }
-
-        const selectedVariant = product.variants?.find((variant) => {
-            for (const [optionName, choiceName] of Object.entries(selectedOptions)) {
-                if (variant.choices?.[optionName] !== choiceName) {
-                    return false;
-                }
+    const getInitialSelectedOptions = () => {
+        const result: Record<string, string | undefined> = {};
+        for (const option of product.productOptions ?? []) {
+            if (option.name) {
+                const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
+                result[option.name] = getChoiceValue(option, initialChoice);
             }
-            return true;
-        });
-
-        if (selectedVariant) {
-            return !selectedVariant.stock?.inStock;
         }
 
-        return false;
+        return result;
     };
 
-    const outOfStock = isOutOfStock();
+    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
+        getInitialSelectedOptions()
+    );
+
+    const outOfStock = isOutOfStock(product, selectedOptions);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -256,15 +247,3 @@ export const links: LinksFunction = () => {
         },
     ];
 };
-
-function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
-    const result: Record<string, string | undefined> = {};
-    for (const option of productOptions ?? []) {
-        if (option.name) {
-            const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
-            result[option.name] = getChoiceValue(option, initialChoice);
-        }
-    }
-
-    return result;
-}

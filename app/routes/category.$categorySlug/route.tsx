@@ -1,16 +1,15 @@
 import classNames from 'classnames';
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { products as wixStoresProducts } from '@wix/stores';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
+import { EcomApiErrorCodes } from '~/api/types';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
-import commonStyles from '~/styles/common-styles.module.scss';
-import { getUrlOriginWithPath } from '~/utils';
-import styles from './category.module.scss';
-import { EcomApiErrorCodes } from '~/api/types';
+import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { ErrorComponent } from '~/components/error-component/error-component';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from './category.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const categorySlug = params.categorySlug;
@@ -82,10 +81,7 @@ export default function ProductsCategoryPage() {
                                         imageUrl={getImageHttpUrl(item.media?.items?.at(0)?.image?.url, 240)}
                                         name={item.name}
                                         price={item.priceData ?? undefined}
-                                        outOfStock={
-                                            item.stock?.inventoryStatus ===
-                                            wixStoresProducts.InventoryStatus.OUT_OF_STOCK
-                                        }
+                                        outOfStock={isOutOfStock(item)}
                                         className={styles.productCard}
                                     />
                                 </NavLink>
