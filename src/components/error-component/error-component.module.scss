@@ -1,5 +1,3 @@
-@import '@styles/typography.scss';
-
 .root {
     display: flex;
     flex-direction: column;
@@ -8,12 +6,12 @@
 }
 
 .title {
-    font: var(--heading2);
+    font: var(--medium-bold-title);
 }
 
 .message {
     margin-top: 12px;
-    font: var(--heading6);
+    font: var(--small-text);
     max-width: 75vw;
 }
 

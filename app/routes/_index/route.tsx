@@ -30,7 +30,7 @@ export default function HomePage() {
                 onButtonClick={() => navigate(ROUTES.category.to())}
             />
             <h1 className={styles.heroTitle}>Best Sellers</h1>
-            <p className={styles.hpParagraph}>Shop our best seller items</p>
+            <p className={styles.bestSeller}>Shop our best seller items</p>
             <div className={styles.cardsLayout}>
                 {products?.map((product) =>
                     product.slug && product.name ? (

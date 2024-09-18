@@ -1,5 +1,3 @@
-@import '@styles/typography.scss';
-
 .root {
     padding-top: 10px;
     text-wrap: pretty;
@@ -7,12 +5,12 @@
 
 .infoTitle {
     margin-top: 10px;
-    font: var(--heading6);
+    font: var(--extra-small-title);
     box-shadow: inset 0 -1px black;
 }
 
 .infoDescription {
-    font: var(--paragraph3);
+    font: var(--extra-small-text);
     margin-top: 8px;
     margin-bottom: 8px;
 }

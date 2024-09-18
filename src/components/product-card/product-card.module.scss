@@ -1,5 +1,4 @@
 @import '@styles/general.scss';
-@import '@styles/typography.scss';
 
 .root {
     cursor: pointer;
@@ -19,7 +18,7 @@
 
 .description {
     text-align: left;
-    font: var(--paragraph1);
+    font: var(--medium-title);
 }
 
 // --- MEDIA QUERIES ---
@@ -30,7 +29,12 @@
     }
 }
 
-@media (width < 430px) {
+@media (width < $mobile-width) {
+    .root {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
     .cardContent {
         font-size: 24px;
     }

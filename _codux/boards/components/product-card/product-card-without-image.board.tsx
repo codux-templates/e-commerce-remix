@@ -3,9 +3,12 @@ import { ProductCard } from '~/components/product-card/product-card';
 
 export default createBoard({
     name: 'Product Card No Image',
-    Board: () => <ProductCard name='Shel 50" Class LED 4K UHD Smart TV' price={{ formatted: { price: '$85' } }} />,
+    Board: () => (
+        <ProductCard
+            name='Shel 50" Class LED 4K UHD Smart TV'
+            price={{ formatted: { price: '$85' } }}
+        />
+    ),
     tags: ['Component'],
-    environmentProps: {
-        windowWidth: 578,
-    },
+    isSnippet: true,
 });

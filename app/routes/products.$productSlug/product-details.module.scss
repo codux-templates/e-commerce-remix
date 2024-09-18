@@ -1,6 +1,4 @@
 @import '@styles/general.scss';
-@import '@styles/typography.scss';
-@import '@styles/colors.scss';
 
 .root {
     display: flex;
@@ -29,11 +27,11 @@
 }
 
 .sku {
-    font: var(--paragraph3);
+    font: var(--extra-small-text);
 }
 
 .description {
-    font: var(--paragraph3);
+    font: var(--extra-small-text);
 }
 
 .quantity input {

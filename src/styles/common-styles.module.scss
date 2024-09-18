@@ -1,10 +1,6 @@
-@import '@styles/general.scss';
-@import '@styles/typography.scss';
-@import '@styles/colors.scss';
-
 .introButton {
     text-align: center;
-    font: var(--heading6);
+    font: var(--small-text);
     background-color: var(--snow-white);
     padding: 10px;
     width: 160px;
@@ -22,9 +18,8 @@
 .primaryButton {
     background-color: var(--charcoal-black);
     display: flex;
-    cursor: pointer;
     align-items: center;
-    font: var(--button-font);
+    font: var(--small-text);
     color: var(--snow-white);
     border-radius: 35px;
     height: 42px;
@@ -33,37 +28,19 @@
     border: 1px solid var(--charcoal-black);
     z-index: 1;
 }
+
 .primaryButton:hover {
     background-color: var(--white);
-    border: 1px solid var(--charcoal-black);	   
-    color: var(--charcoal-black);
-}
-
-.secondaryButton {
-    height: 42px;
-    display: flex;
-    color: var(--charcoal-black);
-    align-items: center;
-    font: var(--button-font);
-    cursor: pointer;
-    padding-right: 22px;
-    padding-left: 22px;
-    border: 1px solid white;
-    z-index: 1;
-    background-color: var(--white);
     border: 1px solid var(--charcoal-black);
-    border-radius: 35px;
-    &:hover {
-        background-color: #729991;
-        border:1px solid #729991;
-        color: var(--white);
-    }
+    color: var(--charcoal-black);
+    cursor: pointer;
 }
 
 .linkButton {
     height: 42px;
     display: flex;
     align-items: center;
+    font: var(--small-text);
     cursor: pointer;
     z-index: 1;
 }
@@ -80,5 +57,10 @@
     height: 25px;
     width: 60px;
     padding-right: 10px;
-    font: var(--paragraph3);
+    font: var(--extra-small-text);
+}
+
+.loading {
+    padding: 30px;
+    font: var(--extra-large-text);
 }

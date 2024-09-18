@@ -3,7 +3,9 @@ import { createBoard } from '@wixc3/react-board';
 import App, { ErrorBoundary as rootErrorBoundary, loader as rootLoader } from 'app/root';
 import HomePage, { loader as homePageLoader } from 'app/routes/_index/route';
 import AboutPage from 'app/routes/about/route';
-import ProductsCategoryPage, { loader as productsCategoryPageLoader } from 'app/routes/category.$categorySlug/route';
+import ProductsCategoryPage, {
+    loader as productsCategoryPageLoader,
+} from 'app/routes/category.$categorySlug/route';
 import ProductDetailsPage, {
     ErrorBoundary as productDetailsErrorBoundary,
     loader as productDetailsPageLoader,

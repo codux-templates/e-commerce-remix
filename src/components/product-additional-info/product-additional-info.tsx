@@ -13,7 +13,7 @@ export const ProductAdditionalInfo = ({ className, productInfo }: ProductAdditio
         <div className={classNames(styles.root, className)}>
             {productInfo?.map((info, index) => (
                 <div key={info.title || index}>
-                    <h6 className={styles.infoTitle}>{info.title}</h6>
+                    <div className={styles.infoTitle}>{info.title}</div>
                     {/** use unsafe component for info description, because it comes from e-commerce site back-office */}
                     <UnsafeRichText className={styles.infoDescription}>
                         {info.description}

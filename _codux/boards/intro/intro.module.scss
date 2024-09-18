@@ -1,12 +1,11 @@
 @import '@styles/general.scss';
-@import '@styles/typography.scss';
-@import '@styles/colors.scss';
 
 .container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: var(--white);
     border-radius: 10px;
     display: grid;
     justify-content: center;
@@ -14,7 +13,7 @@
 }
 
 .myStyle {
-    font: var(--paragraph1);
+    font: var(--medium-paragraph);
     color: var(--snow-white);
     padding: 40px 100px;
     text-align: center;
@@ -29,7 +28,7 @@
     color: var(--snow-white);
     padding: 70px 120px;
     text-align: center;
-    font: var(--paragraph1);
+    font: var(--medium-paragraph);
     background-color: var(--charcoal-black);
     text-wrap: pretty;
     display: flex;

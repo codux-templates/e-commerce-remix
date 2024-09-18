@@ -33,7 +33,7 @@
 }
 
 .noteTitle {
-    font: var(--heading6);
+    font: var(--small-title);
     color: var(--charcoal-black);
 }
 
@@ -47,7 +47,7 @@
 }
 
 .priceItems {
-    font: var(--heading6);
+    font: var(--small-title);
     color: var(--charcoal-black);
 
     display: grid;
@@ -60,7 +60,7 @@
 }
 
 .totalPrice {
-    font: var(--bold-paragraph);
+    font: var(--medium-bold-title);
 }
 
 .deliveryBilling {

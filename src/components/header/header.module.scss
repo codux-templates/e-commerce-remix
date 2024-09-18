@@ -1,12 +1,11 @@
 @import '@styles/general.scss';
-@import '@styles/typography.scss';
 
 .root {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 64px;
-    font: var(--paragraph2);
+    font: var(--small-text);
     padding: 0 20px;
 }
 
@@ -18,11 +17,11 @@
 .menuButton {
     padding-right: 22px;
     padding-left: 22px;
-    font: var(--button-font);
 }
 
+.menuButton:hover,
 .activeMenuItem {
-    font-weight: 500;
+    font-weight: bold;
 }
 
 .cartButton {

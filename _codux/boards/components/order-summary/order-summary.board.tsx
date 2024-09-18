@@ -5,6 +5,7 @@ import { OrderSummary } from '../../../../src/components/order-summary/order-sum
 export default createBoard({
     name: 'OrderSummary',
     Board: () => <OrderSummary order={mockOrder} />,
+    isSnippet: true,
     environmentProps: {
         windowWidth: 1024,
         windowHeight: 943,

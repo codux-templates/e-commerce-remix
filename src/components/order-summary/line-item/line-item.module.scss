@@ -1,5 +1,4 @@
 @import '@styles/general.scss';
-@import '@styles/typography';
 
 .root {
     display: grid;
@@ -12,7 +11,7 @@
 }
 
 .productName {
-    font: var(--paragraph1);
+    font: var(--medium-title);
     color: var(--black);
     margin-bottom: 12px;
 }
