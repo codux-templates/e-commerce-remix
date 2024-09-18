@@ -44,14 +44,14 @@ export default function ProductDetailsPage() {
         getInitialSelectedOptions(product.productOptions)
     );
 
-    const getIsOutOfStock = () => {
+    const isOutOfStock = () => {
         if (product.stock?.inventoryStatus === products.InventoryStatus.OUT_OF_STOCK) {
             return true;
         }
 
         const selectedVariant = product.variants?.find((variant) => {
-            for (const [option, value] of Object.entries(selectedOptions)) {
-                if (variant.choices?.[option] !== value) {
+            for (const [optionName, choiceName] of Object.entries(selectedOptions)) {
+                if (variant.choices?.[optionName] !== choiceName) {
                     return false;
                 }
             }
@@ -65,10 +65,10 @@ export default function ProductDetailsPage() {
         return false;
     };
 
-    const isOutOfStock = getIsOutOfStock();
+    const outOfStock = isOutOfStock();
 
     async function addToCartHandler() {
-        if (!product?._id || isOutOfStock) {
+        if (!product?._id || outOfStock) {
             return;
         }
 
@@ -111,7 +111,7 @@ export default function ProductDetailsPage() {
                 )}
 
                 {product.productOptions && product.productOptions.length > 0 && (
-                    <div className={styles.productVariants}>
+                    <div className={styles.productOptions}>
                         {product.productOptions?.map((option) => (
                             <ProductOption
                                 key={option.name}
@@ -148,11 +148,11 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <div>
-                    {isOutOfStock && <div className={styles.outOfStockMessage}>Item is out of stock</div>}
+                    {outOfStock && <div className={styles.outOfStockMessage}>Item is out of stock</div>}
                     <button
                         onClick={addToCartHandler}
                         className={classNames(commonStyles.primaryButton, styles.addToCartBtn)}
-                        disabled={isOutOfStock}
+                        disabled={outOfStock}
                     >
                         Add to Cart
                     </button>
