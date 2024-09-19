@@ -51,11 +51,22 @@ function createApi(): EcomAPI {
                 if (!category) {
                     throw new Error('Category not found');
                 }
-                const productsResponse = await wixClient.products
+                let productsResponse = await wixClient.products
                     .queryProducts()
                     .hasSome('collectionIds', [category!._id])
+                    .limit(100)
                     .find();
-                return successResponse(productsResponse.items);
+
+                const allProducts = productsResponse.items;
+
+                // load all available products. if you have a lot of projects in your site
+                // please implement proper implementation of pagination
+                while (productsResponse.hasNext()) {
+                    productsResponse = await productsResponse.next();
+                    allProducts.push(...productsResponse.items);
+                }
+
+                return successResponse(allProducts);
             } catch (e) {
                 return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
