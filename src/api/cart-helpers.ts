@@ -1,11 +1,11 @@
 import { cart } from '@wix/ecom';
 
 export function findItemIdInCart(
-    cart: cart.Cart & cart.CartNonNullableFields,
+    { lineItems }: cart.Cart & cart.CartNonNullableFields,
     catalogItemId: string,
     options?: Record<string, string>
 ) {
-    return cart.lineItems.find((it) => {
+    return lineItems.find((it) => {
         if (it.catalogReference?.catalogItemId !== catalogItemId) {
             return false;
         }

@@ -115,7 +115,7 @@ function createApi() {
                     channelType: currentCart.ChannelType.WEB,
                 });
                 checkoutId = result.checkoutId;
-            } catch (e) {
+            } catch {
                 return { success: false, url: '' };
             }
             const { redirectSession } = await wixClient.redirects.createRedirectSession({
