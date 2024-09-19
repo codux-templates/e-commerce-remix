@@ -2,11 +2,11 @@ import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node
 import { Link, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
+import { OrderDetails } from '~/api/types';
+import { OrderSummary } from '~/components/order-summary/order-summary';
 import { ROUTES } from '~/router/config';
 import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
-import { OrderDetails } from '~/api/types';
-import { OrderSummary } from '../../../src/components/order-summary/order-summary';
 import styles from './thank-you.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

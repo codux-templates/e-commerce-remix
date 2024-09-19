@@ -157,7 +157,7 @@ function createApi(): EcomAPI {
                 Cookies.set(WIX_SESSION_TOKEN_COOKIE_KEY, JSON.stringify(tokens));
 
                 return successResponse(result.cart);
-            } catch (e) {
+            } catch {
                 return failureResponse(EcomApiErrorCodes.AddCartItemFailure);
             }
         },
@@ -193,7 +193,7 @@ function createApi(): EcomAPI {
             try {
                 const categories = (await wixClient.collections.queryCollections().find()).items;
                 return successResponse(categories);
-            } catch (e) {
+            } catch {
                 return failureResponse(EcomApiErrorCodes.GetAllCategoriesFailure);
             }
         },

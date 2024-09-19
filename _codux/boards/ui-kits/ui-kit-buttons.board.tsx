@@ -1,15 +1,15 @@
-import { createBoard, Variant } from '@wixc3/react-board';
-import styles from '../../../src/styles/ui-kit-buttons.module.scss';
-import commonStyles from '~/styles/common-styles.module.scss';
-import classNames from 'classnames';
-import facebookIcon from '~/assets/svg/facebook.svg';
-import twitterxIcon from '~/assets/svg/twitterx.svg';
-import discordIcon from '~/assets/svg/discord.svg';
-import youtubeIcon from '~/assets/svg/youtube.svg';
-import mediumIcon from '~/assets/svg/medium.svg';
-import githubIcon from '~/assets/svg/github.svg';
 import { NavLink } from '@remix-run/react';
+import { createBoard, Variant } from '@wixc3/react-board';
+import classNames from 'classnames';
 import { MemoryRouter } from 'react-router-dom';
+import discordIcon from '~/assets/svg/discord.svg';
+import facebookIcon from '~/assets/svg/facebook.svg';
+import githubIcon from '~/assets/svg/github.svg';
+import mediumIcon from '~/assets/svg/medium.svg';
+import twitterxIcon from '~/assets/svg/twitterx.svg';
+import youtubeIcon from '~/assets/svg/youtube.svg';
+import commonStyles from '~/styles/common-styles.module.scss';
+import styles from '~/styles/ui-kit-buttons.module.scss';
 
 export default createBoard({
     name: 'UI Kit - Buttons',
@@ -18,7 +18,7 @@ export default createBoard({
             <div className={styles.container}>
                 <div>
                     <span className={styles.uikit}>UI Kit</span>
-                    <span className={styles.coreComponents}> | Core Components</span>
+                    <span className={styles.coreComponents}>{' | '}Core Components</span>
                     <hr className={styles.hrSolid} />
                     <h3 className={styles.sectionTitle}>Buttons</h3>
                 </div>

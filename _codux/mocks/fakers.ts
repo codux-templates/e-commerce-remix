@@ -77,7 +77,7 @@ function createImage(): products.MediaItem {
     };
 }
 
-export function createCart(items: products.Product[]): cart.Cart & cart.CartNonNullableFields {
+export function createCart(items: products.Product[]): Cart {
     return {
         _id: faker.string.uuid(),
         currency: '$',

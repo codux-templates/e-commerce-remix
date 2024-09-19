@@ -1,7 +1,7 @@
 import { createBoard, Variant } from '@wixc3/react-board';
-import styles from '../../../src/styles/ui-kit-components.module.scss';
 import classNames from 'classnames';
 import { ProductCard } from '~/components/product-card/product-card';
+import styles from '~/styles/ui-kit-components.module.scss';
 
 export default createBoard({
     name: 'UI Kit - Components',
@@ -9,7 +9,7 @@ export default createBoard({
         <div className={styles.container}>
             <div>
                 <span className={styles.uikit}>UI Kit</span>
-                <span className={styles.coreComponents}> | Core Components</span>
+                <span className={styles.coreComponents}>{' | '}Core Components</span>
                 <hr className={styles.hrSolid} />
                 <h3 className={styles.sectionTitle}>Components</h3>
             </div>
