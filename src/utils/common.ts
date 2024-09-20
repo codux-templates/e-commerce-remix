@@ -13,7 +13,7 @@ export function getUrlOriginWithPath(url: string) {
  */
 export function getErrorMessage(value: unknown): string | undefined {
     if (isRouteErrorResponse(value)) {
-        return String(value.data);
+        return value.data instanceof Error ? value.data.message : String(value.data);
     }
 
     if (value instanceof Error || isEcomSDKError(value)) {

@@ -68,7 +68,7 @@ function createApi(): EcomAPI {
 
                 return successResponse(allProducts);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
         },
 
@@ -77,7 +77,7 @@ function createApi(): EcomAPI {
                 const products = (await wixClient.products.queryProducts().limit(4).find()).items;
                 return successResponse(products);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
         },
         async getProductBySlug(slug) {
@@ -88,7 +88,7 @@ function createApi(): EcomAPI {
                 }
                 return successResponse(product);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.GetProductFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetProductFailure, getErrorMessage(e));
             }
         },
         async getCart() {
@@ -96,7 +96,7 @@ function createApi(): EcomAPI {
                 const currentCart = await wixClient.currentCart.getCurrentCart();
                 return successResponse(currentCart);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.GetCartFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetCartFailure, getErrorMessage(e));
             }
         },
         async getCartTotals() {
@@ -104,7 +104,7 @@ function createApi(): EcomAPI {
                 const cartTotals = await wixClient.currentCart.estimateCurrentCartTotals();
                 return successResponse(cartTotals);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.GetCartTotalsFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetCartTotalsFailure, getErrorMessage(e));
             }
         },
         async updateCartItemQuantity(id, quantity) {
@@ -120,10 +120,7 @@ function createApi(): EcomAPI {
                 }
                 return successResponse(result.cart);
             } catch (e) {
-                return failureResponse(
-                    EcomApiErrorCodes.UpdateCartItemQuantityFailure,
-                    getErrorMessage(e) ?? 'Unknown error'
-                );
+                return failureResponse(EcomApiErrorCodes.UpdateCartItemQuantityFailure, getErrorMessage(e));
             }
         },
         async removeItemFromCart(id) {
@@ -134,7 +131,7 @@ function createApi(): EcomAPI {
                 }
                 return successResponse(result.cart);
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.RemoveCartItemFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.RemoveCartItemFailure, getErrorMessage(e));
             }
         },
         async addToCart(id, quantity, options) {
@@ -173,7 +170,7 @@ function createApi(): EcomAPI {
                 });
                 checkoutId = result.checkoutId;
             } catch (e) {
-                return failureResponse(EcomApiErrorCodes.CreateCheckoutFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.CreateCheckoutFailure, getErrorMessage(e));
             }
 
             try {
@@ -189,10 +186,7 @@ function createApi(): EcomAPI {
                 }
                 return successResponse({ checkoutUrl: redirectSession?.fullUrl });
             } catch (e) {
-                return failureResponse(
-                    EcomApiErrorCodes.CreateCheckoutRedirectSessionFailure,
-                    getErrorMessage(e) ?? 'Unknown error'
-                );
+                return failureResponse(EcomApiErrorCodes.CreateCheckoutRedirectSessionFailure, getErrorMessage(e));
             }
         },
         async getAllCategories() {
@@ -216,7 +210,7 @@ function createApi(): EcomAPI {
                     return failureResponse(EcomApiErrorCodes.CategoryNotFound);
                 }
 
-                return failureResponse(EcomApiErrorCodes.GetCategoryFailure, getErrorMessage(e) ?? 'Unknown error');
+                return failureResponse(EcomApiErrorCodes.GetCategoryFailure, getErrorMessage(e));
             }
         },
         async getOrder(id) {
