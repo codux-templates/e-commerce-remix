@@ -6,27 +6,24 @@ export function getUrlOriginWithPath(url: string) {
     return new URL(pathname, origin).toString();
 }
 
-/**
- * Try to find some error message in unknown value.
- *
- * Handles remix ErrorResponse and wix ecom platform EcomSDKError error types.
+/*
+ * Retrieves the message from a thrown error.
+ * - Handles Remix ErrorResponse (non-Error instances).
+ * - Handles Wix eCom SDK errors (non-Error instances).
+ * - Defaults to converting the value to a string if no specific error type is matched.
  */
-export function getErrorMessage(value: unknown): string | undefined {
+export function getErrorMessage(value: unknown): string {
+    if (value instanceof Error) {
+        return value.message;
+    }
+
     if (isRouteErrorResponse(value)) {
         return value.data instanceof Error ? value.data.message : String(value.data);
     }
 
-    if (value instanceof Error || isEcomSDKError(value)) {
+    if (isEcomSDKError(value)) {
         return value.message;
     }
 
-    if (typeof value === 'object' && value !== null) {
-        return JSON.stringify(value);
-    }
-
-    if (typeof value === 'string') {
-        return value;
-    }
-
-    return undefined;
+    return String(value);
 }
