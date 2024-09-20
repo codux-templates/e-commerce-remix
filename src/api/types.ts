@@ -41,6 +41,8 @@ export type EcomSDKError = {
         };
     };
 };
+// type according to https://www.wix.com/velo/reference/wix-stores-backend/ecommerce-integration
+export type AddToCartOptions = { variantId: string } | { options: Record<string, string | undefined> };
 
 export function isEcomSDKError(error: unknown): error is EcomSDKError {
     return (
@@ -61,7 +63,7 @@ export type EcomAPI = {
     getCartTotals: () => Promise<EcomAPIResponse<CartTotals>>;
     updateCartItemQuantity: (id: string | undefined | null, quantity: number) => Promise<EcomAPIResponse<Cart>>;
     removeItemFromCart: (id: string) => Promise<EcomAPIResponse<Cart>>;
-    addToCart: (id: string, quantity: number, options?: Record<string, string>) => Promise<EcomAPIResponse<Cart>>;
+    addToCart: (id: string, quantity: number, options?: AddToCartOptions) => Promise<EcomAPIResponse<Cart>>;
     checkout: () => Promise<EcomAPIResponse<{ checkoutUrl: string }>>;
     getAllCategories: () => Promise<EcomAPIResponse<Collection[]>>;
     getCategoryBySlug: (slug: string) => Promise<EcomAPIResponse<CollectionDetails>>;

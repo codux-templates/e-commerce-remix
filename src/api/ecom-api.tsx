@@ -142,7 +142,7 @@ function createApi(): EcomAPI {
                             catalogReference: {
                                 catalogItemId: id,
                                 appId: WIX_STORES_APP_ID,
-                                options: { options: options },
+                                options,
                             },
                             quantity: quantity,
                         },

@@ -13,8 +13,8 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import { ROUTES } from '~/router/config';
-import { getPriceData, getUrlOriginWithPath, isOutOfStock } from '~/utils';
-import { EcomApiErrorCodes } from '~/api/types';
+import { getPriceData, getSelectedVariant, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './product-details.module.scss';
 
@@ -69,10 +69,17 @@ export default function ProductDetailsPage() {
         }
 
         const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+
+        let options: AddToCartOptions = { options: selectedOptions };
+        if (product.manageVariants && selectedVariant?._id) {
+            options = { variantId: selectedVariant._id };
+        }
+
         await addToCart({
             id: product._id,
             quantity,
-            options: selectedOptions as Record<string, string>,
+            options,
         });
         setIsOpen(true);
     }

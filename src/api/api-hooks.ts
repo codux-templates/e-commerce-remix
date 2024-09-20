@@ -3,6 +3,7 @@ import useSwr, { Key } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { findItemIdInCart } from './cart-helpers';
 import { useEcomAPI } from './ecom-api-context-provider';
+import { AddToCartOptions } from './types';
 
 export const useCart = () => {
     const ecomApi = useEcomAPI();
@@ -37,14 +38,18 @@ export const useCartTotals = () => {
     return cartTotals;
 };
 
-type Args = { id: string; quantity: number };
+export type AddToCartArgs = {
+    id: string;
+    quantity: number;
+    options: AddToCartOptions;
+};
 
 export const useAddToCart = () => {
     const ecomApi = useEcomAPI();
     const { data: cart } = useCart();
     return useSWRMutation(
         'cart',
-        async (_key: Key, { arg }: { arg: Args & { options?: Record<string, string> } }) => {
+        async (_key: Key, { arg }: { arg: AddToCartArgs }) => {
             const itemInCart = cart ? findItemIdInCart(cart, arg.id, arg.options) : undefined;
 
             if (itemInCart) {
@@ -71,11 +76,12 @@ export const useAddToCart = () => {
     );
 };
 
+type updateCartItemQuantityArgs = { id: string; quantity: number };
 export const useUpdateCartItemQuantity = () => {
     const ecomApi = useEcomAPI();
     return useSWRMutation(
         'cart',
-        async (_key: Key, { arg }: { arg: Args }) => {
+        async (_key: Key, { arg }: { arg: updateCartItemQuantityArgs }) => {
             const response = await ecomApi.updateCartItemQuantity(arg.id, arg.quantity);
             if (response.status === 'failure') {
                 throw response.error;
