@@ -26,7 +26,11 @@ export function getErrorMessage(value: unknown): string {
     }
 
     if (typeof value == 'object' && value !== null) {
-        return JSON.stringify(value);
+        try {
+            return JSON.stringify(value);
+        } catch {
+            // ignore serialization failure
+        }
     }
 
     return String(value);
