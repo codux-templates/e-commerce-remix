@@ -76,12 +76,12 @@ export const useAddToCart = () => {
     );
 };
 
-type updateCartItemQuantityArgs = { id: string; quantity: number };
+type UpdateCartItemQuantityArgs = { id: string; quantity: number };
 export const useUpdateCartItemQuantity = () => {
     const ecomApi = useEcomAPI();
     return useSWRMutation(
         'cart',
-        async (_key: Key, { arg }: { arg: updateCartItemQuantityArgs }) => {
+        async (_key: Key, { arg }: { arg: UpdateCartItemQuantityArgs }) => {
             const response = await ecomApi.updateCartItemQuantity(arg.id, arg.quantity);
             if (response.status === 'failure') {
                 throw response.error;
