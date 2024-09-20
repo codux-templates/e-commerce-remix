@@ -7,7 +7,7 @@ export function getUrlOriginWithPath(url: string) {
 }
 
 /**
- * Try to find some error message in unknown value
+ * Try to find some error message in unknown value.
  *
  * Handles cases when value is `ErrorResponse`, `EcomSDKError`, `String` or `Object`.
  *
