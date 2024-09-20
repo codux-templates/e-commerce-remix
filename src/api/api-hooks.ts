@@ -38,7 +38,7 @@ export const useCartTotals = () => {
     return cartTotals;
 };
 
-export type AddToCartArgs = {
+type AddToCartArgs = {
     id: string;
     quantity: number;
     options: AddToCartOptions;
