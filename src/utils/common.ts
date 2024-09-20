@@ -18,7 +18,7 @@ export function getErrorMessage(value: unknown): string {
     }
 
     if (isRouteErrorResponse(value)) {
-        return value.data instanceof Error ? value.data.message : String(value.data);
+        return value.data;
     }
 
     if (isEcomSDKError(value)) {
