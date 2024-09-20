@@ -19,13 +19,7 @@ export function ProductImages(props: {
             />
             <div className={styles.imageGrid}>
                 {restImages?.map((item, index) => {
-                    return (
-                        <img
-                            key={index}
-                            src={getImageHttpUrl(item.image?.url, 500)}
-                            alt={item.title}
-                        />
-                    );
+                    return <img key={index} src={getImageHttpUrl(item.image?.url, 500)} alt={item.title} />;
                 })}
             </div>
         </div>

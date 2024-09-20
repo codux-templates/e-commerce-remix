@@ -19,9 +19,7 @@ export const LineItem = ({ item }: LineItemProps) => {
     return (
         <div className={styles.root}>
             <div className={styles.productInfo}>
-                {lineItemImageUrl && (
-                    <img width={200} height={200} src={lineItemImageUrl} alt={productName} />
-                )}
+                {lineItemImageUrl && <img width={200} height={200} src={lineItemImageUrl} alt={productName} />}
 
                 <div className={styles.productDetails}>
                     <div className={styles.productName}>{productName}</div>

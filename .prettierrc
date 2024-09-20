@@ -3,16 +3,7 @@
   "singleQuote": true,
   "overrides": [
     {
-      "files": [
-        "*.js",
-        "*.cjs",
-        "*.mjs",
-        "*.ts",
-        "*.tsx",
-        "*.cts",
-        "*.mts",
-        "*.scss"
-      ],
+      "files": ["*.js", "*.cjs", "*.mjs", "*.ts", "*.tsx", "*.cts", "*.mts", "*.scss"],
       "options": {
         "tabWidth": 4
       }

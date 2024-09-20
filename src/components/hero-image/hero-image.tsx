@@ -16,13 +16,7 @@ export interface HeroImageProps {
     onButtonClick?: () => void;
 }
 
-export const HeroImage = ({
-    title,
-    bottomLabel,
-    buttonLabel,
-    onButtonClick,
-    className,
-}: HeroImageProps) => {
+export const HeroImage = ({ title, bottomLabel, buttonLabel, onButtonClick, className }: HeroImageProps) => {
     return (
         <div className={classNames(styles.root, className)}>
             <picture>

@@ -9,12 +9,7 @@ export interface ErrorComponentProps {
     onActionButtonClick?: () => void;
 }
 
-export const ErrorComponent = ({
-    title,
-    message,
-    actionButtonText,
-    onActionButtonClick,
-}: ErrorComponentProps) => {
+export const ErrorComponent = ({ title, message, actionButtonText, onActionButtonClick }: ErrorComponentProps) => {
     const shouldRenderActionButton = actionButtonText && onActionButtonClick;
 
     return (

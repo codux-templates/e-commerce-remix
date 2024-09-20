@@ -17,10 +17,7 @@ interface CartOpenContextProviderProps extends React.PropsWithChildren {
     initialIsOpen?: boolean;
 }
 
-export function CartOpenContextProvider({
-    children,
-    initialIsOpen = false,
-}: CartOpenContextProviderProps) {
+export function CartOpenContextProvider({ children, initialIsOpen = false }: CartOpenContextProviderProps) {
     const [isOpen, setIsOpen] = useState(initialIsOpen);
 
     const providerValue = useMemo(() => ({ isOpen, setIsOpen }), [isOpen, setIsOpen]);
