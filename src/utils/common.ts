@@ -1,26 +1,34 @@
+import { isRouteErrorResponse } from '@remix-run/react';
+import { isEcomSDKError } from '~/api/types';
+
 export function getUrlOriginWithPath(url: string) {
     const { origin, pathname } = new URL(url);
     return new URL(pathname, origin).toString();
 }
 
-export function toError(value: unknown): Error {
-    if (value instanceof Error) {
+/**
+ * Try to find some error message in unknown value
+ *
+ * Handles cases when value is `ErrorResponse`, `EcomSDKError`, `String` or `Object`.
+ *
+ * Falls back to 'Unknown error' message.
+ */
+export function getErrorMessage(value: unknown): string {
+    if (isRouteErrorResponse(value)) {
+        return String(value.data);
+    }
+
+    if (value instanceof Error || isEcomSDKError(value)) {
+        return value.message;
+    }
+
+    if (typeof value === 'object' && value !== null) {
+        return JSON.stringify(value);
+    }
+
+    if (typeof value === 'string') {
         return value;
     }
 
-    if (typeof value === 'undefined' || value === null) {
-        return new Error();
-    }
-
-    if (typeof value === 'object') {
-        if ('message' in value) {
-            throw new Error(String(value.message));
-        }
-
-        if ('data' in value) {
-            throw new Error(String(value.data));
-        }
-    }
-
-    return new Error(String(value));
+    return 'Unknown error';
 }

@@ -1,12 +1,12 @@
 import { currentCart, orders } from '@wix/ecom';
 import { redirects } from '@wix/redirects';
-import { OAuthStrategy, createClient } from '@wix/sdk';
-import { products, collections } from '@wix/stores';
+import { createClient, OAuthStrategy } from '@wix/sdk';
+import { collections, products } from '@wix/stores';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
-import { toError } from '~/utils';
+import { getErrorMessage } from '~/utils';
 import { DEMO_STORE_WIX_CLIENT_ID, WIX_SESSION_TOKEN_COOKIE_KEY, WIX_STORES_APP_ID } from './constants';
-import { EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError, EcomAPI } from './types';
+import { EcomAPI, EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError } from './types';
 
 function getWixClientId() {
     /**
@@ -252,8 +252,4 @@ function successResponse<T>(body: T): EcomAPISuccessResponse<T> {
         status: 'success',
         body,
     };
-}
-
-function getErrorMessage(e: unknown): string {
-    return isEcomSDKError(e) ? e.message : toError(e).message;
 }

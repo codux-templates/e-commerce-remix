@@ -17,7 +17,7 @@ import { ErrorComponent } from '~/components/error-component/error-component';
 import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
 import { ROUTES } from '~/router/config';
 import '~/styles/index.scss';
-import { toError } from '~/utils';
+import { getErrorMessage } from '~/utils';
 
 export async function loader() {
     return json({
@@ -84,7 +84,7 @@ export function ErrorBoundary() {
         <ContentWrapper>
             <ErrorComponent
                 title={isPageNotFoundError ? 'Page Not Found' : 'Oops, something went wrong'}
-                message={isPageNotFoundError ? undefined : toError(error).message}
+                message={isPageNotFoundError ? undefined : getErrorMessage(error)}
                 actionButtonText="Back to shopping"
                 onActionButtonClick={() => navigate(ROUTES.category.to())}
             />
