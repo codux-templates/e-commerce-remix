@@ -25,5 +25,9 @@ export function getErrorMessage(value: unknown): string {
         return value.message;
     }
 
+    if (typeof value == 'object' && value !== null) {
+        return JSON.stringify(value);
+    }
+
     return String(value);
 }
