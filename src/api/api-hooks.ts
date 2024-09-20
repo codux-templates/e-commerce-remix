@@ -41,7 +41,7 @@ export const useCartTotals = () => {
 type AddToCartArgs = {
     id: string;
     quantity: number;
-    options: AddToCartOptions;
+    options?: AddToCartOptions;
 };
 
 export const useAddToCart = () => {
