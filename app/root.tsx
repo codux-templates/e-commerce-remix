@@ -84,7 +84,7 @@ export function ErrorBoundary() {
         <ContentWrapper>
             <ErrorComponent
                 title={isPageNotFoundError ? 'Page Not Found' : 'Oops, something went wrong'}
-                message={isPageNotFoundError ? undefined : getErrorMessage(error) ?? 'Unknown error'}
+                message={isPageNotFoundError ? undefined : getErrorMessage(error)}
                 actionButtonText="Back to shopping"
                 onActionButtonClick={() => navigate(ROUTES.category.to())}
             />
