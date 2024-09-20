@@ -7,15 +7,31 @@ export function isOutOfStock(
     product: Product | SerializeFrom<Product>,
     selectedOptions: Record<string, string | undefined> = {}
 ) {
-    if (product.stock?.inventoryStatus === wixStoresProducts.InventoryStatus.OUT_OF_STOCK) {
-        return true;
+    if (product.manageVariants) {
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        if (selectedVariant?.stock?.inStock !== undefined) {
+            return !selectedVariant?.stock?.inStock;
+        }
     }
 
-    const selectedVariant = product.variants?.find((variant) => deepEqual(variant.choices, selectedOptions));
+    return product.stock?.inventoryStatus === wixStoresProducts.InventoryStatus.OUT_OF_STOCK;
+}
 
-    if (selectedVariant) {
-        return !selectedVariant.stock?.inStock;
+export function getPriceData(
+    product: Product | SerializeFrom<Product>,
+    selectedOptions: Record<string, string | undefined> = {}
+) {
+    if (product.manageVariants) {
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        return selectedVariant?.variant?.priceData ?? product.priceData;
     }
 
-    return false;
+    return product.priceData;
+}
+
+export function getSelectedVariant(
+    product: Product | SerializeFrom<Product>,
+    selectedOptions: Record<string, string | undefined> = {}
+) {
+    return product.variants?.find((variant) => deepEqual(variant.choices, selectedOptions));
 }

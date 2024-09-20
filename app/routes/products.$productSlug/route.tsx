@@ -13,7 +13,7 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { getPriceData, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { EcomApiErrorCodes } from '~/api/types';
 import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './product-details.module.scss';
@@ -56,6 +56,7 @@ export default function ProductDetailsPage() {
     );
 
     const outOfStock = isOutOfStock(product, selectedOptions);
+    const priceData = getPriceData(product, selectedOptions);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -87,10 +88,10 @@ export default function ProductDetailsPage() {
                 <div>
                     <div className={styles.productName}>{product.name}</div>
                     {product.sku !== undefined && <div className={styles.sku}>SKU: {product.sku}</div>}
-                    {product.priceData?.formatted?.price && (
+                    {priceData?.formatted?.price && (
                         <Price
-                            fullPrice={product.priceData?.formatted?.price}
-                            discountedPrice={product.priceData?.formatted?.discountedPrice}
+                            fullPrice={priceData?.formatted?.price}
+                            discountedPrice={priceData?.formatted?.discountedPrice}
                         />
                     )}
                 </div>
