@@ -5,7 +5,12 @@ import { collections, products } from '@wix/stores';
 import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
 import { getErrorMessage } from '~/utils';
-import { DEMO_STORE_WIX_CLIENT_ID, WIX_SESSION_TOKEN_COOKIE_KEY, WIX_STORES_APP_ID } from './constants';
+import {
+    DEMO_STORE_WIX_CLIENT_ID,
+    WIX_CLIENT_ID_COOKIE_KEY,
+    WIX_SESSION_TOKEN_COOKIE_KEY,
+    WIX_STORES_APP_ID,
+} from './constants';
 import { EcomAPI, EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError } from './types';
 
 function getWixClientId() {
@@ -20,7 +25,19 @@ function getWixClientId() {
     return env.WIX_CLIENT_ID ?? DEMO_STORE_WIX_CLIENT_ID;
 }
 
+function ensureSessionIntegrity() {
+    const sessionWixClientId = Cookies.get(WIX_CLIENT_ID_COOKIE_KEY);
+    const configuredWixClientId = getWixClientId();
+    if (sessionWixClientId !== configuredWixClientId) {
+        Cookies.remove(WIX_SESSION_TOKEN_COOKIE_KEY);
+    }
+
+    Cookies.set(WIX_CLIENT_ID_COOKIE_KEY, configuredWixClientId);
+}
+
 function getTokensClient() {
+    ensureSessionIntegrity();
+
     const tokens = Cookies.get(WIX_SESSION_TOKEN_COOKIE_KEY);
     return tokens ? JSON.parse(tokens) : undefined;
 }
