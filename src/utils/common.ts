@@ -9,11 +9,9 @@ export function getUrlOriginWithPath(url: string) {
 /**
  * Try to find some error message in unknown value.
  *
- * Handles cases when value is `ErrorResponse`, `EcomSDKError`, `String` or `Object`.
- *
- * Falls back to 'Unknown error' message.
+ * Handles remix ErrorResponse and wix ecom platform EcomSDKError error types.
  */
-export function getErrorMessage(value: unknown): string {
+export function getErrorMessage(value: unknown): string | undefined {
     if (isRouteErrorResponse(value)) {
         return String(value.data);
     }
@@ -30,5 +28,5 @@ export function getErrorMessage(value: unknown): string {
         return value;
     }
 
-    return 'Unknown error';
+    return undefined;
 }
