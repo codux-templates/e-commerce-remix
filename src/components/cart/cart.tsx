@@ -12,18 +12,17 @@ export const Cart = () => {
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
-    const [error, setError] = useState<string>();
+    const [checkoutAttempted, setCheckoutAttempted] = useState(false);
     const ecomAPI = useEcomAPI();
 
     const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
+    const someItemsOutOfStock = cart?.lineItems.some((item) => !isCartItemAvailable(item));
 
     async function checkout() {
-        setError(undefined);
-
-        const someItemsOutOfStock = cart?.lineItems.some((item) => !isCartItemAvailable(item));
+        setCheckoutAttempted(true);
 
         if (someItemsOutOfStock) {
-            return setError('Some of the items are out of stock.');
+            return;
         }
 
         const checkoutResponse = await ecomAPI.checkout();
@@ -47,11 +46,13 @@ export const Cart = () => {
                         ))}
                     </div>
                     <div className={styles.subtotalCheckout}>
+                        {checkoutAttempted && someItemsOutOfStock && (
+                            <div className={styles.errorMessage}>Some items are out of stock</div>
+                        )}
                         <label className={styles.subtotalLabel}>
                             <span>Subtotal:</span>
                             {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
                         </label>
-                        {error && <div className={styles.errorMessage}>{error}</div>}
                         <button className={classnames('primaryButton', styles.checkoutButton)} onClick={checkout}>
                             Checkout
                         </button>
