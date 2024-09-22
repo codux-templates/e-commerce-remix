@@ -28,6 +28,10 @@ function getWixClientId() {
 function ensureSessionIntegrity() {
     const sessionWixClientId = Cookies.get(WIX_CLIENT_ID_COOKIE_KEY);
     const configuredWixClientId = getWixClientId();
+
+    // clear user session if headless site changed
+    // this will clear old cart if it exists
+    // we have to do this because old cart may contain products from old site
     if (sessionWixClientId !== configuredWixClientId) {
         Cookies.remove(WIX_SESSION_TOKEN_COOKIE_KEY);
     }
