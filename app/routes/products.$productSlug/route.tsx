@@ -15,7 +15,6 @@ import { getChoiceValue } from '~/components/product-option/product-option-utils
 import { ROUTES } from '~/router/config';
 import { getPriceData, getSelectedVariant, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
-import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -137,7 +136,7 @@ export default function ProductDetailsPage() {
                         <input
                             ref={quantityInput}
                             defaultValue={1}
-                            className={classNames(commonStyles.numberInput, styles.quantity)}
+                            className={classNames('numberInput', styles.quantity)}
                             type="number"
                             min={1}
                             placeholder="1"
@@ -149,7 +148,7 @@ export default function ProductDetailsPage() {
                     {outOfStock && <div className={styles.outOfStockMessage}>Item is out of stock</div>}
                     <button
                         onClick={addToCartHandler}
-                        className={classNames(commonStyles.primaryButton, styles.addToCartBtn)}
+                        className={classNames('primaryButton', styles.addToCartBtn)}
                         disabled={outOfStock}
                     >
                         Add to Cart
