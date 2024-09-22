@@ -91,6 +91,7 @@ export function createCart(items: products.Product[]): Cart {
 export function createCartItem(product: products.Product): CartItemDetails {
     return {
         _id: faker.string.uuid(),
+        availability: { status: cart.ItemAvailabilityStatus.AVAILABLE },
         productName: {
             original: product.name!,
             translated: product.name,
@@ -99,6 +100,7 @@ export function createCartItem(product: products.Product): CartItemDetails {
         image: product.media!.mainMedia!.image!.url!,
         paymentOption: cart.PaymentOptionType.FULL_PAYMENT_ONLINE,
         price: createPrice(),
+        fullPrice: createPrice(),
         descriptionLines: [],
         url: '',
         couponScopes: [],

@@ -8,6 +8,10 @@
     box-shadow: 0 -1px rgba(40, 43, 45, 0.25);
 }
 
+.isOutOfStock {
+    color: var(--grey);
+}
+
 .image {
     width: 100px;
     height: 100px;
@@ -26,9 +30,10 @@
     font: var(--paragraph2);
 }
 
-.remove {
+.removeButton {
     cursor: pointer;
     margin-left: 6px;
+    color: var(--black)
 }
 
 .actionsContainer {
