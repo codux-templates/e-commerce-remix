@@ -5,6 +5,7 @@ import { ChangeEvent } from 'react';
 import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { Price } from '~/components/price/price';
+import { isCartItemAvailable } from '~/utils';
 import styles from './cart-item.module.scss';
 
 export interface CartItemProps {
@@ -30,9 +31,7 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
         }
     }
 
-    const isAvailable =
-        cartItem.availability?.status === cart.ItemAvailabilityStatus.AVAILABLE ||
-        cartItem.availability?.status === cart.ItemAvailabilityStatus.PARTIALLY_AVAILABLE;
+    const isAvailable = isCartItemAvailable(cartItem);
 
     return (
         <div

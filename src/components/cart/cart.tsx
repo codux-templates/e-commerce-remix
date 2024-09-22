@@ -1,7 +1,9 @@
 import classnames from 'classnames';
+import { useState } from 'react';
 import { useCart, useCartTotals } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
+import { isCartItemAvailable } from '~/utils';
 import { CartItem } from './cart-item/cart-item';
 import { useCartOpen } from './cart-open-context';
 import styles from './cart.module.scss';
@@ -10,11 +12,20 @@ export const Cart = () => {
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
+    const [error, setError] = useState<string>();
     const ecomAPI = useEcomAPI();
 
     const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
 
     async function checkout() {
+        setError(undefined);
+
+        const someItemsOutOfStock = cart?.lineItems.some((item) => !isCartItemAvailable(item));
+
+        if (someItemsOutOfStock) {
+            return setError('Some of the items are out of stock.');
+        }
+
         const checkoutResponse = await ecomAPI.checkout();
 
         if (checkoutResponse.status === 'success') {
@@ -40,7 +51,8 @@ export const Cart = () => {
                             <span>Subtotal:</span>
                             {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
                         </label>
-                        <button className={classnames('primaryButton', styles.checkout)} onClick={checkout}>
+                        {error && <div className={styles.errorMessage}>{error}</div>}
+                        <button className={classnames('primaryButton', styles.checkoutButton)} onClick={checkout}>
                             Checkout
                         </button>
                     </div>
