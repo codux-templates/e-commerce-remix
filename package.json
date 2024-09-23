@@ -9,10 +9,7 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc",
-    "prettier": "prettier . -c",
-    "start": "netlify serve",
-    "deploy:dev": "netlify deploy --build",
-    "deploy:prod": "netlify deploy --build --prod"
+    "prettier:check": "prettier . -c"
   },
   "dependencies": {
     "@netlify/functions": "^2.8.1",

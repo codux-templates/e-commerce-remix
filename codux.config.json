@@ -32,7 +32,18 @@
       "@styles": "./src/styles",
       "@styles/*": "./src/styles/*",
       "/*": "./*",
-      "~/*": "./src/*"
+      "~/*": "./src/*",
+      "node:fs": false,
+      "node:fs/promises": false,
+      "node:path": false,
+      "node:crypto": false,
+      "node:stream": false,
+      "node:os": false,
+      "node:util": false,
+      "node:events": false,
+      "node:url": false,
+      "node:buffer": false,
+      "node:assert": false
     }
   },
   "svgLoader": "both",
