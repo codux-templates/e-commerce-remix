@@ -1,5 +1,4 @@
 import { createBoard } from '@wixc3/react-board';
-import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './intro.module.scss';
 
 export default createBoard({
@@ -14,7 +13,7 @@ export default createBoard({
                 easily. Use Codux to design your website the way you want, and Wix Headless e-commerce services to
                 manage your store.
                 <a href={'https://help.codux.com/kb/en/article/kb37137'}>
-                    <button className={commonStyles.introButton}>Learn more</button>
+                    <button className="introButton">Learn more</button>
                 </a>
             </p>
         </div>

@@ -5,7 +5,6 @@ import { ChangeEvent } from 'react';
 import { useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { Price } from '~/components/price/price';
-import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './cart-item.module.scss';
 
 export interface CartItemProps {
@@ -60,7 +59,7 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
                         value={cartItem.quantity}
                         onChange={updateQuantityHandler}
                         min={0}
-                        className={commonStyles.numberInput}
+                        className="numberInput"
                     />
                 </div>
             </div>

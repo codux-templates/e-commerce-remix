@@ -8,7 +8,6 @@ import githubIcon from '~/assets/svg/github.svg';
 import mediumIcon from '~/assets/svg/medium.svg';
 import twitterxIcon from '~/assets/svg/twitterx.svg';
 import youtubeIcon from '~/assets/svg/youtube.svg';
-import commonStyles from '~/styles/common-styles.module.scss';
 import styles from '~/styles/ui-kit-buttons.module.scss';
 
 export default createBoard({
@@ -28,14 +27,14 @@ export default createBoard({
                 <div className={classNames(styles.buttonsContainer, styles.itemSpacing)}>
                     <div>
                         <Variant name="Primary Button">
-                            <button className={classNames(commonStyles.primaryButton)}>Primary</button>
+                            <button className="primaryButton">Primary</button>
                         </Variant>
                         <span className={styles.buttonLabel}>Primary</span>
                     </div>
 
                     <div>
                         <Variant name="Secondary Button">
-                            <button className={classNames(commonStyles.secondaryButton)}>Secondary</button>
+                            <button className="secondaryButton">Secondary</button>
                         </Variant>
                         <span className={styles.buttonLabel}>Secondary</span>
                     </div>

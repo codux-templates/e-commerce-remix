@@ -5,7 +5,6 @@ import { getEcomApi } from '~/api/ecom-api';
 import { OrderDetails } from '~/api/types';
 import { OrderSummary } from '~/components/order-summary/order-summary';
 import { ROUTES } from '~/router/config';
-import commonStyles from '~/styles/common-styles.module.scss';
 import { getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
 
@@ -54,7 +53,7 @@ export default function ThankYouPage() {
             )}
 
             <Link to={ROUTES.category.to()}>
-                <button className={commonStyles.primaryButton} type="button">
+                <button className="primaryButton" type="button">
                     Continue Shopping
                 </button>
             </Link>

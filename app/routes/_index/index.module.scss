@@ -1,4 +1,4 @@
-@import '@styles/general.scss';
+@use '@styles/variables.scss' as *;
 
 .root {
     padding-bottom: 90px;

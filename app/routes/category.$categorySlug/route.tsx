@@ -8,7 +8,6 @@ import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { ErrorComponent } from '~/components/error-component/error-component';
-import commonStyles from '~/styles/common-styles.module.scss';
 import styles from './category.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -56,7 +55,7 @@ export default function ProductsCategoryPage() {
                                     key={category._id}
                                     to={ROUTES.category.to(category.slug)}
                                     className={({ isActive }) =>
-                                        classNames(commonStyles.linkButton, {
+                                        classNames('linkButton', {
                                             [styles.activeCategory]: isActive,
                                         })
                                     }

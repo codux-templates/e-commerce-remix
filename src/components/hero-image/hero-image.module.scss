@@ -1,6 +1,5 @@
-@import '@styles/general.scss';
-@import '@styles/typography.scss';
-@import '@styles/colors.scss';
+@use '@styles/variables.scss' as *;
+
 .root {
     position: relative;
     color: var(--white);

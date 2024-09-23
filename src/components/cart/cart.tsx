@@ -1,8 +1,7 @@
-import Classnames from 'classnames';
+import classnames from 'classnames';
 import { useCart, useCartTotals } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
-import commonStyles from '~/styles/common-styles.module.scss';
 import { CartItem } from './cart-item/cart-item';
 import { useCartOpen } from './cart-open-context';
 import styles from './cart.module.scss';
@@ -41,7 +40,7 @@ export const Cart = () => {
                             <span>Subtotal:</span>
                             {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
                         </label>
-                        <button className={Classnames(commonStyles.primaryButton, styles.checkout)} onClick={checkout}>
+                        <button className={classnames('primaryButton', styles.checkout)} onClick={checkout}>
                             Checkout
                         </button>
                     </div>
