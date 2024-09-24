@@ -5,6 +5,7 @@ export type Product = products.Product;
 export type Collection = collections.Collection;
 export type CollectionDetails = collections.Collection & collections.CollectionNonNullableFields;
 export type Cart = currentCart.Cart & currentCart.CartNonNullableFields;
+export type CartItem = cart.LineItem;
 export type CartItemDetails = cart.LineItem & cart.CartNonNullableFields['lineItems'][0];
 export type CartTotals = currentCart.EstimateTotalsResponse & currentCart.EstimateTotalsResponseNonNullableFields;
 export type OrderDetails = orders.Order & orders.OrderNonNullableFields;
