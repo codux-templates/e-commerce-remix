@@ -38,7 +38,7 @@ export const CartItem = ({ cartItem, className, isLast }: CartItemProps) => {
         <div
             className={classNames(
                 styles.root,
-                { [styles.divider]: !isLast, [styles.isOutOfStock]: !isAvailable },
+                { [styles.divider]: !isLast, [styles.outOfStock]: !isAvailable },
                 className
             )}
         >
