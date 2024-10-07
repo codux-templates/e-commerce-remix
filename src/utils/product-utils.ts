@@ -29,6 +29,18 @@ export function getPriceData(
     return product.priceData;
 }
 
+export function getSKU(
+    product: Product | SerializeFrom<Product>,
+    selectedOptions: Record<string, string | undefined> = {}
+) {
+    if (product.manageVariants) {
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        return selectedVariant?.variant?.sku ?? product.sku;
+    }
+
+    return product.sku;
+}
+
 export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
     selectedOptions: Record<string, string | undefined> = {}
