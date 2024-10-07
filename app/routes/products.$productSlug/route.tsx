@@ -13,7 +13,7 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import { ROUTES } from '~/router/config';
-import { getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { getErrorMessage, getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
@@ -166,28 +166,22 @@ export function ErrorBoundary() {
     const error = useRouteError();
     const navigate = useNavigate();
 
-    if (isRouteErrorResponse(error)) {
-        let title: string;
-        let message: string | undefined;
-        if (error.data.code === EcomApiErrorCodes.ProductNotFound) {
-            title = 'Product Not Found';
-            message = "Unfortunately product you trying to open doesn't exist";
-        } else {
-            title = 'Failed to load product details';
-            message = error.data.message;
-        }
+    let title = 'Error';
+    let message = getErrorMessage(error);
 
-        return (
-            <ErrorComponent
-                title={title}
-                message={message}
-                actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to())}
-            />
-        );
+    if (isRouteErrorResponse(error) && error.data.code === EcomApiErrorCodes.ProductNotFound) {
+        title = 'Product Not Found';
+        message = "Unfortunately a product page you trying to open doesn't exist";
     }
 
-    throw error;
+    return (
+        <ErrorComponent
+            title={title}
+            message={message}
+            actionButtonText="Back to shopping"
+            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+        />
+    );
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
