@@ -1,11 +1,12 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useSearchParams } from '@remix-run/react';
+import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
 import { OrderDetails } from '~/api/types';
+import { ErrorComponent } from '~/components/error-component/error-component';
 import { OrderSummary } from '~/components/order-summary/order-summary';
 import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath } from '~/utils';
+import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -59,6 +60,13 @@ export default function ThankYouPage() {
             </Link>
         </div>
     );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError();
+    const title = isRouteErrorResponse(error) ? 'Failed to load order details' : 'Error';
+    const message = getErrorMessage(error);
+    return <ErrorComponent title={title} message={message} />;
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
