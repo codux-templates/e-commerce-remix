@@ -84,8 +84,6 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
-    console.log('====> PRODUCT', product);
-
     return (
         <div className={styles.root}>
             <ProductImages
