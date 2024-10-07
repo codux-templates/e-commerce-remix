@@ -86,7 +86,7 @@ export function ErrorBoundary() {
                 title={isPageNotFoundError ? 'Page Not Found' : 'Oops, something went wrong'}
                 message={isPageNotFoundError ? undefined : getErrorMessage(error)}
                 actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to())}
+                onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
             />
         </ContentWrapper>
     );

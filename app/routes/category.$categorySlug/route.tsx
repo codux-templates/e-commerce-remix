@@ -6,7 +6,7 @@ import { EcomApiErrorCodes } from '~/api/types';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { ProductCard } from '~/components/product-card/product-card';
 import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { ErrorComponent } from '~/components/error-component/error-component';
 import styles from './category.module.scss';
 
@@ -96,28 +96,22 @@ export function ErrorBoundary() {
     const error = useRouteError();
     const navigate = useNavigate();
 
-    if (isRouteErrorResponse(error)) {
-        let title: string;
-        let message: string | undefined;
-        if (error.data.code === EcomApiErrorCodes.CategoryNotFound) {
-            title = 'Category Not Found';
-            message = "Unfortunately category you trying to open doesn't exist";
-        } else {
-            title = 'Failed to load category products';
-            message = error.data.message;
-        }
+    let title = 'Error';
+    let message = getErrorMessage(error);
 
-        return (
-            <ErrorComponent
-                title={title}
-                message={message}
-                actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to())}
-            />
-        );
+    if (isRouteErrorResponse(error) && error.data.code === EcomApiErrorCodes.CategoryNotFound) {
+        title = 'Category Not Found';
+        message = "Unfortunately, the category page you're trying to open does not exist";
     }
 
-    throw error;
+    return (
+        <ErrorComponent
+            title={title}
+            message={message}
+            actionButtonText="Back to shopping"
+            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+        />
+    );
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
