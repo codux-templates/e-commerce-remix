@@ -6,7 +6,7 @@ import { Product } from '~/api/types';
 export function isOutOfStock(
     product: Product | SerializeFrom<Product>,
     selectedOptions: Record<string, string | undefined> = {}
-) {
+): boolean {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedOptions);
         if (selectedVariant?.stock?.inStock !== undefined) {
@@ -20,7 +20,7 @@ export function isOutOfStock(
 export function getPriceData(
     product: Product | SerializeFrom<Product>,
     selectedOptions: Record<string, string | undefined> = {}
-) {
+): Product['priceData'] {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedOptions);
         return selectedVariant?.variant?.priceData ?? product.priceData;
@@ -29,9 +29,21 @@ export function getPriceData(
     return product.priceData;
 }
 
+export function getSKU(
+    product: Product | SerializeFrom<Product>,
+    selectedOptions: Record<string, string | undefined> = {}
+): Product['sku'] {
+    if (product.manageVariants) {
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        return selectedVariant?.variant?.sku ?? product.sku;
+    }
+
+    return product.sku;
+}
+
 export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
     selectedOptions: Record<string, string | undefined> = {}
-) {
+): wixStoresProducts.Variant | undefined {
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedOptions));
 }

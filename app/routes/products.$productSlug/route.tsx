@@ -13,7 +13,7 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import { ROUTES } from '~/router/config';
-import { getPriceData, getSelectedVariant, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
@@ -56,6 +56,7 @@ export default function ProductDetailsPage() {
 
     const outOfStock = isOutOfStock(product, selectedOptions);
     const priceData = getPriceData(product, selectedOptions);
+    const sku = getSKU(product, selectedOptions);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -93,7 +94,7 @@ export default function ProductDetailsPage() {
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
-                    {product.sku !== undefined && <div className={styles.sku}>SKU: {product.sku}</div>}
+                    {sku !== undefined && <div className={styles.sku}>SKU: {sku}</div>}
                     {priceData?.formatted?.price && (
                         <Price
                             fullPrice={priceData?.formatted?.price}
