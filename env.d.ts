@@ -8,11 +8,6 @@ declare module '*.svg' {
     export default ReactComponent;
 }
 
-declare module 'raw-loader!.*' {
-    const value: string;
-    export default value;
-}
-
 interface ClientENV {
     readonly WIX_CLIENT_ID?: string;
     // more env variables...
