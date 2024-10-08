@@ -1,12 +1,5 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import {
-    isRouteErrorResponse,
-    json,
-    useLoaderData,
-    useNavigate,
-    useRouteError,
-} from '@remix-run/react';
-import { products } from '@wix/stores';
+import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
@@ -19,9 +12,9 @@ import { ProductImages } from '~/components/product-images/product-images';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { getChoiceValue } from '~/components/product-option/product-option-utils';
-import commonStyles from '~/styles/common-styles.module.scss';
 import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath } from '~/utils';
+import { getErrorMessage, getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -29,14 +22,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!productSlug) {
         throw new Error('Missing product slug');
     }
-    const product = await getEcomApi().getProduct(productSlug);
-    if (product === undefined) {
-        throw json('Product Not Found', { status: 404 });
+    const productResponse = await getEcomApi().getProductBySlug(productSlug);
+    if (productResponse.status === 'failure') {
+        throw json(productResponse.error);
     }
 
-    const canonicalUrl = getUrlOriginWithPath(request.url);
-
-    return json({ product, canonicalUrl });
+    return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
 };
 
 export default function ProductDetailsPage() {
@@ -47,12 +38,28 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
+    const getInitialSelectedOptions = () => {
+        const result: Record<string, string | undefined> = {};
+        for (const option of product.productOptions ?? []) {
+            if (option.name) {
+                const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
+                result[option.name] = getChoiceValue(option, initialChoice);
+            }
+        }
+
+        return result;
+    };
+
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
-        getInitialSelectedOptions(product.productOptions)
+        getInitialSelectedOptions()
     );
 
+    const outOfStock = isOutOfStock(product, selectedOptions);
+    const priceData = getPriceData(product, selectedOptions);
+    const sku = getSKU(product, selectedOptions);
+
     async function addToCartHandler() {
-        if (!product?._id) {
+        if (!product?._id || outOfStock) {
             return;
         }
 
@@ -62,10 +69,17 @@ export default function ProductDetailsPage() {
         }
 
         const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
+        const selectedVariant = getSelectedVariant(product, selectedOptions);
+
+        let options: AddToCartOptions = { options: selectedOptions };
+        if (product.manageVariants && selectedVariant?._id) {
+            options = { variantId: selectedVariant._id };
+        }
+
         await addToCart({
             id: product._id,
             quantity,
-            options: selectedOptions as Record<string, string>,
+            options,
         });
         setIsOpen(true);
     }
@@ -80,42 +94,42 @@ export default function ProductDetailsPage() {
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
-                    {product.sku !== undefined && (
-                        <div className={styles.sku}>SKU: {product.sku}</div>
-                    )}
-                    {product.priceData?.formatted?.price && (
+                    {sku !== undefined && <div className={styles.sku}>SKU: {sku}</div>}
+                    {priceData?.formatted?.price && (
                         <Price
-                            fullPrice={product.priceData?.formatted?.price}
-                            discountedPrice={product.priceData?.formatted?.discountedPrice}
+                            fullPrice={priceData?.formatted?.price}
+                            discountedPrice={priceData?.formatted?.discountedPrice}
                         />
                     )}
                 </div>
 
                 {product.description && (
                     /** use unsafe component for description, because it comes from e-commerce site back-office */
-                    <UnsafeRichText className={styles.description}>
-                        {product.description}
-                    </UnsafeRichText>
+                    <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {product.productOptions?.map((option) => (
-                    <ProductOption
-                        key={option.name}
-                        error={
-                            addToCartAttempted && selectedOptions[option.name!] === undefined
-                                ? `Select ${option.name}`
-                                : undefined
-                        }
-                        option={option}
-                        selectedValue={selectedOptions[option.name!]}
-                        onChange={(value) =>
-                            setSelectedOptions((prev) => ({
-                                ...prev,
-                                [option.name!]: value,
-                            }))
-                        }
-                    />
-                ))}
+                {product.productOptions && product.productOptions.length > 0 && (
+                    <div className={styles.productOptions}>
+                        {product.productOptions?.map((option) => (
+                            <ProductOption
+                                key={option.name}
+                                error={
+                                    addToCartAttempted && selectedOptions[option.name!] === undefined
+                                        ? `Select ${option.name}`
+                                        : undefined
+                                }
+                                option={option}
+                                selectedValue={selectedOptions[option.name!]}
+                                onChange={(value) => {
+                                    setSelectedOptions((prev) => ({
+                                        ...prev,
+                                        [option.name!]: value,
+                                    }));
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
 
                 <div className={styles.quantity}>
                     <label>
@@ -123,7 +137,7 @@ export default function ProductDetailsPage() {
                         <input
                             ref={quantityInput}
                             defaultValue={1}
-                            className={classNames(commonStyles.numberInput, styles.quantity)}
+                            className={classNames('numberInput', styles.quantity)}
                             type="number"
                             min={1}
                             placeholder="1"
@@ -132,9 +146,11 @@ export default function ProductDetailsPage() {
                 </div>
 
                 <div>
+                    {outOfStock && <div className={styles.outOfStockMessage}>Item is out of stock</div>}
                     <button
                         onClick={addToCartHandler}
-                        className={classNames(commonStyles.primaryButton, styles.addToCartBtn)}
+                        className={classNames('primaryButton', styles.addToCartBtn)}
+                        disabled={outOfStock}
                     >
                         Add to Cart
                     </button>
@@ -150,21 +166,22 @@ export function ErrorBoundary() {
     const error = useRouteError();
     const navigate = useNavigate();
 
-    if (isRouteErrorResponse(error)) {
-        switch (error.status) {
-            case 404:
-                return (
-                    <ErrorComponent
-                        title="Product Not Found"
-                        message="Unfortunately product you trying to open doesn't exist"
-                        actionButtonText="Back to shopping"
-                        onActionButtonClick={() => navigate(ROUTES.category.to())}
-                    />
-                );
-        }
+    let title = 'Error';
+    let message = getErrorMessage(error);
+
+    if (isRouteErrorResponse(error) && error.data.code === EcomApiErrorCodes.ProductNotFound) {
+        title = 'Product Not Found';
+        message = "Unfortunately a product page you trying to open doesn't exist";
     }
 
-    throw error;
+    return (
+        <ErrorComponent
+            title={title}
+            message={message}
+            actionButtonText="Back to shopping"
+            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+        />
+    );
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -174,8 +191,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
     const title = data.product.name ?? 'Product Details';
     const description = data.product.description ?? 'Product Description';
-    const coverImage =
-        data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
+    const coverImage = data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
 
     return [
         { title: title },
@@ -232,15 +248,3 @@ export const links: LinksFunction = () => {
         },
     ];
 };
-
-function getInitialSelectedOptions(productOptions: products.ProductOption[] | undefined) {
-    const result: Record<string, string | undefined> = {};
-    for (const option of productOptions ?? []) {
-        if (option.name) {
-            const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
-            result[option.name] = getChoiceValue(option, initialChoice);
-        }
-    }
-
-    return result;
-}

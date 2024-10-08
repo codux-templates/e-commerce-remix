@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import React, { FC, useMemo, useState } from 'react';
 import { SWRConfig } from 'swr';
-import type { EcomAPI } from '~/api/ecom-api';
+import type { EcomAPI } from '~/api/types';
 import { EcomAPIContext } from '~/api/ecom-api-context-provider';
 import {
     createCart,
@@ -20,27 +20,37 @@ function getEcomApi(settings?: Settings): EcomAPI {
     const products = createProducts(settings);
 
     const api: EcomAPI = {
-        getProductsByCategory: async () => {
-            return Promise.resolve(products);
+        getProductsByCategory: () => {
+            return Promise.resolve({ status: 'success', body: products });
         },
-        getProduct: async (id: string | undefined) => {
+        getProductBySlug: async (slug: string | undefined) => {
             faker.seed(123);
-            return Promise.resolve(createProduct(id, settings));
+            return Promise.resolve({
+                status: 'success',
+                body: createProduct({ slug, settings }),
+            });
         },
         getPromotedProducts: async () => {
-            return Promise.resolve(products.slice(0, 4));
+            return Promise.resolve({
+                status: 'success',
+                body: products.slice(0, 4),
+            });
         },
         getCart: () => {
             faker.seed(123);
             const productsInCart =
-                settings?.numberOfCartItems === 0
-                    ? []
-                    : products.slice(0, settings?.numberOfCartItems || 2);
-            return Promise.resolve(createCart(productsInCart));
+                settings?.numberOfCartItems === 0 ? [] : products.slice(0, settings?.numberOfCartItems ?? 2);
+            return Promise.resolve({
+                status: 'success',
+                body: createCart(productsInCart),
+            });
         },
         getCartTotals: () => {
             faker.seed(123);
-            return Promise.resolve(getCartTotals());
+            return Promise.resolve({
+                status: 'success',
+                body: getCartTotals(),
+            });
         },
         addToCart: (id: string, quantity: number) => {
             alert(`Add item ${id} to cart with quantity ${quantity}`);
@@ -56,16 +66,25 @@ function getEcomApi(settings?: Settings): EcomAPI {
         },
         checkout: () => {
             alert('Checkout');
-            return Promise.resolve({ success: true, url: '' });
+            return Promise.resolve({ status: 'success', body: { checkoutUrl: '' } });
         },
         getAllCategories: () => {
-            return Promise.resolve([createCategory(settings)]);
+            return Promise.resolve({
+                status: 'success',
+                body: [createCategory(settings)],
+            });
         },
         getCategoryBySlug: () => {
-            return Promise.resolve(createCategory(settings));
+            return Promise.resolve({
+                status: 'success',
+                body: createCategory(settings),
+            });
         },
         getOrder: (id: string) => {
-            return Promise.resolve(createOrder(id));
+            return Promise.resolve({
+                status: 'success',
+                body: createOrder(id),
+            });
         },
     };
 

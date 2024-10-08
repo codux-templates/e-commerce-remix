@@ -33,7 +33,32 @@
     background-color: var(--white);
     border: 1px solid var(--charcoal-black);
     color: var(--charcoal-black);
+}
+
+.secondaryButton {
+    height: 42px;
+    display: flex;
+    color: var(--charcoal-black);
     cursor: pointer;
+    padding-right: 22px;
+    padding-left: 22px;
+    border: 1px solid white;
+    z-index: 1;
+    background-color: var(--white);
+    border: 1px solid var(--charcoal-black);
+    border-radius: 35px;
+    &:hover {
+        background-color: #729991;
+        border: 1px solid #729991;
+        color: var(--white);
+    }
+}
+
+.primaryButton:disabled {
+    cursor: initial;
+    color: var(--white);
+    background-color: var(--grey);
+    border-color: var(--grey);
 }
 
 .linkButton {

@@ -1,3 +1,5 @@
+@use '@styles/variables.scss' as *;
+
 .cart {
     background-color: var(--white);
     padding: 15px 10px 10px;
@@ -29,7 +31,7 @@
     margin: 14px;
 }
 
-.checkout {
+.checkoutButton {
     width: 100%;
     text-align: center;
     justify-content: center;
@@ -41,4 +43,9 @@
     width: 100%;
     padding-left: 4px;
     padding-right: 4px;
+}
+
+.errorMessage {
+    color: var(--red);
+    align-self: flex-start;
 }

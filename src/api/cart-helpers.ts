@@ -1,28 +1,17 @@
-import { cart } from '@wix/ecom';
+import deepEqual from 'fast-deep-equal';
+import { AddToCartOptions, Cart } from './types';
 
-export function findItemIdInCart(
-    { lineItems }: cart.Cart & cart.CartNonNullableFields,
-    catalogItemId: string,
-    options?: Record<string, string>
-) {
+export function findItemIdInCart({ lineItems }: Cart, catalogItemId: string, options?: AddToCartOptions) {
     return lineItems.find((it) => {
         if (it.catalogReference?.catalogItemId !== catalogItemId) {
             return false;
         }
-        const catalogOptions = it.catalogReference?.options?.options;
-        const optionsLength = options ? Object.keys(options).length : 0;
-        const catalogOptionsLength = catalogOptions ? Object.keys(catalogOptions).length : 0;
-        if (optionsLength !== catalogOptionsLength) {
-            return false;
+
+        if (options && 'variantId' in options) {
+            return it.catalogReference?.options?.variantId === options.variantId;
         }
-        if (!options || !catalogOptions) {
-            return true;
-        }
-        for (const optionName of Object.keys(options)) {
-            if (options[optionName] !== catalogOptions[optionName]) {
-                return false;
-            }
-        }
-        return true;
+
+        const lineItemOptions = it.catalogReference?.options?.options;
+        return deepEqual(lineItemOptions, options?.options);
     });
 }

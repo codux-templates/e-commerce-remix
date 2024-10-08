@@ -1,4 +1,4 @@
-@import '@styles/general.scss';
+@use '@styles/variables.scss' as *;
 
 .root {
     cursor: pointer;
@@ -19,6 +19,14 @@
 .description {
     text-align: left;
     font: var(--medium-title);
+}
+
+.outOfStock {
+    color: var(--grey);
+}
+
+.outOfStockMessage {
+    font: var(--extra-small-text);
 }
 
 // --- MEDIA QUERIES ---

@@ -11,13 +11,7 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
     const { lineItems, priceSummary, shippingInfo, billingInfo } = order;
 
     function addressToString(address: orders.Address) {
-        return [
-            address?.addressLine1,
-            address?.addressLine2,
-            address?.city,
-            address?.postalCode,
-            address?.country,
-        ]
+        return [address?.addressLine1, address?.addressLine2, address?.city, address?.postalCode, address?.country]
             .filter((line) => !!line)
             .join(', ');
     }
@@ -58,9 +52,7 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
                     <div className={styles.priceDetails}>
                         <div className={styles.priceItems}>
                             <div>Subtotal</div>
-                            <div className={styles.priceValue}>
-                                {priceSummary?.subtotal?.formattedAmount}
-                            </div>
+                            <div className={styles.priceValue}>{priceSummary?.subtotal?.formattedAmount}</div>
 
                             <div>Delivery</div>
                             <div className={styles.priceValue}>
@@ -70,18 +62,14 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
                             </div>
 
                             <div>Sales Tax</div>
-                            <div className={styles.priceValue}>
-                                {priceSummary?.tax?.formattedAmount}
-                            </div>
+                            <div className={styles.priceValue}>{priceSummary?.tax?.formattedAmount}</div>
                         </div>
 
                         <div className={styles.divider} />
 
                         <div className={cx(styles.priceItems, styles.totalPrice)}>
                             <div>Total</div>
-                            <div className={styles.priceValue}>
-                                {priceSummary?.total?.formattedAmount}
-                            </div>
+                            <div className={styles.priceValue}>{priceSummary?.total?.formattedAmount}</div>
                         </div>
                     </div>
                 </div>
@@ -96,9 +84,7 @@ export const OrderSummary = ({ order }: OrderSummaryProps) => {
                         {deliveryContact?.phone && <li>{deliveryContact?.phone}</li>}
 
                         {shippingInfo?.logistics?.deliveryTime && (
-                            <li className={styles.deliveryTime}>
-                                {shippingInfo?.logistics?.deliveryTime}
-                            </li>
+                            <li className={styles.deliveryTime}>{shippingInfo?.logistics?.deliveryTime}</li>
                         )}
                     </ul>
                 </div>

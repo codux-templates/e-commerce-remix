@@ -3,17 +3,32 @@ import useSwr, { Key } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { findItemIdInCart } from './cart-helpers';
 import { useEcomAPI } from './ecom-api-context-provider';
+import { AddToCartOptions } from './types';
 
 export const useCart = () => {
     const ecomApi = useEcomAPI();
-    return useSwr('cart', ecomApi.getCart);
+    return useSwr('cart', async () => {
+        const response = await ecomApi.getCart();
+        if (response.status === 'failure') {
+            throw response.error;
+        }
+
+        return response.body;
+    });
 };
 
 export const useCartTotals = () => {
     const ecomApi = useEcomAPI();
     const { data } = useCart();
 
-    const cartTotals = useSwr('cart-totals', ecomApi.getCartTotals);
+    const cartTotals = useSwr('cart-totals', async () => {
+        const response = await ecomApi.getCartTotals();
+        if (response.status === 'failure') {
+            throw response.error;
+        }
+
+        return response.body;
+    });
 
     useEffect(() => {
         cartTotals.mutate();
@@ -23,24 +38,36 @@ export const useCartTotals = () => {
     return cartTotals;
 };
 
-type Args = { id: string; quantity: number };
+type AddToCartArgs = {
+    id: string;
+    quantity: number;
+    options?: AddToCartOptions;
+};
 
 export const useAddToCart = () => {
     const ecomApi = useEcomAPI();
     const { data: cart } = useCart();
     return useSWRMutation(
         'cart',
-        (_key: Key, { arg }: { arg: Args & { options?: Record<string, string> } }) => {
-            if (!cart) {
-                return ecomApi.addToCart(arg.id, arg.quantity, arg.options);
+        async (_key: Key, { arg }: { arg: AddToCartArgs }) => {
+            const itemInCart = cart ? findItemIdInCart(cart, arg.id, arg.options) : undefined;
+
+            if (itemInCart) {
+                const updateCartItemQuantityResponse = await ecomApi.updateCartItemQuantity(
+                    itemInCart._id,
+                    (itemInCart.quantity ?? 0) + arg.quantity
+                );
+                if (updateCartItemQuantityResponse.status === 'failure') {
+                    throw updateCartItemQuantityResponse.error;
+                }
+                return updateCartItemQuantityResponse.body;
             }
-            const itemInCart = findItemIdInCart(cart, arg.id, arg.options);
-            return itemInCart
-                ? ecomApi.updateCartItemQuantity(
-                      itemInCart._id,
-                      (itemInCart.quantity || 0) + arg.quantity
-                  )
-                : ecomApi.addToCart(arg.id, arg.quantity, arg.options);
+
+            const addToCartResponse = await ecomApi.addToCart(arg.id, arg.quantity, arg.options);
+            if (addToCartResponse.status === 'failure') {
+                throw addToCartResponse.error;
+            }
+            return addToCartResponse.body;
         },
         {
             revalidate: false,
@@ -49,11 +76,18 @@ export const useAddToCart = () => {
     );
 };
 
+type UpdateCartItemQuantityArgs = { id: string; quantity: number };
 export const useUpdateCartItemQuantity = () => {
     const ecomApi = useEcomAPI();
     return useSWRMutation(
         'cart',
-        (_key: Key, { arg }: { arg: Args }) => ecomApi.updateCartItemQuantity(arg.id, arg.quantity),
+        async (_key: Key, { arg }: { arg: UpdateCartItemQuantityArgs }) => {
+            const response = await ecomApi.updateCartItemQuantity(arg.id, arg.quantity);
+            if (response.status === 'failure') {
+                throw response.error;
+            }
+            return response.body;
+        },
         {
             revalidate: false,
             populateCache: true,
@@ -65,7 +99,13 @@ export const useRemoveItemFromCart = () => {
     const ecomApi = useEcomAPI();
     return useSWRMutation(
         'cart',
-        (_key: Key, { arg }: { arg: string }) => ecomApi.removeItemFromCart(arg),
+        async (_key: Key, { arg }: { arg: string }) => {
+            const response = await ecomApi.removeItemFromCart(arg);
+            if (response.status === 'failure') {
+                throw response.error;
+            }
+            return response.body;
+        },
         {
             revalidate: false,
             populateCache: true,

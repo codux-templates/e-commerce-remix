@@ -1,12 +1,12 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Link, useSearchParams } from '@remix-run/react';
-import { orders } from '@wix/ecom';
+import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
+import { OrderDetails } from '~/api/types';
+import { ErrorComponent } from '~/components/error-component/error-component';
+import { OrderSummary } from '~/components/order-summary/order-summary';
 import { ROUTES } from '~/router/config';
-import commonStyles from '~/styles/common-styles.module.scss';
-import { getUrlOriginWithPath } from '~/utils';
-import { OrderSummary } from '../../../src/components/order-summary/order-summary';
+import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
 import styles from './thank-you.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -17,13 +17,21 @@ export default function ThankYouPage() {
     const [search] = useSearchParams();
     const orderId = search.get('orderId');
 
-    const [order, setOrder] = useState<orders.Order & orders.OrderNonNullableFields>();
+    const [order, setOrder] = useState<OrderDetails>();
+    const [error, setError] = useState<string>();
 
     const api = getEcomApi();
 
     useEffect(() => {
         if (orderId) {
-            api.getOrder(orderId).then((order) => setOrder(order));
+            api.getOrder(orderId).then((response) => {
+                if (response.status === 'success') {
+                    setOrder(response.body);
+                    setError(undefined);
+                } else {
+                    setError(response.error.message ?? 'Unknown error');
+                }
+            });
         }
     }, [api, orderId]);
 
@@ -38,14 +46,27 @@ export default function ThankYouPage() {
             </div>
 
             {order && <OrderSummary order={order} />}
+            {error && (
+                <div className={styles.errorContainer}>
+                    <h2>Could not load your order:</h2>
+                    <div>{error}</div>
+                </div>
+            )}
 
             <Link to={ROUTES.category.to()}>
-                <button className={commonStyles.primaryButton} type="button">
+                <button className="primaryButton" type="button">
                     Continue Shopping
                 </button>
             </Link>
         </div>
     );
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError();
+    const title = isRouteErrorResponse(error) ? 'Failed to load order details' : 'Error';
+    const message = getErrorMessage(error);
+    return <ErrorComponent title={title} message={message} />;
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {

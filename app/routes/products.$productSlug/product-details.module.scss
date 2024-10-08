@@ -1,4 +1,4 @@
-@import '@styles/general.scss';
+@use '@styles/variables.scss' as *;
 
 .root {
     display: flex;
@@ -34,8 +34,19 @@
     font: var(--extra-small-text);
 }
 
+.productOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .quantity input {
     margin-top: 13px;
+}
+
+.outOfStockMessage {
+    margin-bottom: 10px;
+    color: var(--grey);
 }
 
 .addToCartBtn {
