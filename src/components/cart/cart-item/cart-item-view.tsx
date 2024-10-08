@@ -1,11 +1,12 @@
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { cart } from '@wix/ecom';
+import type { cart } from '@wix/ecom';
 import classNames from 'classnames';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { Price } from '~/components/price/price';
 import { isCartItemAvailable } from '~/utils';
 import styles from './cart-item-view.module.scss';
 
+const IMAGE_SIZE = 120;
 export interface CartItemViewProps {
     className?: string;
     isLast?: boolean;
@@ -21,8 +22,8 @@ export const CartItemView = ({
     onRemoveButtonClick,
     onQuantityChange,
 }: CartItemViewProps) => {
-    const name = cartItem.productName?.translated || '';
-    const imageUrl = getImageHttpUrl(cartItem.image, 120, 120);
+    const name = cartItem.productName?.translated ?? '';
+    const imageUrl = getImageHttpUrl(cartItem.image, IMAGE_SIZE, IMAGE_SIZE);
     const isAvailable = isCartItemAvailable(cartItem);
 
     return (
@@ -33,7 +34,7 @@ export const CartItemView = ({
                 className
             )}
         >
-            <img src={imageUrl} alt={name || ''} className={styles.image} />
+            <img src={imageUrl} alt={name} className={styles.image} />
             <div className={styles.infoContainer}>
                 <div className={styles.itemLine}>
                     <div>
