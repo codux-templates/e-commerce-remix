@@ -23,6 +23,7 @@ export default createBoard({
                 />
             </Variant>
             <p className={styles.productCardInfo}>Product Card</p>
+
             <Variant name="Product Card Without Image">
                 <ProductCard
                     name="Im a product"
@@ -31,7 +32,8 @@ export default createBoard({
                 />
             </Variant>
             <p className={styles.productCardInfo}>Product Card - No Image</p>
-            <Variant name="Product Card Without Image">
+
+            <Variant name="Product Card - Out Of Stock">
                 <ProductCard
                     name="Im a product"
                     imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
@@ -41,7 +43,8 @@ export default createBoard({
                 />
             </Variant>
             <p className={styles.productCardInfo}>Product Card - Out Of Stock</p>
-            <Variant name="Product Card Without Image">
+
+            <Variant name="Product Card - With Discount">
                 <ProductCard
                     name="Im a product"
                     imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
@@ -49,7 +52,7 @@ export default createBoard({
                     className={classNames(styles.productCard, styles.productCard)}
                 />
             </Variant>
-            <p className={styles.productCardInfo}>Product Card - Discount price</p>
+            <p className={styles.productCardInfo}>Product Card - With Discount</p>
         </div>
     ),
     isSnippet: true,
