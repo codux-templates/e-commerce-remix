@@ -1,4 +1,4 @@
-import { NavLink } from '@remix-run/react';
+import { Form, NavLink } from '@remix-run/react';
 import classNames from 'classnames';
 import { useCartOpen } from '~/components/cart/cart-open-context';
 import { ROUTES } from '~/router/config';
@@ -17,6 +17,9 @@ export const Header = ({ className }: HeaderProps) => {
                 LOGO
             </NavLink>
             <div className={styles.menu}>
+                <Form id="search-form" action="search" role="search">
+                    <input type="search" placeholder="Search" className={styles.searchInput} name="text" required />
+                </Form>
                 <NavLink
                     to={ROUTES.home.to()}
                     className={({ isActive }) => classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })}

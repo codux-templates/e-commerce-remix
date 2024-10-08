@@ -6,11 +6,13 @@ import {
     ScrollRestoration,
     isRouteErrorResponse,
     json,
+    redirect,
     useLoaderData,
     useNavigate,
     useRouteError,
 } from '@remix-run/react';
 import { useEffect, useRef } from 'react';
+import type { ActionFunctionArgs } from 'react-router-dom';
 import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
 import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
 import { ErrorComponent } from '~/components/error-component/error-component';
@@ -18,6 +20,12 @@ import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
 import { ROUTES } from '~/router/config';
 import '~/styles/index.scss';
 import { getErrorMessage } from '~/utils';
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+    const url = new URL(request.url);
+    const text = url.searchParams.get('text');
+    return redirect(text ? `/search&text=${text}` : ROUTES.home.to());
+};
 
 export async function loader() {
     return json({
