@@ -30,12 +30,31 @@ export default createBoard({
                     className={classNames(styles.productCard, styles.productCard)}
                 />
             </Variant>
-            <p className={styles.productCardInfo}>Product Card No Image</p>
+            <p className={styles.productCardInfo}>Product Card - No Image</p>
+            <Variant name="Product Card Without Image">
+                <ProductCard
+                    name="Im a product"
+                    imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
+                    price={{ formatted: { price: '$15.00' } }}
+                    className={classNames(styles.productCard, styles.productCard)}
+                    outOfStock={true}
+                />
+            </Variant>
+            <p className={styles.productCardInfo}>Product Card - Out Of Stock</p>
+            <Variant name="Product Card Without Image">
+                <ProductCard
+                    name="Im a product"
+                    imageUrl="https://wixmp-b7f7090100b13623109851bc.wixmp.com/layouters-starters/img_02.jpg"
+                    price={{ formatted: { price: '$15.00', discountedPrice: '$10.00' } }}
+                    className={classNames(styles.productCard, styles.productCard)}
+                />
+            </Variant>
+            <p className={styles.productCardInfo}>Product Card - Discount price</p>
         </div>
     ),
     isSnippet: true,
     environmentProps: {
-        windowWidth: 320,
+        windowWidth: 421,
         windowHeight: 525,
     },
     tags: ['UI Kit'],
