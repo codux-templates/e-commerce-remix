@@ -5,10 +5,10 @@ import { Product } from '~/api/types';
 
 export function isOutOfStock(
     product: Product | SerializeFrom<Product>,
-    selectedOptions: Record<string, string | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): boolean {
     if (product.manageVariants) {
-        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        const selectedVariant = getSelectedVariant(product, selectedChoices);
         if (selectedVariant?.stock?.trackQuantity === true) {
             return selectedVariant?.stock?.quantity === 0;
         } else {
@@ -21,10 +21,10 @@ export function isOutOfStock(
 
 export function getPriceData(
     product: Product | SerializeFrom<Product>,
-    selectedOptions: Record<string, string | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): Product['priceData'] {
     if (product.manageVariants) {
-        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        const selectedVariant = getSelectedVariant(product, selectedChoices);
         return selectedVariant?.variant?.priceData ?? product.priceData;
     }
 
@@ -33,10 +33,10 @@ export function getPriceData(
 
 export function getSKU(
     product: Product | SerializeFrom<Product>,
-    selectedOptions: Record<string, string | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): Product['sku'] {
     if (product.manageVariants) {
-        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        const selectedVariant = getSelectedVariant(product, selectedChoices);
         return selectedVariant?.variant?.sku ?? product.sku;
     }
 
@@ -45,7 +45,34 @@ export function getSKU(
 
 export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
-    selectedOptions: Record<string, string | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): wixStoresProducts.Variant | undefined {
-    return product.variants?.find((variant) => deepEqual(variant.choices, selectedOptions));
+    const selectedChoiceValues = selectedChoicesToChoiceValues(product, selectedChoices);
+    return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
 }
+
+export const getChoiceValue = (optionType: wixStoresProducts.OptionType, choice: wixStoresProducts.Choice) => {
+    // for color options, `description` field contains color name
+    // and `value` field contains hex color representation
+    return optionType === wixStoresProducts.OptionType.color ? choice.description : choice.value;
+};
+
+export const selectedChoicesToChoiceValues = (
+    product: Product | SerializeFrom<Product>,
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+) => {
+    const result: Record<string, string | undefined> = {};
+    for (const [optionName, choice] of Object.entries(selectedChoices)) {
+        if (!choice) {
+            result[optionName] = undefined;
+            continue;
+        }
+
+        const option = product.productOptions?.find((option) => option.name === optionName);
+        if (!option?.optionType) continue;
+
+        result[optionName] = getChoiceValue(option.optionType, choice);
+    }
+
+    return result;
+};
