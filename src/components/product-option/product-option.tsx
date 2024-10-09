@@ -1,24 +1,33 @@
 import { products } from '@wix/stores';
 import { ColorSelect } from '~/components/color-select/color-select';
 import { Select } from '~/components/select/select';
-import { getChoiceValue } from './product-option-utils';
 import styles from './product-option.module.scss';
+import { getChoiceValue } from '~/utils';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
-    selectedValue: string | undefined;
+    selectedChoice: products.Choice | undefined;
     error: string | undefined;
-    onChange: (value: string) => void;
+    onChange: (value: products.Choice) => void;
 }
 
-export const ProductOption = ({ option, selectedValue, error, onChange }: ProductOptionProps) => {
+export const ProductOption = ({ option, selectedChoice, error, onChange }: ProductOptionProps) => {
     const { name, optionType, choices } = option;
 
     if (name === undefined || choices === undefined) {
         return null;
     }
 
-    const selectedChoice = choices.find((c) => getChoiceValue(option, c) === selectedValue);
+    const handleChange = (value: string) => {
+        if (!optionType) {
+            return;
+        }
+
+        const newSelectedChoice = choices.find((c) => getChoiceValue(optionType, c) === value);
+        if (newSelectedChoice) {
+            onChange(newSelectedChoice);
+        }
+    };
 
     return (
         <div className={styles.root}>
@@ -36,8 +45,8 @@ export const ProductOption = ({ option, selectedValue, error, onChange }: Produc
                             name: c.description!,
                             hexValue: c.value!,
                         }))}
-                    onChange={onChange}
-                    selectedName={selectedValue}
+                    onChange={handleChange}
+                    selectedName={selectedChoice?.description}
                 />
             ) : (
                 <Select
@@ -48,9 +57,9 @@ export const ProductOption = ({ option, selectedValue, error, onChange }: Produc
                             name: c.description!,
                             value: c.value!,
                         }))}
-                    value={selectedValue}
+                    value={selectedChoice?.value}
                     placeholder={`Select ${name}`}
-                    onChange={onChange}
+                    onChange={handleChange}
                 />
             )}
             {error !== undefined && <div className={styles.error}>{error}</div>}

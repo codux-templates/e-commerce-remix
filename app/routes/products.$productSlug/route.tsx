@@ -1,5 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
@@ -11,9 +12,16 @@ import { ProductAdditionalInfo } from '~/components/product-additional-info/prod
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
-import { getChoiceValue } from '~/components/product-option/product-option-utils';
 import { ROUTES } from '~/router/config';
-import { getErrorMessage, getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import {
+    getErrorMessage,
+    getPriceData,
+    selectedChoicesToVariantChoices,
+    getSelectedVariant,
+    getSKU,
+    getUrlOriginWithPath,
+    isOutOfStock,
+} from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
@@ -38,25 +46,24 @@ export default function ProductDetailsPage() {
     const { trigger: addToCart } = useAddToCart();
     const quantityInput = useRef<HTMLInputElement>(null);
 
-    const getInitialSelectedOptions = () => {
-        const result: Record<string, string | undefined> = {};
+    const getInitialSelectedChoices = () => {
+        const result: Record<string, products.Choice | undefined> = {};
         for (const option of product.productOptions ?? []) {
             if (option.name) {
-                const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
-                result[option.name] = getChoiceValue(option, initialChoice);
+                result[option.name] = option?.choices?.length === 1 ? option.choices[0] : undefined;
             }
         }
 
         return result;
     };
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
-        getInitialSelectedOptions()
+    const [selectedChoices, setSelectedChoices] = useState<Record<string, products.Choice | undefined>>(
+        getInitialSelectedChoices()
     );
 
-    const outOfStock = isOutOfStock(product, selectedOptions);
-    const priceData = getPriceData(product, selectedOptions);
-    const sku = getSKU(product, selectedOptions);
+    const outOfStock = isOutOfStock(product, selectedChoices);
+    const priceData = getPriceData(product, selectedChoices);
+    const sku = getSKU(product, selectedChoices);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -64,14 +71,14 @@ export default function ProductDetailsPage() {
         }
 
         setAddToCartAttempted(true);
-        if (Object.values(selectedOptions).includes(undefined)) {
+        if (Object.values(selectedChoices).includes(undefined)) {
             return;
         }
 
         const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
-        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        const selectedVariant = getSelectedVariant(product, selectedChoices);
 
-        let options: AddToCartOptions = { options: selectedOptions };
+        let options: AddToCartOptions = { options: selectedChoicesToVariantChoices(product, selectedChoices) };
         if (product.manageVariants && selectedVariant?._id) {
             options = { variantId: selectedVariant._id };
         }
@@ -114,16 +121,16 @@ export default function ProductDetailsPage() {
                             <ProductOption
                                 key={option.name}
                                 error={
-                                    addToCartAttempted && selectedOptions[option.name!] === undefined
+                                    addToCartAttempted && selectedChoices[option.name!] === undefined
                                         ? `Select ${option.name}`
                                         : undefined
                                 }
                                 option={option}
-                                selectedValue={selectedOptions[option.name!]}
-                                onChange={(value) => {
-                                    setSelectedOptions((prev) => ({
+                                selectedChoice={selectedChoices[option.name!]}
+                                onChange={(newSelectedChoice) => {
+                                    setSelectedChoices((prev) => ({
                                         ...prev,
-                                        [option.name!]: value,
+                                        [option.name!]: newSelectedChoice,
                                     }));
                                 }}
                             />
