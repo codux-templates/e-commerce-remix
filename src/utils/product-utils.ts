@@ -47,7 +47,7 @@ export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): wixStoresProducts.Variant | undefined {
-    const selectedChoiceValues = selectedChoicesToChoiceValues(product, selectedChoices);
+    const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices);
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
 }
 
@@ -60,7 +60,10 @@ export const getChoiceValue = (
     return optionType === wixStoresProducts.OptionType.color ? choice.description : choice.value;
 };
 
-export const selectedChoicesToChoiceValues = (
+// selected choices is a map of option names to selected choice objects - {'Size': {value: 'Large', visible: true...}}
+// variant choices is a map of option names to selected choice values - {'Size': 'Large'}
+// the name 'variant choices' is used because the same data structure is used for the Variant['choices'] property provided by SDK
+export const selectedChoicesToVariantChoices = (
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): Record<string, string | undefined> => {

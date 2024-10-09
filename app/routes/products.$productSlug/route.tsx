@@ -16,7 +16,7 @@ import { ROUTES } from '~/router/config';
 import {
     getErrorMessage,
     getPriceData,
-    selectedChoicesToChoiceValues,
+    selectedChoicesToVariantChoices,
     getSelectedVariant,
     getSKU,
     getUrlOriginWithPath,
@@ -78,7 +78,7 @@ export default function ProductDetailsPage() {
         const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
         const selectedVariant = getSelectedVariant(product, selectedChoices);
 
-        let options: AddToCartOptions = { options: selectedChoicesToChoiceValues(product, selectedChoices) };
+        let options: AddToCartOptions = { options: selectedChoicesToVariantChoices(product, selectedChoices) };
         if (product.manageVariants && selectedVariant?._id) {
             options = { variantId: selectedVariant._id };
         }
