@@ -21,6 +21,7 @@ import {
     getSKU,
     getUrlOriginWithPath,
     isOutOfStock,
+    getMedia,
 } from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
@@ -64,6 +65,7 @@ export default function ProductDetailsPage() {
     const outOfStock = isOutOfStock(product, selectedChoices);
     const priceData = getPriceData(product, selectedChoices);
     const sku = getSKU(product, selectedChoices);
+    const media = getMedia(product, selectedChoices);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -93,11 +95,7 @@ export default function ProductDetailsPage() {
 
     return (
         <div className={styles.root}>
-            <ProductImages
-                mainImage={product.media?.mainMedia}
-                images={product.media?.items}
-                className={styles.media}
-            />
+            <ProductImages mainImage={media?.mainMedia} images={media?.items} className={styles.media} />
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
