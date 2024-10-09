@@ -9,9 +9,7 @@ export function isOutOfStock(
 ): boolean {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedChoices);
-        if (selectedVariant?.stock?.trackQuantity === true) {
-            return selectedVariant?.stock?.quantity === 0;
-        } else {
+        if (selectedVariant !== undefined) {
             return selectedVariant?.stock?.inStock === false;
         }
     }
