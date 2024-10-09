@@ -51,16 +51,19 @@ export function getSelectedVariant(
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
 }
 
-export const getChoiceValue = (optionType: wixStoresProducts.OptionType, choice: wixStoresProducts.Choice) => {
-    // for color options, `description` field contains color name
-    // and `value` field contains hex color representation
+export const getChoiceValue = (
+    optionType: wixStoresProducts.OptionType,
+    choice: wixStoresProducts.Choice
+): string | undefined => {
+    // for color options, `description` field contains color name and `value` field contains hex color representation
+    // e-commerce SDK for some actions (adding to cart for example) expects color name as selected color value
     return optionType === wixStoresProducts.OptionType.color ? choice.description : choice.value;
 };
 
 export const selectedChoicesToChoiceValues = (
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
-) => {
+): Record<string, string | undefined> => {
     const result: Record<string, string | undefined> = {};
     for (const [optionName, choice] of Object.entries(selectedChoices)) {
         if (!choice) {
