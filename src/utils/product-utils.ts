@@ -82,3 +82,11 @@ export const selectedChoicesToVariantChoices = (
 
     return result;
 };
+
+export function getMedia(
+    product: Product | SerializeFrom<Product>,
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+): wixStoresProducts.Media | undefined {
+    const selectedChoiceWithMedia = Object.values(selectedChoices).find((c) => c?.media?.mainMedia !== undefined);
+    return selectedChoiceWithMedia?.media ?? product.media;
+}
