@@ -99,7 +99,7 @@ export default function ProductDetailsPage() {
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
-                    {sku !== undefined && <div className={styles.sku}>SKU: {sku}</div>}
+                    {sku && <div className={styles.sku}>SKU: {sku}</div>}
                     {priceData?.formatted?.price && (
                         <Price
                             fullPrice={priceData?.formatted?.price}
