@@ -40,7 +40,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
-    console.log('=====> PRODUCT', product);
     const { setIsOpen } = useCartOpen();
     const [addToCartAttempted, setAddToCartAttempted] = useState(false);
 
