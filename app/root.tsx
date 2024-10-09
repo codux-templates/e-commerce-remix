@@ -69,8 +69,6 @@ export function ErrorBoundary() {
             const url = routeLocationToUrl(navigation.location, window.location.origin);
             // force full page reload after navigating from error boundary
             // to fix remix issue with style tags disappearing
-
-            console.log('HEEEEERRRRRREEEE');
             window.location.assign(url);
         }
     }, [navigation]);
