@@ -34,7 +34,7 @@ export const CartView = ({
                         key={item._id}
                         cartItem={item}
                         onQuantityChange={(newQuantity: number) => onItemQuantityChange(item._id!, newQuantity)}
-                        onRemove={() => onItemRemove(item._id!)}
+                        onRemoveButtonClick={() => onItemRemove(item._id!)}
                     />
                 ))}
             </div>
