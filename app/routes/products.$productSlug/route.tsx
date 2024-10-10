@@ -74,19 +74,19 @@ export default function ProductDetailsPage() {
      */
     function getAllowedOptionValues(
         option: products.ProductOption,
-        currentChoices: Record<string, products.Choice | undefined>,
+        selectedChoices: Record<string, products.Choice | undefined>,
         variants: products.Variant[],
         allOptions: products.ProductOption[]
     ): Set<string> {
-        const optionsChoices = Object.entries(currentChoices)
-            .filter(([, madeChoice]) => madeChoice)
-            .map(([optionName, madeChoice]) => ({ optionName, madeChoice: madeChoice! }));
+        const optionsChoices = Object.entries(selectedChoices)
+            .filter(([, selectedChoice]) => selectedChoice)
+            .map(([optionName, selectedChoice]) => ({ optionName, selectedChoice: selectedChoice! }));
 
         const visibleVariants = variants?.filter((v) => v.variant?.visible) ?? [];
 
         // filter variants that match the current choices for all options except the current one
         const allowedVariants = visibleVariants.filter((variant) =>
-            optionsChoices.every(({ optionName, madeChoice }) => {
+            optionsChoices.every(({ optionName, selectedChoice }) => {
                 if (optionName === option.name) {
                     return true;
                 }
@@ -96,7 +96,7 @@ export default function ProductDetailsPage() {
                     return false;
                 }
 
-                const choiceValue = getChoiceValue(choiceOption.optionType!, madeChoice);
+                const choiceValue = getChoiceValue(choiceOption.optionType!, selectedChoice);
                 const variantValue = variant.choices?.[optionName];
 
                 return variantValue === choiceValue;
