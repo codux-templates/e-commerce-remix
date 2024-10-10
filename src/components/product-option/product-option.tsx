@@ -6,17 +6,22 @@ import { getChoiceValue } from '~/utils';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
+    allowedValues: Set<string> | undefined;
     selectedChoice: products.Choice | undefined;
     error: string | undefined;
     onChange: (value: products.Choice) => void;
 }
 
-export const ProductOption = ({ option, selectedChoice, error, onChange }: ProductOptionProps) => {
+export const ProductOption = ({ option, allowedValues, selectedChoice, error, onChange }: ProductOptionProps) => {
     const { name, optionType, choices } = option;
 
     if (name === undefined || choices === undefined) {
         return null;
     }
+
+    const allowedChoices = choices.filter(
+        (c) => allowedValues === undefined || allowedValues.has(getChoiceValue(optionType!, c)!)
+    );
 
     const handleChange = (value: string) => {
         if (!optionType) {
@@ -39,7 +44,7 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
             {optionType === products.OptionType.color ? (
                 <ColorSelect
                     hasError={error !== undefined}
-                    options={choices
+                    options={allowedChoices
                         .filter((c) => c.value && c.description)
                         .map((c) => ({
                             name: c.description!,
@@ -51,7 +56,7 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
             ) : (
                 <Select
                     hasError={error !== undefined}
-                    options={choices
+                    options={allowedChoices
                         .filter((c) => c.value && c.description)
                         .map((c) => ({
                             name: c.description!,

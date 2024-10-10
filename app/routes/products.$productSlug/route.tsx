@@ -22,6 +22,7 @@ import {
     getUrlOriginWithPath,
     isOutOfStock,
     getMedia,
+    getChoiceValue,
 } from '~/utils';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
@@ -66,6 +67,47 @@ export default function ProductDetailsPage() {
     const priceData = getPriceData(product, selectedChoices);
     const sku = getSKU(product, selectedChoices);
     const media = getMedia(product, selectedChoices);
+
+    /**
+     * Returns the set of allowed values for the specified option
+     * based on available product variants and other options choices.
+     */
+    function getAllowedOptionValues(
+        option: products.ProductOption,
+        currentChoices: Record<string, products.Choice | undefined>,
+        variants: products.Variant[],
+        allOptions: products.ProductOption[]
+    ): Set<string> {
+        const optionsChoices = Object.entries(currentChoices)
+            .filter(([, madeChoice]) => madeChoice)
+            .map(([optionName, madeChoice]) => ({ optionName, madeChoice: madeChoice! }));
+
+        const visibleVariants = variants?.filter((v) => v.variant?.visible) ?? [];
+
+        // filter variants that match the current choices for all options except the current one
+        const allowedVariants = visibleVariants.filter((variant) =>
+            optionsChoices.every(({ optionName, madeChoice }) => {
+                if (optionName === option.name) {
+                    return true;
+                }
+
+                const choiceOption = allOptions.find((o) => o.name === optionName);
+                if (!choiceOption) {
+                    return false;
+                }
+
+                const choiceValue = getChoiceValue(choiceOption.optionType!, madeChoice);
+                const variantValue = variant.choices?.[optionName];
+
+                return variantValue === choiceValue;
+            })
+        );
+
+        // collect allowed values for the specified option
+        const allowedOptionValues = allowedVariants.map((variant) => variant.choices![option.name!]);
+
+        return new Set(allowedOptionValues);
+    }
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -118,6 +160,16 @@ export default function ProductDetailsPage() {
                         {product.productOptions?.map((option) => (
                             <ProductOption
                                 key={option.name}
+                                allowedValues={
+                                    product.manageVariants
+                                        ? getAllowedOptionValues(
+                                              option,
+                                              selectedChoices,
+                                              product.variants!,
+                                              product.productOptions!
+                                          )
+                                        : undefined
+                                }
                                 error={
                                     addToCartAttempted && selectedChoices[option.name!] === undefined
                                         ? `Select ${option.name}`
