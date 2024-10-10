@@ -1,17 +1,18 @@
 @use '@styles/variables.scss' as *;
 
 .container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 10px;
-    display: grid;
+    width: 100%;
+    height: 100vh;
+    display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.content {
     width: 1000px;
 }
 
-.myStyle {
+.title {
     font: var(--paragraph1);
     color: var(--snow-white);
     padding: 40px 100px;
@@ -23,7 +24,7 @@
     border-radius: 20px 20px 0 0;
 }
 
-.myParagraph {
+.description {
     color: var(--snow-white);
     padding: 70px 120px;
     text-align: center;
@@ -43,15 +44,15 @@
         margin-top: unset;
     }
 
-    .myStyle,
-    .myParagraph {
+    .title,
+    .description {
         padding: 50px 40px;
     }
 }
 
 @media (width <= $mobile-width) {
-    .myStyle,
-    .myParagraph {
+    .title,
+    .description {
         font-size: 20px;
     }
 }
