@@ -27,6 +27,48 @@ import {
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
+function getVisibleOptions(
+    product: Pick<products.Product, 'productOptions' | 'variants'>,
+    selectedChoices: Record<string, products.Choice | undefined>
+): products.ProductOption[] {
+    return product.productOptions!.map((option) => {
+        const optionsChoices = Object.entries(selectedChoices)
+            .filter(([, selectedChoice]) => selectedChoice)
+            .map(([optionName, selectedChoice]) => ({ optionName, selectedChoice: selectedChoice! }));
+
+        const visibleVariants = product.variants?.filter((v) => v.variant?.visible) ?? [];
+
+        // filter variants that match the current choices for all options except the current one
+        const allowedVariants = visibleVariants.filter((variant) =>
+            optionsChoices.every(({ optionName, selectedChoice }) => {
+                if (optionName === option.name) {
+                    return true;
+                }
+
+                const choiceOption = product.productOptions?.find((o) => o.name === optionName);
+                if (!choiceOption) {
+                    return false;
+                }
+
+                const choiceValue = getChoiceValue(choiceOption.optionType!, selectedChoice);
+                const variantValue = variant.choices?.[optionName];
+
+                return variantValue === choiceValue;
+            })
+        );
+
+        // collect allowed values for the specified option
+        const allowedOptionValues = new Set(allowedVariants.map((variant) => variant.choices![option.name!]));
+
+        const result: products.ProductOption = {
+            ...option,
+            choices: option.choices?.filter((c) => allowedOptionValues.has(getChoiceValue(option.optionType!, c)!)),
+        };
+
+        return result;
+    });
+}
+
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const productSlug = params.productSlug;
     if (!productSlug) {
@@ -68,47 +110,6 @@ export default function ProductDetailsPage() {
     const sku = getSKU(product, selectedChoices);
     const media = getMedia(product, selectedChoices);
 
-    /**
-     * Returns the set of allowed values for the specified option
-     * based on available product variants and other options choices.
-     */
-    function getAllowedOptionValues(
-        option: products.ProductOption,
-        selectedChoices: Record<string, products.Choice | undefined>,
-        variants: products.Variant[],
-        allOptions: products.ProductOption[]
-    ): Set<string> {
-        const optionsChoices = Object.entries(selectedChoices)
-            .filter(([, selectedChoice]) => selectedChoice)
-            .map(([optionName, selectedChoice]) => ({ optionName, selectedChoice: selectedChoice! }));
-
-        const visibleVariants = variants?.filter((v) => v.variant?.visible) ?? [];
-
-        // filter variants that match the current choices for all options except the current one
-        const allowedVariants = visibleVariants.filter((variant) =>
-            optionsChoices.every(({ optionName, selectedChoice }) => {
-                if (optionName === option.name) {
-                    return true;
-                }
-
-                const choiceOption = allOptions.find((o) => o.name === optionName);
-                if (!choiceOption) {
-                    return false;
-                }
-
-                const choiceValue = getChoiceValue(choiceOption.optionType!, selectedChoice);
-                const variantValue = variant.choices?.[optionName];
-
-                return variantValue === choiceValue;
-            })
-        );
-
-        // collect allowed values for the specified option
-        const allowedOptionValues = allowedVariants.map((variant) => variant.choices![option.name!]);
-
-        return new Set(allowedOptionValues);
-    }
-
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
             return;
@@ -135,6 +136,8 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
+    const visibleOptions = getVisibleOptions(product!, selectedChoices);
+
     return (
         <div className={styles.root}>
             <ProductImages mainImage={media?.mainMedia} images={media?.items} className={styles.media} />
@@ -155,21 +158,11 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {product.productOptions && product.productOptions.length > 0 && (
+                {visibleOptions.length > 0 && (
                     <div className={styles.productOptions}>
-                        {product.productOptions?.map((option) => (
+                        {visibleOptions.map((option) => (
                             <ProductOption
                                 key={option.name}
-                                allowedValues={
-                                    product.manageVariants
-                                        ? getAllowedOptionValues(
-                                              option,
-                                              selectedChoices,
-                                              product.variants!,
-                                              product.productOptions!
-                                          )
-                                        : undefined
-                                }
                                 error={
                                     addToCartAttempted && selectedChoices[option.name!] === undefined
                                         ? `Select ${option.name}`
