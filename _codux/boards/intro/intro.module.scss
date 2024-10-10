@@ -17,7 +17,7 @@
     padding: 40px 100px;
     text-align: center;
     margin-bottom: 8px;
-    background-color: var(--charcoal-black);
+    background: var(--charcoal-black);
     text-wrap: pretty;
     letter-spacing: 10px;
     border-radius: 20px 20px 0 0;
@@ -28,7 +28,7 @@
     padding: 70px 120px;
     text-align: center;
     font: var(--paragraph1);
-    background-color: var(--charcoal-black);
+    background: var(--charcoal-black);
     text-wrap: pretty;
     display: flex;
     flex-direction: column;
