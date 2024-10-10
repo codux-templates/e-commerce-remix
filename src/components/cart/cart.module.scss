@@ -1,7 +1,7 @@
 @use '@styles/variables.scss' as *;
 
 .cart {
-    background-color: var(--white);
+    background: var(--white);
     padding: 15px 10px 10px;
     display: flex;
     flex-direction: column;

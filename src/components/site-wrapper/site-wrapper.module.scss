@@ -7,7 +7,7 @@
 .content {
     min-height: min-content;
     flex-grow: 1;
-    background-color: #f5f5f5;
+    background: var(--snow-white);
     display: flex;
     flex-direction: column;
     justify-content: center;
