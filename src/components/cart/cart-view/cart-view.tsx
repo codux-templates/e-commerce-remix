@@ -8,8 +8,8 @@ export interface CartViewProps {
     cartTotals?: CartTotals;
     errorMessage?: string;
     onCheckout: () => void;
-    onItemQuantityChange: (itemId: string, newQuantity: number) => void;
-    onItemRemove: (itemId: string) => void;
+    onItemQuantityChange: (args: { id: string; quantity: number }) => void;
+    onItemRemove: (id: string) => void;
 }
 
 export const CartView = ({
@@ -20,21 +20,19 @@ export const CartView = ({
     onItemQuantityChange,
     onItemRemove,
 }: CartViewProps) => {
-    const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
-
-    if (isEmpty) {
+    if (cart.lineItems.length === 0) {
         return <div className={styles.emptyCart}>Cart is empty</div>;
     }
 
     return (
         <div className={styles.cart}>
             <div className={styles.items}>
-                {cart?.lineItems?.map((item) => (
+                {cart.lineItems?.map((item) => (
                     <CartItem
                         key={item._id}
                         cartItem={item}
-                        onQuantityChange={(newQuantity: number) => onItemQuantityChange(item._id!, newQuantity)}
-                        onRemoveButtonClick={() => onItemRemove(item._id!)}
+                        onQuantityChange={(quantity: number) => onItemQuantityChange({ id: item._id!, quantity })}
+                        onRemove={() => onItemRemove(item._id!)}
                     />
                 ))}
             </div>

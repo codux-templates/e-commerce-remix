@@ -12,11 +12,11 @@ export interface CartItemProps {
     className?: string;
     isLast?: boolean;
     cartItem: cart.LineItem;
-    onRemoveButtonClick: () => void;
+    onRemove: () => void;
     onQuantityChange: (newQuantity: number) => void;
 }
 
-export const CartItem = ({ cartItem, className, isLast, onRemoveButtonClick, onQuantityChange }: CartItemProps) => {
+export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChange }: CartItemProps) => {
     const name = cartItem.productName?.translated ?? '';
     const imageUrl = getImageHttpUrl(cartItem.image, IMAGE_SIZE, IMAGE_SIZE);
     const isAvailable = isCartItemAvailable(cartItem);
@@ -51,7 +51,7 @@ export const CartItem = ({ cartItem, className, isLast, onRemoveButtonClick, onQ
                             />
                         )}
                     </div>
-                    <button onClick={onRemoveButtonClick} aria-label="Remove item" className={styles.removeButton}>
+                    <button onClick={onRemove} aria-label="Remove item" className={styles.removeButton}>
                         <Cross2Icon height={20} width={18} />
                     </button>
                 </div>

@@ -40,8 +40,8 @@ export const Cart = () => {
                 cartTotals={cartTotals}
                 errorMessage={error}
                 onCheckout={handleCheckout}
-                onItemRemove={(id) => removeItem(id)}
-                onItemQuantityChange={(id, quantity) => updateQuantity({ id, quantity })}
+                onItemRemove={removeItem}
+                onItemQuantityChange={updateQuantity}
             />
         </Drawer>
     );

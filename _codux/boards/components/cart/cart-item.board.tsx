@@ -10,8 +10,8 @@ export default createBoard({
     Board: () => {
         return (
             <ComponentWrapper>
-                <CartItem cartItem={mockCartItem} onQuantityChange={noop} onRemoveButtonClick={noop} />
-                <CartItem cartItem={mockOutOfStockCartItem} onQuantityChange={noop} onRemoveButtonClick={noop} />
+                <CartItem cartItem={mockCartItem} onQuantityChange={noop} onRemove={noop} />
+                <CartItem cartItem={mockOutOfStockCartItem} onQuantityChange={noop} onRemove={noop} />
             </ComponentWrapper>
         );
     },
