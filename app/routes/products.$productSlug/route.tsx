@@ -1,10 +1,11 @@
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
+import { AddToCartOptions, EcomApiErrorCodes, Product } from '~/api/types';
 import { useCartOpen } from '~/components/cart/cart-open-context';
 import { ErrorComponent } from '~/components/error-component/error-component';
 import { Price } from '~/components/price/price';
@@ -14,55 +15,49 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { ROUTES } from '~/router/config';
 import {
+    getChoiceValue,
     getErrorMessage,
+    getMatchingVariants,
+    getMedia,
     getPriceData,
-    selectedChoicesToVariantChoices,
     getSelectedVariant,
     getSKU,
     getUrlOriginWithPath,
     isOutOfStock,
-    getMedia,
-    getChoiceValue,
+    selectedChoicesToVariantChoices,
 } from '~/utils';
-import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
+function isChoiceVisible(
+    choice: products.Choice,
+    option: products.ProductOption,
+    selectedChoices: Record<string, products.Choice | undefined>,
+    product: Product | SerializeFrom<Product>
+): boolean {
+    if (!option.name || !option.optionType) {
+        return false;
+    }
+
+    // Get variants matching all other selected choices except the current option
+    const matchingVariants = getMatchingVariants(product, {
+        ...selectedChoices,
+        [option.name]: undefined,
+    });
+
+    const choiceValue = getChoiceValue(option.optionType, choice);
+    return matchingVariants.some(
+        (variant) => variant.variant?.visible && variant.choices?.[option.name!] === choiceValue
+    );
+}
+
 function getVisibleOptions(
-    product: Pick<products.Product, 'productOptions' | 'variants'>,
+    product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, products.Choice | undefined>
-): products.ProductOption[] {
-    return product.productOptions!.map((option) => {
-        const optionsChoices = Object.entries(selectedChoices)
-            .filter(([, selectedChoice]) => selectedChoice)
-            .map(([optionName, selectedChoice]) => ({ optionName, selectedChoice: selectedChoice! }));
-
-        const visibleVariants = product.variants?.filter((v) => v.variant?.visible) ?? [];
-
-        // filter variants that match the current choices for all options except the current one
-        const allowedVariants = visibleVariants.filter((variant) =>
-            optionsChoices.every(({ optionName, selectedChoice }) => {
-                if (optionName === option.name) {
-                    return true;
-                }
-
-                const choiceOption = product.productOptions?.find((o) => o.name === optionName);
-                if (!choiceOption) {
-                    return false;
-                }
-
-                const choiceValue = getChoiceValue(choiceOption.optionType!, selectedChoice);
-                const variantValue = variant.choices?.[optionName];
-
-                return variantValue === choiceValue;
-            })
-        );
-
-        // collect allowed values for the specified option
-        const allowedOptionValues = new Set(allowedVariants.map((variant) => variant.choices![option.name!]));
-
+): products.ProductOption[] | undefined {
+    return product.productOptions?.map((option) => {
         const result: products.ProductOption = {
             ...option,
-            choices: option.choices?.filter((c) => allowedOptionValues.has(getChoiceValue(option.optionType!, c)!)),
+            choices: option.choices?.filter((choice) => isChoiceVisible(choice, option, selectedChoices, product)),
         };
 
         return result;
@@ -136,7 +131,7 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
-    const visibleOptions = getVisibleOptions(product!, selectedChoices);
+    const visibleOptions = getVisibleOptions(product, selectedChoices);
 
     return (
         <div className={styles.root}>
@@ -158,7 +153,7 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {visibleOptions.length > 0 && (
+                {visibleOptions && visibleOptions.length > 0 && (
                     <div className={styles.productOptions}>
                         {visibleOptions.map((option) => (
                             <ProductOption

@@ -31,7 +31,7 @@ export function getPriceData(
 
 export function getSKU(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
 ): Product['sku'] {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedChoices);
@@ -43,10 +43,48 @@ export function getSKU(
 
 export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
 ): wixStoresProducts.Variant | undefined {
     const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices);
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
+}
+
+/**
+ * Checks if the variant matches all selected choices.
+ * Choices that are not yet selected (value is undefined) are not considered.
+ */
+export function isVariantMatchesSelectedChoices(
+    variant: wixStoresProducts.Variant,
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
+    product: Product | SerializeFrom<Product>
+): boolean {
+    for (const [optionName, variantChoiceValue] of Object.entries(variant.choices ?? {})) {
+        const selectedChoice = selectedChoices[optionName];
+
+        // Skip if no choice is selected for this option
+        if (selectedChoice === undefined) {
+            continue;
+        }
+
+        const choiceOption = product.productOptions?.find((o) => o.name === optionName);
+        if (!choiceOption?.optionType) {
+            return false;
+        }
+
+        const selectedChoiceValue = getChoiceValue(choiceOption.optionType, selectedChoice);
+        if (selectedChoiceValue !== variantChoiceValue) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+export function getMatchingVariants(
+    product: Product | SerializeFrom<Product>,
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
+): wixStoresProducts.Variant[] {
+    return product.variants?.filter((v) => isVariantMatchesSelectedChoices(v, selectedChoices, product)) ?? [];
 }
 
 export const getChoiceValue = (
