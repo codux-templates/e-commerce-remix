@@ -1,6 +1,5 @@
 import { createBoard } from '@wixc3/react-board';
-import ComponentWrapper from '_codux/board-wrappers/component-wrapper';
-import { mockCartItem, mockOutOfStockCartItem } from '_codux/mocks/cart-item';
+import { cartItem, cartItemOutOfStock, cartItemWithDiscount } from '_codux/mocks/cart';
 import { CartItem } from '~/components/cart/cart-item/cart-item';
 
 const noop = () => {};
@@ -9,10 +8,11 @@ export default createBoard({
     name: 'Cart Item',
     Board: () => {
         return (
-            <ComponentWrapper>
-                <CartItem cartItem={mockCartItem} onQuantityChange={noop} onRemove={noop} />
-                <CartItem cartItem={mockOutOfStockCartItem} onQuantityChange={noop} onRemove={noop} />
-            </ComponentWrapper>
+            <div>
+                <CartItem cartItem={cartItem} onQuantityChange={noop} onRemove={noop} />
+                <CartItem cartItem={cartItemOutOfStock} onQuantityChange={noop} onRemove={noop} />
+                <CartItem cartItem={cartItemWithDiscount} onQuantityChange={noop} onRemove={noop} />
+            </div>
         );
     },
     tags: ['Component', 'Cart'],
