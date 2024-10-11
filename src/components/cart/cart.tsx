@@ -13,15 +13,15 @@ export const Cart = () => {
     const { data: cartTotals } = useCartTotals();
     const { trigger: updateQuantity } = useUpdateCartItemQuantity();
     const { trigger: removeItem } = useRemoveItemFromCart();
-    const [error, setError] = useState<string>();
+    const [checkoutAttempted, setCheckoutAttempted] = useState(false);
 
     const someItemsOutOfStock = cart?.lineItems.some((item) => !isCartItemAvailable(item));
 
     const handleCheckout = async () => {
-        setError(undefined);
+        setCheckoutAttempted(true);
 
         if (someItemsOutOfStock) {
-            setError('Some items are out of stock');
+            return;
         }
 
         const checkoutResponse = await ecomAPI.checkout();
@@ -33,12 +33,14 @@ export const Cart = () => {
         }
     };
 
+    const errorMessage = checkoutAttempted && someItemsOutOfStock ? 'Some items are out of stock' : undefined;
+
     return (
         <Drawer title="Cart" onClose={() => setIsOpen(false)} isOpen={isOpen}>
             <CartView
                 cart={cart!}
                 cartTotals={cartTotals}
-                errorMessage={error}
+                errorMessage={errorMessage}
                 onCheckout={handleCheckout}
                 onItemRemove={removeItem}
                 onItemQuantityChange={updateQuantity}
