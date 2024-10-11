@@ -37,14 +37,18 @@ export const Cart = () => {
 
     return (
         <Drawer title="Cart" onClose={() => setIsOpen(false)} isOpen={isOpen}>
-            <CartView
-                cart={cart!}
-                cartTotals={cartTotals}
-                errorMessage={errorMessage}
-                onCheckout={handleCheckout}
-                onItemRemove={removeItem}
-                onItemQuantityChange={updateQuantity}
-            />
+            {cart === undefined ? (
+                <div>Loading...</div>
+            ) : (
+                <CartView
+                    cart={cart}
+                    cartTotals={cartTotals}
+                    errorMessage={errorMessage}
+                    onCheckout={handleCheckout}
+                    onItemRemove={removeItem}
+                    onItemQuantityChange={updateQuantity}
+                />
+            )}
         </Drawer>
     );
 };
