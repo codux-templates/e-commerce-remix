@@ -1,24 +1,23 @@
-import classnames from 'classnames';
 import { useState } from 'react';
-import { useCart, useCartTotals } from '~/api/api-hooks';
+import { useCart, useCartTotals, useRemoveItemFromCart, useUpdateCartItemQuantity } from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 import { Drawer } from '~/components/drawer/drawer';
 import { isCartItemAvailable } from '~/utils';
-import { CartItem } from './cart-item/cart-item';
 import { useCartOpen } from './cart-open-context';
-import styles from './cart.module.scss';
+import { CartView } from './cart-view/cart-view';
 
 export const Cart = () => {
+    const ecomAPI = useEcomAPI();
     const { isOpen, setIsOpen } = useCartOpen();
     const { data: cart } = useCart();
     const { data: cartTotals } = useCartTotals();
+    const { trigger: updateQuantity } = useUpdateCartItemQuantity();
+    const { trigger: removeItem } = useRemoveItemFromCart();
     const [checkoutAttempted, setCheckoutAttempted] = useState(false);
-    const ecomAPI = useEcomAPI();
 
-    const isEmpty = !cart?.lineItems || cart.lineItems.length === 0;
     const someItemsOutOfStock = cart?.lineItems.some((item) => !isCartItemAvailable(item));
 
-    async function checkout() {
+    const handleCheckout = async () => {
         setCheckoutAttempted(true);
 
         if (someItemsOutOfStock) {
@@ -32,32 +31,23 @@ export const Cart = () => {
         } else {
             alert('checkout is not configured');
         }
-    }
+    };
+
+    const errorMessage = checkoutAttempted && someItemsOutOfStock ? 'Some items are out of stock' : undefined;
 
     return (
         <Drawer title="Cart" onClose={() => setIsOpen(false)} isOpen={isOpen}>
-            {isEmpty ? (
-                <div className={styles.emptyCart}>Cart is empty</div>
+            {cart === undefined ? (
+                <div>Loading...</div>
             ) : (
-                <div className={styles.cart}>
-                    <div className={styles.items}>
-                        {cart?.lineItems?.map((item) => (
-                            <CartItem key={item._id} cartItem={item} />
-                        ))}
-                    </div>
-                    <div className={styles.subtotalCheckout}>
-                        {checkoutAttempted && someItemsOutOfStock && (
-                            <div className={styles.errorMessage}>Some items are out of stock</div>
-                        )}
-                        <label className={styles.subtotalLabel}>
-                            <span>Subtotal:</span>
-                            {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
-                        </label>
-                        <button className={classnames('primaryButton', styles.checkoutButton)} onClick={checkout}>
-                            Checkout
-                        </button>
-                    </div>
-                </div>
+                <CartView
+                    cart={cart}
+                    cartTotals={cartTotals}
+                    errorMessage={errorMessage}
+                    onCheckout={handleCheckout}
+                    onItemRemove={removeItem}
+                    onItemQuantityChange={updateQuantity}
+                />
             )}
         </Drawer>
     );
