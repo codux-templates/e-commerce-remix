@@ -5,7 +5,7 @@ import { findItemIdInCart } from './cart-helpers';
 import { useEcomAPI } from './ecom-api-context-provider';
 import { AddToCartOptions } from './types';
 
-export const useCart = () => {
+export const useCartData = () => {
     const ecomApi = useEcomAPI();
     return useSwr('cart', async () => {
         const response = await ecomApi.getCart();
@@ -19,7 +19,7 @@ export const useCart = () => {
 
 export const useCartTotals = () => {
     const ecomApi = useEcomAPI();
-    const { data } = useCart();
+    const { data } = useCartData();
 
     const cartTotals = useSwr('cart-totals', async () => {
         const response = await ecomApi.getCartTotals();
@@ -46,7 +46,7 @@ type AddToCartArgs = {
 
 export const useAddToCart = () => {
     const ecomApi = useEcomAPI();
-    const { data: cart } = useCart();
+    const { data: cart } = useCartData();
     return useSWRMutation(
         'cart',
         async (_key: Key, { arg }: { arg: AddToCartArgs }) => {
