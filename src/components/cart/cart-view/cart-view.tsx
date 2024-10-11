@@ -4,7 +4,7 @@ import { CartItem } from '../cart-item/cart-item';
 import styles from './cart-view.module.scss';
 
 export interface CartViewProps {
-    cart: Cart;
+    cart?: Cart;
     cartTotals?: CartTotals;
     errorMessage?: string;
     onCheckout: () => void;
@@ -20,7 +20,7 @@ export const CartView = ({
     onItemQuantityChange,
     onItemRemove,
 }: CartViewProps) => {
-    if (cart.lineItems.length === 0) {
+    if (!cart || cart.lineItems.length === 0) {
         return <div className={styles.emptyCart}>Cart is empty</div>;
     }
 
