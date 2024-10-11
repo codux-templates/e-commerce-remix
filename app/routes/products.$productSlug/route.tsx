@@ -50,7 +50,7 @@ function isChoiceVisible(
     );
 }
 
-function getVisibleOptions(
+function getActualOptions(
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, products.Choice | undefined>
 ): products.ProductOption[] | undefined {
@@ -131,7 +131,7 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
-    const visibleOptions = getVisibleOptions(product, selectedChoices);
+    const actualOptions = getActualOptions(product, selectedChoices);
 
     return (
         <div className={styles.root}>
@@ -153,9 +153,9 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {visibleOptions && visibleOptions.length > 0 && (
+                {actualOptions && actualOptions.length > 0 && (
                     <div className={styles.productOptions}>
-                        {visibleOptions.map((option) => (
+                        {actualOptions.map((option) => (
                             <ProductOption
                                 key={option.name}
                                 error={
