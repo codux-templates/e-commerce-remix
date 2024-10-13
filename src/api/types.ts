@@ -69,4 +69,5 @@ export type EcomAPI = {
     getAllCategories: () => Promise<EcomAPIResponse<Collection[]>>;
     getCategoryBySlug: (slug: string) => Promise<EcomAPIResponse<CollectionDetails>>;
     getOrder: (id: string) => Promise<EcomAPIResponse<OrderDetails>>;
+    getAllProducts: () => Promise<EcomAPIResponse<Product[]>>;
 };

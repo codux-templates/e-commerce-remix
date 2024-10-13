@@ -249,6 +249,27 @@ function createApi(): EcomAPI {
                 return failureResponse(EcomApiErrorCodes.GetOrderFailure);
             }
         },
+        async getAllProducts() {
+            try {
+                const allCategories = (await wixClient.collections.queryCollections().find()).items;
+
+                const allProducts = [];
+
+                for (const category of allCategories) {
+                    const productsResponse = await wixClient.products
+                        .queryProducts()
+                        .hasSome('collectionIds', [category._id])
+                        .limit(100)
+                        .find();
+
+                    allProducts.push(...productsResponse.items);
+                }
+
+                return successResponse(allProducts);
+            } catch (e) {
+                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
+            }
+        },
     };
 }
 

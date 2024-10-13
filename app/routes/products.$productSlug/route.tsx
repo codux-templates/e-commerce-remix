@@ -30,6 +30,16 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
 };
 
+export const getStaticRoutes = async () => {
+    const products = await getEcomApi().getAllProducts();
+
+    if (products.status === 'failure') {
+        return [];
+    }
+
+    return products.body.map((product) => `/products/${product.slug}`);
+};
+
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();

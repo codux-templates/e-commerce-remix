@@ -86,6 +86,12 @@ function getEcomApi(settings?: Settings): EcomAPI {
                 body: createOrder(id),
             });
         },
+        getAllProducts() {
+            return Promise.resolve({
+                status: 'success',
+                body: products,
+            });
+        },
     };
 
     return api;

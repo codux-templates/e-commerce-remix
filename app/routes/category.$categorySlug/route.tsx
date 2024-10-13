@@ -39,6 +39,16 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     };
 };
 
+export const getStaticRoutes = async () => {
+    const categories = await getEcomApi().getAllCategories();
+
+    if (categories.status === 'failure') {
+        return [];
+    }
+
+    return categories.body.map((category) => `/category/${category.slug}`);
+};
+
 export default function ProductsCategoryPage() {
     const { categoryProducts, currentCategory, allCategories } = useLoaderData<typeof loader>();
 
