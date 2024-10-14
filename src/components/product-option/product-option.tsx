@@ -40,10 +40,11 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                 <ColorSelect
                     hasError={error !== undefined}
                     options={choices
-                        .filter((c) => c.value && c.description)
+                        .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
                             name: c.description!,
                             hexValue: c.value!,
+                            inStock: !!c.inStock,
                         }))}
                     onChange={handleChange}
                     selectedName={selectedChoice?.description}
@@ -52,10 +53,11 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                 <Select
                     hasError={error !== undefined}
                     options={choices
-                        .filter((c) => c.value && c.description)
+                        .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
                             name: c.description!,
                             value: c.value!,
+                            inStock: !!c.inStock,
                         }))}
                     value={selectedChoice?.value}
                     placeholder={`Select ${name}`}

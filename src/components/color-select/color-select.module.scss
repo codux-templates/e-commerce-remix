@@ -16,17 +16,36 @@
     height: 100%;
 }
 
-.option:hover,
+.option:not(.outOfStock):hover,
 .option.selected {
     border-color: var(--charcoal-black);
     padding: 2px;
 }
 
-.option:hover .colorBox,
+.option:not(.outOfStock):hover .colorBox,
 .option.selected .colorBox {
     border: solid 1px var(--grey);
 }
 
 .option.hasError {
     border-color: var(--red);
+}
+
+.outOfStock {
+    position: relative;
+    overflow: hidden;
+}
+
+.outOfStock :first-child {
+    opacity: 0.5;
+}
+
+.outOfStock::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    transform: rotate(45deg);
+    inset: -50%;
+    margin: auto;
+    background-color: var(--charcoal-black);
 }

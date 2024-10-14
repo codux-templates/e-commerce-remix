@@ -1,11 +1,11 @@
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from '@remix-run/node';
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
-import { AddToCartOptions, EcomApiErrorCodes, Product } from '~/api/types';
+import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import { useCartOpen } from '~/components/cart/cart-open-context';
 import { ErrorComponent } from '~/components/error-component/error-component';
 import { Price } from '~/components/price/price';
@@ -15,11 +15,10 @@ import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { ROUTES } from '~/router/config';
 import {
-    getChoiceValue,
     getErrorMessage,
-    getMatchingVariants,
     getMedia,
     getPriceData,
+    getProductOptions,
     getSelectedVariant,
     getSKU,
     getUrlOriginWithPath,
@@ -27,42 +26,6 @@ import {
     selectedChoicesToVariantChoices,
 } from '~/utils';
 import styles from './product-details.module.scss';
-
-function isChoiceVisible(
-    choice: products.Choice,
-    option: products.ProductOption,
-    selectedChoices: Record<string, products.Choice | undefined>,
-    product: Product | SerializeFrom<Product>
-): boolean {
-    if (!option.name || !option.optionType) {
-        return false;
-    }
-
-    // Get variants matching all other selected choices except the current option
-    const matchingVariants = getMatchingVariants(product, {
-        ...selectedChoices,
-        [option.name]: undefined,
-    });
-
-    const choiceValue = getChoiceValue(option.optionType, choice);
-    return matchingVariants.some(
-        (variant) => variant.variant?.visible && variant.choices?.[option.name!] === choiceValue
-    );
-}
-
-function getActualOptions(
-    product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, products.Choice | undefined>
-): products.ProductOption[] | undefined {
-    return product.productOptions?.map((option) => {
-        const result: products.ProductOption = {
-            ...option,
-            choices: option.choices?.filter((choice) => isChoiceVisible(choice, option, selectedChoices, product)),
-        };
-
-        return result;
-    });
-}
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const productSlug = params.productSlug;
@@ -131,7 +94,7 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
-    const actualOptions = getActualOptions(product, selectedChoices);
+    const productOptions = getProductOptions(product, selectedChoices);
 
     return (
         <div className={styles.root}>
@@ -153,9 +116,9 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {actualOptions && actualOptions.length > 0 && (
+                {productOptions && productOptions.length > 0 && (
                     <div className={styles.productOptions}>
-                        {actualOptions.map((option) => (
+                        {productOptions.map((option) => (
                             <ProductOption
                                 key={option.name}
                                 error={
