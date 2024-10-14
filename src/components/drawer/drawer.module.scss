@@ -1,53 +1,15 @@
-@use '@styles/variables.scss' as *;
-
-.background {
+.backdrop {
     position: fixed;
-    top: 0px;
-    right: 0px;
-    bottom: 0;
-    background: rgba(148, 148, 148, 0.5);
-    z-index: 999;
-}
-
-.background.open {
-    left: 0;
+    inset: 0;
+    background: rgba(27, 17, 13, 0.8);
 }
 
 .drawer {
-    right: -480px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 420px;
     height: 100%;
     background: var(--white);
-    transition: right 0.3s ease-in-out;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-}
-
-.drawer.open {
-    right: 0;
-}
-
-.header {
-    background: var(--black);
-    color: var(--white);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font: var(--heading2);
-    padding: 10px;
-    letter-spacing: 2px;
-}
-
-.arrowIcon {
-    position: absolute;
-    left: 0px;
-    margin: 0 0 0 16px;
-    cursor: pointer;
-}
-
-.body {
-    position: relative;
-    flex-grow: 1;
-    overflow: auto;
 }

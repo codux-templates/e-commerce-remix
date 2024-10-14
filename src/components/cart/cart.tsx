@@ -25,7 +25,7 @@ export const Cart = () => {
     const errorMessage = checkoutAttempted && someItemsOutOfStock ? 'Some items are out of stock' : undefined;
 
     return (
-        <Drawer title="Cart" onClose={() => setIsOpen(false)} isOpen={isOpen}>
+        <Drawer onClose={() => setIsOpen(false)} open={isOpen}>
             <CartView
                 cart={cartData}
                 cartTotals={cartTotals}
@@ -33,6 +33,7 @@ export const Cart = () => {
                 onCheckout={handleCheckout}
                 onItemRemove={removeItem}
                 onItemQuantityChange={updateItemQuantity}
+                onClose={() => setIsOpen(false)}
             />
         </Drawer>
     );

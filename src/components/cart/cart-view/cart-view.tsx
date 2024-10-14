@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import { Cart, CartTotals } from '~/api/types';
 import { CartItem } from '../cart-item/cart-item';
 import styles from './cart-view.module.scss';
+import { ChevronRightIcon } from '@radix-ui/react-icons';
 
 export interface CartViewProps {
     cart?: Cart;
@@ -10,6 +11,7 @@ export interface CartViewProps {
     onCheckout: () => void;
     onItemQuantityChange: (args: { id: string; quantity: number }) => void;
     onItemRemove: (id: string) => void;
+    onClose: () => void;
 }
 
 export const CartView = ({
@@ -19,34 +21,45 @@ export const CartView = ({
     onCheckout,
     onItemQuantityChange,
     onItemRemove,
+    onClose,
 }: CartViewProps) => {
-    if (!cart || cart.lineItems.length === 0) {
-        return <div className={styles.emptyCart}>Cart is empty</div>;
-    }
-
     return (
         <div className={styles.cart}>
-            <div className={styles.items}>
-                {cart.lineItems?.map((item) => (
-                    <CartItem
-                        key={item._id}
-                        cartItem={item}
-                        onQuantityChange={(quantity: number) => onItemQuantityChange({ id: item._id!, quantity })}
-                        onRemove={() => onItemRemove(item._id!)}
-                    />
-                ))}
+            <div className={styles.header}>
+                <div className={styles.title}>Cart</div>
+                <ChevronRightIcon className={styles.arrowIcon} onClick={onClose} height={35} width={35} />
             </div>
-            <div className={styles.subtotalCheckout}>
-                {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-                {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount && (
-                    <label className={styles.subtotalLabel}>
-                        <span>Subtotal:</span>
-                        {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
-                    </label>
+            <div className={styles.content}>
+                {!cart || cart.lineItems.length === 0 ? (
+                    <div className={styles.emptyCart}>Cart is empty</div>
+                ) : (
+                    <>
+                        <div className={styles.items}>
+                            {cart.lineItems?.map((item) => (
+                                <CartItem
+                                    key={item._id}
+                                    cartItem={item}
+                                    onQuantityChange={(quantity: number) =>
+                                        onItemQuantityChange({ id: item._id!, quantity })
+                                    }
+                                    onRemove={() => onItemRemove(item._id!)}
+                                />
+                            ))}
+                        </div>
+                        <div className={styles.subtotalCheckout}>
+                            {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
+                            {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount && (
+                                <label className={styles.subtotalLabel}>
+                                    <span>Subtotal:</span>
+                                    {cartTotals?.priceSummary?.subtotal?.formattedConvertedAmount}
+                                </label>
+                            )}
+                            <button className={classnames('primaryButton', styles.checkoutButton)} onClick={onCheckout}>
+                                Checkout
+                            </button>
+                        </div>
+                    </>
                 )}
-                <button className={classnames('primaryButton', styles.checkoutButton)} onClick={onCheckout}>
-                    Checkout
-                </button>
             </div>
         </div>
     );
