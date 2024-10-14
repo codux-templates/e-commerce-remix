@@ -30,7 +30,7 @@ export const Select = ({ options, value, onChange, placeholder, hasError }: Sele
                 ) : null}
 
                 {options.map((o) => (
-                    <option key={o.value} value={o.value} disabled={!o.inStock}>
+                    <option key={o.value} value={o.value}>
                         {o.name}
                         {!o.inStock ? ' (Out of stock)' : null}
                     </option>

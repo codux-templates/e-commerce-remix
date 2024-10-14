@@ -19,7 +19,6 @@ export const ColorSelect = ({ options, selectedName, onChange, hasError }: Color
         <div className={styles.root}>
             {options.map((o) => (
                 <button
-                    disabled={!o.inStock}
                     key={o.name}
                     className={classNames(styles.option, {
                         [styles.selected]: selectedName === o.name,
@@ -27,7 +26,6 @@ export const ColorSelect = ({ options, selectedName, onChange, hasError }: Color
                         [styles.outOfStock]: !o.inStock,
                     })}
                     onClick={() => onChange(o.name!)}
-                    title={!o.inStock ? 'Out of stock' : undefined}
                 >
                     <div
                         className={styles.colorBox}
