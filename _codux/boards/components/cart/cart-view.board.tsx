@@ -13,6 +13,7 @@ export default createBoard({
             onCheckout={noop}
             onItemRemove={noop}
             onItemQuantityChange={noop}
+            onClose={noop}
         />
     ),
     tags: ['Component', 'Cart'],
