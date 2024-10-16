@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useRef, useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
+import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import { useCartOpen } from '~/components/cart/cart-open-context';
 import { ErrorComponent } from '~/components/error-component/error-component';
 import { Price } from '~/components/price/price';
@@ -15,15 +16,15 @@ import { UnsafeRichText } from '~/components/rich-text/rich-text';
 import { ROUTES } from '~/router/config';
 import {
     getErrorMessage,
+    getMedia,
     getPriceData,
-    selectedChoicesToVariantChoices,
+    getProductOptions,
     getSelectedVariant,
     getSKU,
     getUrlOriginWithPath,
     isOutOfStock,
-    getMedia,
+    selectedChoicesToVariantChoices,
 } from '~/utils';
-import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -93,6 +94,8 @@ export default function ProductDetailsPage() {
         setIsOpen(true);
     }
 
+    const productOptions = getProductOptions(product, selectedChoices);
+
     return (
         <div className={styles.root}>
             <ProductImages mainImage={media?.mainMedia} images={media?.items} className={styles.media} />
@@ -113,9 +116,9 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {product.productOptions && product.productOptions.length > 0 && (
+                {productOptions && productOptions.length > 0 && (
                     <div className={styles.productOptions}>
-                        {product.productOptions?.map((option) => (
+                        {productOptions.map((option) => (
                             <ProductOption
                                 key={option.name}
                                 error={

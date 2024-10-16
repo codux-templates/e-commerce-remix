@@ -4,6 +4,7 @@ import styles from './select.module.scss';
 export interface SelectOption {
     name: string;
     value: string;
+    inStock: boolean;
 }
 
 export interface SelectProps {
@@ -31,6 +32,7 @@ export const Select = ({ options, value, onChange, placeholder, hasError }: Sele
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
                         {o.name}
+                        {!o.inStock ? ' (Out of stock)' : null}
                     </option>
                 ))}
             </select>
