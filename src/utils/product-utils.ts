@@ -49,13 +49,17 @@ export function getSelectedVariant(
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
 }
 
-export function getMatchingVariants(
+function getMatchingVariants(
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
 ): wixStoresProducts.Variant[] {
-    const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices, {
-        notSelectedOptions: 'exclude',
-    });
+    const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices);
+
+    for (const optionName of Object.keys(selectedChoiceValues)) {
+        if (selectedChoiceValues[optionName] === undefined) {
+            delete selectedChoiceValues[optionName];
+        }
+    }
 
     return (
         product.variants?.filter((variant) =>
@@ -81,18 +85,12 @@ export const getChoiceValue = (
 // the name 'variant choices' is used because the same data structure is used for the Variant['choices'] property provided by SDK
 export const selectedChoicesToVariantChoices = (
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {},
-    options: { notSelectedOptions: 'include' | 'exclude' } = {
-        notSelectedOptions: 'include',
-    }
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
 ): Record<string, string | undefined> => {
     const result: Record<string, string | undefined> = {};
     for (const [optionName, choice] of Object.entries(selectedChoices)) {
         if (!choice) {
-            if (options.notSelectedOptions === 'include') {
-                result[optionName] = undefined;
-            }
-
+            result[optionName] = undefined;
             continue;
         }
 
@@ -113,6 +111,10 @@ export function getMedia(
     return selectedChoiceWithMedia?.media ?? product.media;
 }
 
+/**
+ * returns a copy of product options array with populated availability information (visible, inStock)
+ * considering currently selected option choices and available product variants
+ */
 export function getProductOptions(
     product: Product | SerializeFrom<Product>,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
