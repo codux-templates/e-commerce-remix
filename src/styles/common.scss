@@ -85,3 +85,11 @@
     padding-right: 10px;
     font: var(--paragraph3);
 }
+
+.rangeSlider {
+    --track-color: var(--grey);
+    --selected-range-color: var(--charcoal-black);
+    --thumb-color: var(--charcoal-black);
+    --thumb-focus-ring-color: var(--charcoal-black);
+    font: var(--paragraph3);
+}

@@ -11,6 +11,7 @@ import {
     WIX_SESSION_TOKEN_COOKIE_KEY,
     WIX_STORES_APP_ID,
 } from './constants';
+import { getSortedProductsQuery } from './product-sorting';
 import { EcomAPI, EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError } from './types';
 
 function getWixClientId() {
@@ -66,18 +67,30 @@ function createApi(): EcomAPI {
     const wixClient = getWixClient();
 
     return {
-        async getProductsByCategory(categorySlug) {
+        async getProductsByCategory(categorySlug, { filters, sortBy } = {}) {
             try {
                 const category = (await wixClient.collections.getCollectionBySlug(categorySlug)).collection;
                 if (!category) {
                     throw new Error('Category not found');
                 }
-                let productsResponse = await wixClient.products
-                    .queryProducts()
-                    .hasSome('collectionIds', [category!._id])
-                    .limit(100)
-                    .find();
 
+                let query = wixClient.products.queryProducts().hasSome('collectionIds', [category._id]);
+
+                if (filters) {
+                    if (filters.minPrice) {
+                        query = query.ge('priceData.price', filters.minPrice);
+                    }
+
+                    if (filters.maxPrice) {
+                        query = query.le('priceData.price', filters.maxPrice);
+                    }
+                }
+
+                if (sortBy) {
+                    query = getSortedProductsQuery(query, sortBy);
+                }
+
+                let productsResponse = await query.limit(100).find();
                 const allProducts = productsResponse.items;
 
                 // load all available products. if you have a lot of projects in your site
@@ -87,7 +100,7 @@ function createApi(): EcomAPI {
                     allProducts.push(...productsResponse.items);
                 }
 
-                return successResponse(allProducts);
+                return successResponse({ items: allProducts, totalCount: productsResponse.totalCount ?? 0 });
             } catch (e) {
                 return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
@@ -247,6 +260,26 @@ function createApi(): EcomAPI {
                     return failureResponse(EcomApiErrorCodes.OrderNotFound);
                 }
                 return failureResponse(EcomApiErrorCodes.GetOrderFailure);
+            }
+        },
+        async getProductPriceBounds(categorySlug: string) {
+            try {
+                const category = (await wixClient.collections.getCollectionBySlug(categorySlug)).collection;
+                if (!category) throw new Error('Category not found');
+
+                const query = wixClient.products.queryProducts().hasSome('collectionIds', [category._id]);
+
+                const [ascendingPrice, descendingPrice] = await Promise.all([
+                    query.ascending('price').limit(1).find(),
+                    query.descending('price').limit(1).find(),
+                ]);
+
+                const lowest = ascendingPrice.items[0]?.priceData?.price ?? 0;
+                const highest = descendingPrice.items[0]?.priceData?.price ?? 0;
+
+                return successResponse({ lowest, highest });
+            } catch (e) {
+                return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
         },
     };

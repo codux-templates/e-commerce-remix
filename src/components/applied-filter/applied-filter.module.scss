@@ -1,0 +1,10 @@
+.root {
+    height: 32px;
+    padding: 0 8px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(23, 17, 13, 0.1);
+    font: var(--paragraph3);
+    cursor: pointer;
+}

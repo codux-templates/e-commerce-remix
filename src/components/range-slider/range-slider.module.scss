@@ -1,0 +1,102 @@
+:where(.root) {
+    /* Default slider styles. Customize them by passing a className to the component. */
+    --track-color: #b2b2b2;
+    --selected-range-color: #0175ff;
+    --thumb-color: #0175ff;
+    --thumb-focus-ring-color: #0175ff;
+}
+
+.slidersContainer {
+    position: relative;
+    height: 12px;
+}
+
+.input {
+    appearance: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.trackInput::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        to right,
+        var(--track-color) var(--start),
+        var(--selected-range-color) var(--start),
+        var(--selected-range-color) var(--end),
+        var(--track-color) var(--end)
+    );
+}
+
+.trackInput::-moz-range-track {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        to right,
+        var(--track-color) var(--start),
+        var(--selected-range-color) var(--start),
+        var(--selected-range-color) var(--end),
+        var(--track-color) var(--end)
+    );
+}
+
+.trackInput::-webkit-slider-thumb {
+    visibility: hidden;
+}
+
+.trackInput::-moz-range-thumb {
+    visibility: hidden;
+}
+
+.thumbInput {
+    pointer-events: none;
+}
+
+.thumbInput::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: auto;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: var(--thumb-color);
+    cursor: pointer;
+}
+
+.thumbInput::-moz-range-thumb {
+    appearance: none;
+    pointer-events: auto;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: var(--thumb-color);
+    cursor: pointer;
+}
+
+.thumbInput:focus-visible {
+    box-shadow: none;
+}
+
+.thumbInput:focus-visible::-webkit-slider-thumb {
+    box-shadow:
+        0 0 0 1px #ffffff,
+        0 0 0 3px var(--thumb-focus-ring-color);
+}
+
+.thumbInput:focus-visible::-moz-range-thumb {
+    box-shadow:
+        0 0 0 1px #ffffff,
+        0 0 0 3px var(--thumb-focus-ring-color);
+}
+
+.values {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+}

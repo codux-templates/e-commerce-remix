@@ -56,3 +56,64 @@ export function routeLocationToUrl(location: Location, origin: string): URL {
     url.hash = location.hash;
     return url;
 }
+
+/**
+ * It's important to add an appropriate role and a keyboard support
+ * for non-interactive HTML elements with click handlers, such as `<div onClick={handler}></div>`.
+ * This function returns a basic set of attributes
+ * to make the clickable element focusable and handle keyboard events.
+ */
+export function getClickableElementAttributes(handler: () => void) {
+    return {
+        role: 'button',
+        tabIndex: 0,
+        onClick: handler,
+        onKeyUp: (event: React.KeyboardEvent) => {
+            if (event.code === 'Enter' || event.code === 'Space') {
+                handler();
+            }
+        },
+    };
+}
+
+/**
+ * Merges multiple URLSearchParams instances into one URLSearchParams.
+ *
+ * For entries with the same key, values from subsequent URLSearchParams
+ * instances will overwrite the earlier ones. For example:
+ * ```js
+ * const a = new URLSearchParams([['foo', '1'], ['foo', '2']])
+ * const b = new URLSearchParams([['foo', '3'], ['foo', '4']])
+ * const c = mergeUrlSearchParams(a, b);
+ * c.toString(); // 'foo=3&foo=4'
+ * ```
+ */
+export function mergeUrlSearchParams(...paramsArr: URLSearchParams[]): URLSearchParams {
+    const result = new URLSearchParams();
+
+    for (const params of paramsArr) {
+        const overriddenParams = new Set<string>();
+
+        for (const [key, value] of params.entries()) {
+            if (result.has(key) && !overriddenParams.has(key)) {
+                result.delete(key);
+                overriddenParams.add(key);
+            }
+
+            result.append(key, value);
+        }
+    }
+
+    return result;
+}
+
+export function formatPrice(price: number, currency: string): string {
+    const formatter = Intl.NumberFormat('en-US', {
+        currency,
+        style: 'currency',
+        currencyDisplay: 'narrowSymbol',
+        minimumFractionDigits: 2,
+    });
+
+    return formatter.format(price);
+}

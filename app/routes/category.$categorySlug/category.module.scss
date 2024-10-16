@@ -1,26 +1,28 @@
 @use '@styles/variables.scss' as *;
 
 .root {
-    padding-top: 20px;
     display: flex;
+    gap: 100px;
     padding-top: 50px;
     padding-bottom: 60px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
-.filters {
+.sidebar {
     padding-top: 30px;
     padding-left: 50px;
 }
 
-.filterSection {
+.sidebarSection {
     width: 150px;
-    padding-bottom: 10px;
+    padding-bottom: 40px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.filterSectionName {
+.sidebarTitle {
     text-transform: uppercase;
     padding-bottom: 10px;
     border-bottom: solid 1px var(--grey);
@@ -35,12 +37,26 @@
     text-align: center;
 }
 
+.appliedFilters {
+    margin-bottom: 16px;
+}
+
+.countAndSorting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.productsCount {
+    font: var(--paragraph3);
+}
+
 .gallery {
     display: grid;
     grid-auto-flow: row;
     grid-template-columns: 1fr 1fr 1fr;
-    margin-right: 80px;
-    margin-left: 80px;
     column-gap: 20px;
     row-gap: 60px;
     margin-top: 30px;
@@ -59,9 +75,6 @@
 @media (width > $desktop-width) {
     .gallery {
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        max-width: 1400px;
-        margin-left: auto;
-        margin-right: auto;
     }
 }
 
@@ -69,21 +82,21 @@
     .root {
         flex-direction: column;
     }
+
+    .sidebar {
+        display: none;
+    }
 }
 
 @media ($mobile-width <= width < $tablet-width) {
     .gallery {
         grid-template-columns: 1fr 1fr;
-        margin-right: 80px;
-        margin-left: 80px;
     }
 }
 
 @media (width < $mobile-width) {
     .gallery {
         grid-template-columns: 1fr;
-        margin-left: 60px;
-        margin-right: 60px;
     }
 
     .title {
