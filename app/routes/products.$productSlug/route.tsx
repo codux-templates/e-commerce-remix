@@ -2,7 +2,7 @@ import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
@@ -44,9 +44,9 @@ export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();
     const [addToCartAttempted, setAddToCartAttempted] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const { trigger: addToCart } = useAddToCart();
-    const quantityInput = useRef<HTMLInputElement>(null);
 
     const getInitialSelectedChoices = () => {
         const result: Record<string, products.Choice | undefined> = {};
@@ -78,7 +78,6 @@ export default function ProductDetailsPage() {
             return;
         }
 
-        const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
         const selectedVariant = getSelectedVariant(product, selectedChoices);
 
         let options: AddToCartOptions = { options: selectedChoicesToVariantChoices(product, selectedChoices) };
@@ -129,6 +128,7 @@ export default function ProductDetailsPage() {
                                 option={option}
                                 selectedChoice={selectedChoices[option.name!]}
                                 onChange={(newSelectedChoice) => {
+                                    setQuantity(1);
                                     setSelectedChoices((prev) => ({
                                         ...prev,
                                         [option.name!]: newSelectedChoice,
@@ -143,12 +143,11 @@ export default function ProductDetailsPage() {
                     <label>
                         <div>Quantity:</div>
                         <input
-                            ref={quantityInput}
-                            defaultValue={1}
                             className={classNames('numberInput', styles.quantity)}
                             type="number"
+                            value={quantity}
                             min={1}
-                            placeholder="1"
+                            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
                         />
                     </label>
                 </div>
