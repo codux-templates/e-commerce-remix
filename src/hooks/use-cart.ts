@@ -1,4 +1,10 @@
-import { useCartTotals, useCartData, useUpdateCartItemQuantity, useRemoveItemFromCart } from '~/api/api-hooks';
+import {
+    useCartTotals,
+    useCartData,
+    useUpdateCartItemQuantity,
+    useRemoveItemFromCart,
+    useAddToCart,
+} from '~/api/api-hooks';
 import { useEcomAPI } from '~/api/ecom-api-context-provider';
 
 export const useCart = () => {
@@ -7,6 +13,7 @@ export const useCart = () => {
     const { data: cartTotals } = useCartTotals();
     const { trigger: updateItemQuantity } = useUpdateCartItemQuantity();
     const { trigger: removeItem } = useRemoveItemFromCart();
+    const { trigger: addItem } = useAddToCart();
 
     const checkout = async () => {
         const checkoutResponse = await ecomAPI.checkout();
@@ -23,6 +30,7 @@ export const useCart = () => {
         cartTotals,
         updateItemQuantity,
         removeItem,
+        addItem,
         checkout,
     };
 };

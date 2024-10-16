@@ -3,7 +3,6 @@ import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError }
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { useAddToCart } from '~/api/api-hooks';
 import { getEcomApi } from '~/api/ecom-api';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
 import { useCartOpen } from '~/components/cart/cart-open-context';
@@ -13,6 +12,7 @@ import { ProductAdditionalInfo } from '~/components/product-additional-info/prod
 import { ProductImages } from '~/components/product-images/product-images';
 import { ProductOption } from '~/components/product-option/product-option';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
+import { useCart } from '~/hooks/use-cart';
 import { ROUTES } from '~/router/config';
 import {
     getErrorMessage,
@@ -46,7 +46,7 @@ export default function ProductDetailsPage() {
     const [addToCartAttempted, setAddToCartAttempted] = useState(false);
     const [quantity, setQuantity] = useState(1);
 
-    const { trigger: addToCart } = useAddToCart();
+    const cart = useCart();
 
     const getInitialSelectedChoices = () => {
         const result: Record<string, products.Choice | undefined> = {};
@@ -85,7 +85,7 @@ export default function ProductDetailsPage() {
             options = { variantId: selectedVariant._id };
         }
 
-        await addToCart({
+        await cart.addItem({
             id: product._id,
             quantity,
             options,
