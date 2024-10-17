@@ -78,11 +78,7 @@
     }
 }
 
-@media (width < $desktop-width) {
-    .root {
-        flex-direction: column;
-    }
-
+@media (width < $tablet-width) {
     .sidebar {
         display: none;
     }
@@ -97,10 +93,5 @@
 @media (width < $mobile-width) {
     .gallery {
         grid-template-columns: 1fr;
-    }
-
-    .title {
-        margin-top: 20px;
-        margin-bottom: 10px;
     }
 }
