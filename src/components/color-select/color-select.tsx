@@ -4,7 +4,7 @@ import styles from './color-select.module.scss';
 export interface ColorSelectOption {
     name: string;
     hexValue: string;
-    crossedOut: boolean;
+    inStock: boolean;
 }
 
 export interface ColorSelectProps {
@@ -23,7 +23,7 @@ export const ColorSelect = ({ options, selectedName, onChange, hasError }: Color
                     className={classNames(styles.option, {
                         [styles.selected]: selectedName === o.name,
                         [styles.hasError]: hasError,
-                        [styles.crossedOut]: o.crossedOut,
+                        [styles.outOfStock]: !o.inStock,
                     })}
                     onClick={() => onChange(o.name!)}
                 >
