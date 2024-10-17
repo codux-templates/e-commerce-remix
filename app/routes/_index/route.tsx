@@ -3,7 +3,7 @@ import { json, Link, MetaFunction, useLoaderData, useNavigate } from '@remix-run
 import { getEcomApi } from '~/api/ecom-api';
 import { HeroImage } from '~/components/hero-image';
 import { ProductCard } from '~/components/product-card';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
 
 import styles from './index.module.scss';

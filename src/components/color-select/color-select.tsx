@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+
 import styles from './color-select.module.scss';
 
 export interface ColorSelectOption {

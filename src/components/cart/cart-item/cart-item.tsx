@@ -3,8 +3,9 @@ import type { cart } from '@wix/ecom';
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
 import { getImageHttpUrl } from '~/api/wix-image';
-import { Price } from '~/components/price/price';
+import { Price } from '~/components/price';
 import { isCartItemAvailable } from '~/utils';
+
 import styles from './cart-item.module.scss';
 
 const IMAGE_SIZE = 120;

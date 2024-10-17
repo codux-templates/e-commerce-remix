@@ -1,8 +1,9 @@
+import { ChevronRightIcon } from '@radix-ui/react-icons';
 import classnames from 'classnames';
 import { Cart, CartTotals } from '~/api/types';
-import { CartItem } from '../cart-item/cart-item';
+import { CartItem } from '~/components/cart';
+
 import styles from './cart-view.module.scss';
-import { ChevronRightIcon } from '@radix-ui/react-icons';
 
 export interface CartViewProps {
     cart?: Cart;

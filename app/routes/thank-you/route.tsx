@@ -5,7 +5,7 @@ import { getEcomApi } from '~/api/ecom-api';
 import { OrderDetails } from '~/api/types';
 import { ErrorComponent } from '~/components/error-component';
 import { OrderSummary } from '~/components/order-summary';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
 
 import styles from './thank-you.module.scss';

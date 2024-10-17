@@ -13,7 +13,7 @@ import { ProductImages } from '~/components/product-images';
 import { ProductOption } from '~/components/product-option';
 import { UnsafeRichText } from '~/components/unsafe-rich-text';
 import { useCart } from '~/hooks';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 import {
     getErrorMessage,
     getMedia,

@@ -1,6 +1,7 @@
 import { products } from '@wix/stores';
 import cx from 'classnames';
 import { getImageHttpUrl } from '~/api/wix-image';
+
 import styles from './product-images.module.scss';
 
 export function ProductImages(props: {

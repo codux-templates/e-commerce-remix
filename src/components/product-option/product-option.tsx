@@ -1,8 +1,9 @@
 import { products } from '@wix/stores';
-import { ColorSelect } from '~/components/color-select/color-select';
-import { Select } from '~/components/select/select';
-import styles from './product-option.module.scss';
+import { ColorSelect } from '~/components/color-select';
+import { Select } from '~/components/select';
 import { getChoiceValue } from '~/utils';
+
+import styles from './product-option.module.scss';
 
 export interface ProductOptionProps {
     option: products.ProductOption;

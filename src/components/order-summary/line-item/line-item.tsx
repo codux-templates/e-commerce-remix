@@ -1,6 +1,7 @@
 import { orders } from '@wix/ecom';
-import styles from './line-item.module.scss';
 import { getImageUrl } from './utils';
+
+import styles from './line-item.module.scss';
 
 export interface LineItemProps {
     item: orders.OrderLineItem;

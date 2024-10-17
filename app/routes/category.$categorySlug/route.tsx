@@ -11,7 +11,7 @@ import { ErrorComponent } from '~/components/error-component';
 import { ProductCard } from '~/components/product-card';
 import { ProductFilters } from '~/components/product-filters';
 import { ProductSortingSelect } from '~/components/product-sorting-select';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 
 import styles from './category.module.scss';

@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import classNames from 'classnames';
+import { useState } from 'react';
+import { MinusIcon, PlusIcon } from '~/components/icons';
 import { getClickableElementAttributes } from '~/utils';
-import { MinusIcon, PlusIcon } from '../icons';
 
 import styles from './accordion.module.scss';
 

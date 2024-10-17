@@ -5,6 +5,7 @@ import githubIcon from '~/assets/svg/github.svg';
 import mediumIcon from '~/assets/svg/medium.svg';
 import twitterxIcon from '~/assets/svg/twitterx.svg';
 import youtubeIcon from '~/assets/svg/youtube.svg';
+
 import styles from './site-footer.module.scss';
 
 export interface FooterProps {

@@ -16,7 +16,7 @@ import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
 import { CartOpenContextProvider } from '~/components/cart';
 import { ErrorComponent } from '~/components/error-component';
 import { SiteWrapper } from '~/components/site-wrapper';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 import { getErrorMessage, routeLocationToUrl } from '~/utils';
 
 import '~/styles/index.scss';
