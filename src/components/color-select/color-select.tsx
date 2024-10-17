@@ -23,7 +23,7 @@ export const ColorSelect = ({ options, selectedName, onChange, hasError }: Color
                     className={classNames(styles.option, {
                         [styles.selected]: selectedName === o.name,
                         [styles.hasError]: hasError,
-                        [styles.crossedOut]: !o.crossedOut,
+                        [styles.crossedOut]: o.crossedOut,
                     })}
                     onClick={() => onChange(o.name!)}
                 >

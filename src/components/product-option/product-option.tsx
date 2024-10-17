@@ -44,7 +44,7 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                         .map((c) => ({
                             name: c.description!,
                             hexValue: c.value!,
-                            crossedOut: !!c.inStock,
+                            crossedOut: !c.inStock,
                         }))}
                     onChange={handleChange}
                     selectedName={selectedChoice?.description}
