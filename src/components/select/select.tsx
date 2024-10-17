@@ -4,20 +4,20 @@ import styles from './select.module.scss';
 export interface SelectOption {
     name: string;
     value: string;
-    inStock: boolean;
 }
 
 export interface SelectProps {
+    className?: string;
     options: SelectOption[];
     value?: string;
-    placeholder: string;
-    hasError: boolean;
+    placeholder?: string;
+    hasError?: boolean;
     onChange: (value: string) => void;
 }
 
-export const Select = ({ options, value, onChange, placeholder, hasError }: SelectProps) => {
+export const Select = ({ className, options, value, onChange, placeholder, hasError }: SelectProps) => {
     return (
-        <div className={classNames(styles.root, { [styles.error]: hasError })}>
+        <div className={classNames(className, styles.root, { [styles.error]: hasError })}>
             <select
                 className={classNames({ [styles.placeholder]: value === undefined })}
                 value={value ?? ''}
@@ -32,7 +32,6 @@ export const Select = ({ options, value, onChange, placeholder, hasError }: Sele
                 {options.map((o) => (
                     <option key={o.value} value={o.value}>
                         {o.name}
-                        {!o.inStock ? ' (Out of stock)' : null}
                     </option>
                 ))}
             </select>
