@@ -1,6 +1,6 @@
 import { orders } from '@wix/ecom';
 import cx from 'classnames';
-import { LineItem } from './line-item/line-item';
+import { LineItem } from './line-item';
 import styles from './order-summary.module.scss';
 
 export interface OrderSummaryProps {
