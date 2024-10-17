@@ -5,14 +5,10 @@ import { IProductFilters, ProductFilter } from '~/api/types';
 export function useAppliedProductFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const appliedFilters = useMemo(
-        () => productFiltersFromSearchParams(searchParams),
-        [searchParams],
-    );
+    const appliedFilters = useMemo(() => productFiltersFromSearchParams(searchParams), [searchParams]);
 
     const someFiltersApplied =
-        Object.values(appliedFilters).length > 0 &&
-        Object.values(appliedFilters).some((value) => value !== undefined);
+        Object.values(appliedFilters).length > 0 && Object.values(appliedFilters).some((value) => value !== undefined);
 
     const clearFilters = useCallback(
         (filters: ProductFilter[]) => {
@@ -21,10 +17,10 @@ export function useAppliedProductFilters() {
                     filters.forEach((filter) => params.delete(filter));
                     return params;
                 },
-                { preventScrollReset: true },
+                { preventScrollReset: true }
             );
         },
-        [setSearchParams],
+        [setSearchParams]
     );
 
     const clearAllFilters = useCallback(() => {
@@ -50,10 +46,7 @@ export function productFiltersFromSearchParams(params: URLSearchParams): IProduc
     };
 }
 
-export function searchParamsFromProductFilters({
-    minPrice,
-    maxPrice,
-}: IProductFilters): URLSearchParams {
+export function searchParamsFromProductFilters({ minPrice, maxPrice }: IProductFilters): URLSearchParams {
     const params = new URLSearchParams();
     if (minPrice !== undefined) params.set(ProductFilter.minPrice, minPrice.toString());
     if (maxPrice !== undefined) params.set(ProductFilter.maxPrice, maxPrice.toString());
