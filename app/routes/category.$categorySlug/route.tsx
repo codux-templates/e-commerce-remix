@@ -1,13 +1,18 @@
-import classNames from 'classnames';
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
+import { isRouteErrorResponse, json, NavLink, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import classNames from 'classnames';
 import { getEcomApi } from '~/api/ecom-api';
+import { productFiltersFromSearchParams, useAppliedProductFilters } from '~/api/product-filters';
+import { productSortByFromSearchParams } from '~/api/product-sorting';
 import { EcomApiErrorCodes } from '~/api/types';
 import { getImageHttpUrl } from '~/api/wix-image';
+import { AppliedProductFilters } from '~/components/applied-product-filters/applied-product-filters';
+import { ErrorComponent } from '~/components/error-component/error-component';
 import { ProductCard } from '~/components/product-card/product-card';
+import { ProductFilters } from '~/components/product-filters/product-filters';
+import { ProductSortingSelect } from '~/components/product-sorting-select/product-sorting-select';
 import { ROUTES } from '~/router/config';
 import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
-import { ErrorComponent } from '~/components/error-component/error-component';
 import styles from './category.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -17,38 +22,56 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     }
 
     const api = getEcomApi();
-    const currentCategoryResponse = await api.getCategoryBySlug(categorySlug);
+    const url = new URL(request.url);
+
+    const [currentCategoryResponse, categoryProductsResponse, allCategoriesResponse, productPriceBoundsResponse] =
+        await Promise.all([
+            api.getCategoryBySlug(categorySlug),
+            api.getProductsByCategory(categorySlug, {
+                filters: productFiltersFromSearchParams(url.searchParams),
+                sortBy: productSortByFromSearchParams(url.searchParams),
+            }),
+            api.getAllCategories(),
+            api.getProductPriceBounds(categorySlug),
+        ]);
+
     if (currentCategoryResponse.status === 'failure') {
         throw json(currentCategoryResponse.error);
     }
-    const allCategoriesResponse = await api.getAllCategories();
     if (allCategoriesResponse.status === 'failure') {
         throw json(allCategoriesResponse.error);
     }
-
-    const categoryProductsResponse = await api.getProductsByCategory(categorySlug);
     if (categoryProductsResponse.status === 'failure') {
         throw json(categoryProductsResponse.error);
     }
+    if (productPriceBoundsResponse.status === 'failure') {
+        throw json(productPriceBoundsResponse.error);
+    }
 
     return {
+        category: currentCategoryResponse.body,
         categoryProducts: categoryProductsResponse.body,
-        currentCategory: currentCategoryResponse.body,
         allCategories: allCategoriesResponse.body,
+        productPriceBounds: productPriceBoundsResponse.body,
+
         canonicalUrl: getUrlOriginWithPath(request.url),
     };
 };
 
 export default function ProductsCategoryPage() {
-    const { categoryProducts, currentCategory, allCategories } = useLoaderData<typeof loader>();
+    const { categoryProducts, category, allCategories, productPriceBounds } = useLoaderData<typeof loader>();
+
+    const { appliedFilters, someFiltersApplied, clearFilters, clearAllFilters } = useAppliedProductFilters();
+
+    const currency = categoryProducts.items[0]?.priceData?.currency ?? 'USD';
 
     return (
         <div className={styles.root}>
-            <div className={styles.filters}>
-                <div className={styles.filterSection}>
-                    <div className={styles.filterSectionName}>Browse by</div>
+            <div className={styles.sidebar}>
+                <nav className={styles.sidebarSection}>
+                    <h2 className={styles.sidebarTitle}>Browse by</h2>
 
-                    <div>
+                    <ul>
                         {allCategories.map((category) =>
                             category.slug ? (
                                 <NavLink
@@ -64,14 +87,46 @@ export default function ProductsCategoryPage() {
                                 </NavLink>
                             ) : null
                         )}
+                    </ul>
+                </nav>
+
+                {category.numberOfProducts !== 0 && (
+                    <div className={styles.sidebarSection}>
+                        <h2 className={styles.sidebarTitle}>Filters</h2>
+                        <ProductFilters
+                            lowestPrice={productPriceBounds.lowest}
+                            highestPrice={productPriceBounds.highest}
+                            currency={currency}
+                        />
                     </div>
-                </div>
+                )}
             </div>
 
             <div className={styles.products}>
-                <h1 className={styles.title}>{currentCategory?.name}</h1>
+                <h1 className={styles.title}>{category?.name}</h1>
+
+                {someFiltersApplied && (
+                    <AppliedProductFilters
+                        className={styles.appliedFilters}
+                        appliedFilters={appliedFilters}
+                        onClearFilters={clearFilters}
+                        onClearAllFilters={clearAllFilters}
+                        currency={currency}
+                        minPriceInCategory={productPriceBounds.lowest}
+                        maxPriceInCategory={productPriceBounds.highest}
+                    />
+                )}
+
+                <div className={styles.countAndSorting}>
+                    <p className={styles.productsCount}>
+                        {categoryProducts.totalCount} {categoryProducts.totalCount === 1 ? 'product' : 'products'}
+                    </p>
+
+                    <ProductSortingSelect />
+                </div>
+
                 <div className={styles.gallery}>
-                    {categoryProducts?.map(
+                    {categoryProducts?.items?.map(
                         (item) =>
                             item.slug &&
                             item.name && (
