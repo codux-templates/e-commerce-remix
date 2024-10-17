@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
 import classNames from 'classnames';
-import { ProductFilter, IProductFilters } from '~/api/types';
+import { useMemo } from 'react';
+import { IProductFilters, ProductFilter } from '~/api/types';
+import { AppliedFilter } from '~/components/applied-filter';
 import { formatPrice } from '~/utils';
-import { AppliedFilter } from '../applied-filter/applied-filter';
 
 import styles from './applied-product-filters.module.scss';
 

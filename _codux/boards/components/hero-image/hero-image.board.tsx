@@ -1,5 +1,5 @@
 import { createBoard } from '@wixc3/react-board';
-import { HeroImage } from '~/components/hero-image/hero-image';
+import { HeroImage } from '~/components/hero-image';
 
 export default createBoard({
     name: 'Hero Image',

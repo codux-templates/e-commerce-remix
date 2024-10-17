@@ -1,5 +1,5 @@
+import { CloseIcon } from '~/components/icons';
 import { getClickableElementAttributes } from '~/utils';
-import { CloseIcon } from '../icons';
 
 import styles from './applied-filter.module.scss';
 

@@ -1,13 +1,13 @@
 import { createRemixStub } from '@remix-run/testing';
 import { PropsWithChildren } from 'react';
 import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
-import { ROUTES } from '~/router/config';
+import { ROUTES } from '~/router';
 
 export interface ComponentWrapperProps extends PropsWithChildren {
     loaderData?: Record<string, unknown>;
 }
 
-export default function ComponentWrapper({ children, loaderData }: ComponentWrapperProps) {
+export function ComponentWrapper({ children, loaderData }: ComponentWrapperProps) {
     const RemixStub = createRemixStub([
         {
             Component: () => children,

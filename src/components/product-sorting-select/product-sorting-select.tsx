@@ -1,7 +1,8 @@
 import { productSortByFromSearchParams, SORT_BY_SEARCH_PARAM } from '~/api/product-sorting';
 import { ProductSortBy } from '~/api/types';
+import { Select } from '~/components/select';
 import { useSearchParamsOptimistic } from '~/utils/use-search-params-optimistic';
-import { Select } from '../select/select';
+
 import styles from './product-sorting-select.module.scss';
 
 const sortingOptions: { value: ProductSortBy; label: string }[] = [

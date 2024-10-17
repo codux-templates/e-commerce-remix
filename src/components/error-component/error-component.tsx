@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+
 import styles from './error-component.module.scss';
 
 export interface ErrorComponentProps {

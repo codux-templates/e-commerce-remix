@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Drawer } from '~/components/drawer/drawer';
+import { Drawer } from '~/components/drawer';
+import { useCart } from '~/hooks';
 import { isCartItemAvailable } from '~/utils';
-import { useCart } from '~/hooks/use-cart';
 import { useCartOpen } from './cart-open-context';
-import { CartView } from './cart-view/cart-view';
+import { CartView } from './cart-view';
 
 export const Cart = () => {
     const { isOpen, setIsOpen } = useCartOpen();

@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+
 import styles from './range-slider.module.scss';
 
 interface RangeSlider {

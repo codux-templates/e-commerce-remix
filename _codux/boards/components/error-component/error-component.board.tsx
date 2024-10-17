@@ -1,5 +1,5 @@
 import { createBoard } from '@wixc3/react-board';
-import { ErrorComponent } from '~/components/error-component/error-component';
+import { ErrorComponent } from '~/components/error-component';
 
 export default createBoard({
     name: 'ErrorComponent',

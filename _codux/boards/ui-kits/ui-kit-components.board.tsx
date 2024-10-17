@@ -1,6 +1,6 @@
 import { createBoard, Variant } from '@wixc3/react-board';
 import classNames from 'classnames';
-import { ProductCard } from '~/components/product-card/product-card';
+import { ProductCard } from '~/components/product-card';
 import styles from '~/styles/ui-kit-components.module.scss';
 
 export default createBoard({
