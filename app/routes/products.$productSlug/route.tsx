@@ -5,14 +5,14 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
 import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { Price } from '~/components/price/price';
-import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
-import { ProductImages } from '~/components/product-images/product-images';
-import { ProductOption } from '~/components/product-option/product-option';
-import { UnsafeRichText } from '~/components/rich-text/rich-text';
-import { useCart } from '~/hooks/use-cart';
+import { useCartOpen } from '~/components/cart';
+import { ErrorComponent } from '~/components/error-component';
+import { Price } from '~/components/price';
+import { ProductAdditionalInfo } from '~/components/product-additional-info';
+import { ProductImages } from '~/components/product-images';
+import { ProductOption } from '~/components/product-option';
+import { UnsafeRichText } from '~/components/unsafe-rich-text';
+import { useCart } from '~/hooks';
 import { ROUTES } from '~/router/config';
 import {
     getErrorMessage,
@@ -25,6 +25,7 @@ import {
     isOutOfStock,
     selectedChoicesToVariantChoices,
 } from '~/utils';
+
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {

@@ -1,6 +1,7 @@
 import { products } from '@wix/stores';
 import classNames from 'classnames';
 import { UnsafeRichText } from '~/components/rich-text/rich-text';
+
 import styles from './product-additional-info.module.scss';
 
 export interface ProductAdditionalInfoProps {

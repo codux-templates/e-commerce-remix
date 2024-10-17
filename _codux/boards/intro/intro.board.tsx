@@ -1,4 +1,5 @@
 import { createBoard } from '@wixc3/react-board';
+
 import styles from './intro.module.scss';
 
 export default createBoard({

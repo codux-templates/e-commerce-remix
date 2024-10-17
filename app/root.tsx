@@ -13,12 +13,13 @@ import {
 } from '@remix-run/react';
 import { useEffect } from 'react';
 import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
-import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
+import { CartOpenContextProvider } from '~/components/cart';
+import { ErrorComponent } from '~/components/error-component';
+import { SiteWrapper } from '~/components/site-wrapper';
 import { ROUTES } from '~/router/config';
-import '~/styles/index.scss';
 import { getErrorMessage, routeLocationToUrl } from '~/utils';
+
+import '~/styles/index.scss';
 
 export async function loader() {
     return json({

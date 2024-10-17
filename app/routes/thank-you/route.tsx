@@ -3,10 +3,11 @@ import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@rem
 import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
 import { OrderDetails } from '~/api/types';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { OrderSummary } from '~/components/order-summary/order-summary';
+import { ErrorComponent } from '~/components/error-component';
+import { OrderSummary } from '~/components/order-summary';
 import { ROUTES } from '~/router/config';
 import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
+
 import styles from './thank-you.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

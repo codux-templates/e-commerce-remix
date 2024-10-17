@@ -6,13 +6,14 @@ import { productFiltersFromSearchParams, useAppliedProductFilters } from '~/api/
 import { productSortByFromSearchParams } from '~/api/product-sorting';
 import { EcomApiErrorCodes } from '~/api/types';
 import { getImageHttpUrl } from '~/api/wix-image';
-import { AppliedProductFilters } from '~/components/applied-product-filters/applied-product-filters';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { ProductCard } from '~/components/product-card/product-card';
-import { ProductFilters } from '~/components/product-filters/product-filters';
-import { ProductSortingSelect } from '~/components/product-sorting-select/product-sorting-select';
+import { AppliedProductFilters } from '~/components/applied-product-filters';
+import { ErrorComponent } from '~/components/error-component';
+import { ProductCard } from '~/components/product-card';
+import { ProductFilters } from '~/components/product-filters';
+import { ProductSortingSelect } from '~/components/product-sorting-select';
 import { ROUTES } from '~/router/config';
 import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+
 import styles from './category.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
-import { Cart } from '~/components/cart/cart';
-import { Header } from '~/components/header/header';
-import { Footer } from '~/components/site-footer/site-footer';
+import { Cart } from '~/components/cart';
+import { Header } from '~/components/header';
+import { Footer } from '~/components/site-footer';
 import styles from './site-wrapper.module.scss';
 
 export interface SiteWrapperProps {

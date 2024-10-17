@@ -1,10 +1,11 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
-import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
+import { json, Link, MetaFunction, useLoaderData, useNavigate } from '@remix-run/react';
 import { getEcomApi } from '~/api/ecom-api';
-import { HeroImage } from '~/components/hero-image/hero-image';
-import { ProductCard } from '~/components/product-card/product-card';
+import { HeroImage } from '~/components/hero-image';
+import { ProductCard } from '~/components/product-card';
 import { ROUTES } from '~/router/config';
 import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
+
 import styles from './index.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
