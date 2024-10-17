@@ -16,13 +16,13 @@
     height: 100%;
 }
 
-.option:not(.outOfStock):hover,
+.option:not(.crossedOut):hover,
 .option.selected {
     border-color: var(--charcoal-black);
     padding: 2px;
 }
 
-.option:not(.outOfStock):hover .colorBox,
+.option:not(.crossedOut):hover .colorBox,
 .option.selected .colorBox {
     border: solid 1px var(--grey);
 }
@@ -31,16 +31,16 @@
     border-color: var(--red);
 }
 
-.outOfStock {
+.crossedOut {
     position: relative;
     overflow: hidden;
 }
 
-.outOfStock :first-child {
+.crossedOut :first-child {
     opacity: 0.5;
 }
 
-.outOfStock::after {
+.crossedOut::after {
     content: '';
     position: absolute;
     height: 2px;

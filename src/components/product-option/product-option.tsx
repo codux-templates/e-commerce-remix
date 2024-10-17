@@ -44,7 +44,7 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                         .map((c) => ({
                             name: c.description!,
                             hexValue: c.value!,
-                            inStock: !!c.inStock,
+                            crossedOut: !!c.inStock,
                         }))}
                     onChange={handleChange}
                     selectedName={selectedChoice?.description}
@@ -55,9 +55,8 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                     options={choices
                         .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
-                            name: c.description!,
+                            name: c.inStock ? c.description! : `${c.description!} (Out of stock)`,
                             value: c.value!,
-                            inStock: !!c.inStock,
                         }))}
                     value={selectedChoice?.value}
                     placeholder={`Select ${name}`}
