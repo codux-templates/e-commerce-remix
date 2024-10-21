@@ -1,25 +1,59 @@
-import { IProductPagination } from './types';
+import { useEffect, useState } from 'react';
+import { getEcomApi } from './ecom-api';
+import { useAppliedProductFilters } from './product-filters';
+import { useAppliedProductSorting } from './product-sorting';
+import { Product } from './types';
 
 export const DEFAULT_PAGE_SIZE = 50;
 
-export const OFFSET_SEARCH_PARAM = 'offset';
-export const LIMIT_SEARCH_PARAM = 'limit';
+export function useProductPagination(
+    categorySlug: string,
+    loadedProducts: Omit<Product, 'lastUpdated' | '_createdDate'>[],
+    loadedTotalCount: number
+) {
+    const api = getEcomApi();
+    const { appliedFilters } = useAppliedProductFilters();
+    const { appliedSortBy } = useAppliedProductSorting();
 
-export function productPaginationFromSearchParams(searchParams: URLSearchParams): IProductPagination {
-    const offset = searchParams.get(OFFSET_SEARCH_PARAM);
-    const limit = searchParams.get(LIMIT_SEARCH_PARAM);
-    const offsetNumber = Number(offset);
-    const limitNumber = Number(limit);
+    const [products, setProducts] = useState(loadedProducts);
+    useEffect(() => {
+        setProducts(loadedProducts);
+    }, [loadedProducts]);
+
+    const [totalProductsCount, setTotalProductsCount] = useState(loadedTotalCount);
+    useEffect(() => {
+        setTotalProductsCount(loadedTotalCount);
+    }, [loadedTotalCount]);
+
+    const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+
+    const loadMoreProducts = () => {
+        setIsLoadingProducts(true);
+
+        api.getProductsByCategory(categorySlug, {
+            filters: appliedFilters,
+            sortBy: appliedSortBy,
+            pagination: {
+                limit: DEFAULT_PAGE_SIZE,
+                offset: products.length,
+            },
+        })
+            .then((data) => {
+                if (data.status === 'success') {
+                    setProducts((prev) => [...prev, ...data.body.items]);
+                    setTotalProductsCount(data.body.totalCount);
+                }
+            })
+            .finally(() => {
+                setIsLoadingProducts(false);
+            });
+    };
 
     return {
-        offset: offset && !Number.isNaN(offsetNumber) ? offsetNumber : undefined,
-        limit: limit && !Number.isNaN(limitNumber) ? limitNumber : undefined,
+        products,
+        totalProductsCount,
+        isLoadingProducts,
+        loadMoreProducts,
+        canLoadMoreProducts: products.length < totalProductsCount,
     };
-}
-
-export function searchParamsFromProductPagination({ offset, limit }: IProductPagination): URLSearchParams {
-    const params = new URLSearchParams();
-    if (offset !== undefined) params.set(OFFSET_SEARCH_PARAM, offset.toString());
-    if (limit !== undefined) params.set(LIMIT_SEARCH_PARAM, limit.toString());
-    return params;
 }

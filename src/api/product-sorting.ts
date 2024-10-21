@@ -1,9 +1,19 @@
+import { useSearchParams } from '@remix-run/react';
 import { products } from '@wix/stores';
+import { useMemo } from 'react';
 import { ProductSortBy } from './types';
 
 export const SORT_BY_SEARCH_PARAM = 'sortBy';
 
 export const DEFAULT_SORT_BY = ProductSortBy.newest;
+
+export function useAppliedProductSorting() {
+    const [searchParams] = useSearchParams();
+    const appliedSortBy = useMemo(() => productSortByFromSearchParams(searchParams), [searchParams]);
+    return {
+        appliedSortBy,
+    };
+}
 
 export function productSortByFromSearchParams(searchParams: URLSearchParams): ProductSortBy {
     const value = searchParams.get(SORT_BY_SEARCH_PARAM);

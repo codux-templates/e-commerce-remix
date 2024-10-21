@@ -1,20 +1,10 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import {
-    isRouteErrorResponse,
-    json,
-    NavLink,
-    useFetcher,
-    useLoaderData,
-    useNavigate,
-    useRouteError,
-    useSearchParams,
-} from '@remix-run/react';
+import { isRouteErrorResponse, json, NavLink, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import classNames from 'classnames';
-import { useEffect, useState } from 'react';
 import { getEcomApi } from '~/api/ecom-api';
-import { getProducts } from '~/api/get-products';
-import { useAppliedProductFilters } from '~/api/product-filters';
-import { searchParamsFromProductPagination } from '~/api/product-pagination';
+import { productFiltersFromSearchParams, useAppliedProductFilters } from '~/api/product-filters';
+import { useProductPagination } from '~/api/product-pagination';
+import { productSortByFromSearchParams } from '~/api/product-sorting';
 import { EcomApiErrorCodes } from '~/api/types';
 import { getImageHttpUrl } from '~/api/wix-image';
 import { AppliedProductFilters } from '~/components/applied-product-filters/applied-product-filters';
@@ -23,8 +13,7 @@ import { ProductCard } from '~/components/product-card/product-card';
 import { ProductFilters } from '~/components/product-filters/product-filters';
 import { ProductSortingSelect } from '~/components/product-sorting-select/product-sorting-select';
 import { ROUTES } from '~/router/config';
-import { getErrorMessage, getUrlOriginWithPath, isOutOfStock, mergeUrlSearchParams } from '~/utils';
-import { loader as productsLoader } from '../category.$categorySlug.products/route';
+import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
 
 import styles from './category.module.scss';
 
@@ -40,7 +29,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const [currentCategoryResponse, categoryProductsResponse, allCategoriesResponse, productPriceBoundsResponse] =
         await Promise.all([
             api.getCategoryBySlug(categorySlug),
-            getProducts(api, categorySlug, url.searchParams),
+            api.getProductsByCategory(categorySlug, {
+                filters: productFiltersFromSearchParams(url.searchParams),
+                sortBy: productSortByFromSearchParams(url.searchParams),
+            }),
             api.getAllCategories(),
             api.getProductPriceBounds(categorySlug),
         ]);
@@ -71,37 +63,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 export default function ProductsCategoryPage() {
     const { categoryProducts, category, allCategories, productPriceBounds } = useLoaderData<typeof loader>();
 
-    const [searchParams] = useSearchParams();
     const { appliedFilters, someFiltersApplied, clearFilters, clearAllFilters } = useAppliedProductFilters();
 
     const currency = categoryProducts.items[0]?.priceData?.currency ?? 'USD';
 
-    const [products, setProducts] = useState(categoryProducts.items);
-    const [totalProductsCount, setTotalProductsCount] = useState(categoryProducts.totalCount);
-
-    useEffect(() => {
-        setProducts(categoryProducts.items);
-        setTotalProductsCount(categoryProducts.totalCount);
-    }, [categoryProducts]);
-
-    const fetcher = useFetcher<ReturnType<typeof productsLoader>>();
-    const loadMore = async () => {
-        const paginationSearchParams = searchParamsFromProductPagination({
-            offset: products.length,
-        });
-        const fetchProductsSearchParams = mergeUrlSearchParams(searchParams, paginationSearchParams);
-
-        fetcher.load(`/category/${category.slug}/products?${fetchProductsSearchParams.toString()}`);
-    };
-
-    useEffect(() => {
-        if (fetcher.state === 'idle') {
-            if (fetcher.data?.items !== undefined) {
-                setProducts((prev) => [...prev, ...fetcher.data!.items]);
-                setTotalProductsCount(fetcher.data?.totalCount);
-            }
-        }
-    }, [fetcher]);
+    const { products, totalProductsCount, isLoadingProducts, canLoadMoreProducts, loadMoreProducts } =
+        useProductPagination(category.slug!, categoryProducts.items, categoryProducts.totalCount);
 
     return (
         <div className={styles.root}>
@@ -181,10 +148,10 @@ export default function ProductsCategoryPage() {
                     )}
                 </div>
 
-                {products.length < totalProductsCount && (
+                {canLoadMoreProducts && (
                     <div className={styles.loadMoreWrapper}>
-                        <button className="primaryButton" onClick={loadMore} disabled={fetcher.state !== 'idle'}>
-                            {fetcher.state === 'idle' ? 'Load More' : 'Loading...'}
+                        <button className="primaryButton" onClick={loadMoreProducts} disabled={isLoadingProducts}>
+                            {isLoadingProducts ? 'Loading...' : 'Load More'}
                         </button>
                     </div>
                 )}
