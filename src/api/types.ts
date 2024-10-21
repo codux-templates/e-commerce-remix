@@ -80,9 +80,15 @@ export enum ProductSortBy {
     nameDesc = 'nameDesc',
 }
 
+export interface IProductPagination {
+    offset?: number;
+    limit?: number;
+}
+
 interface GetProductsByCategoryOptions {
     filters?: IProductFilters;
     sortBy?: ProductSortBy;
+    pagination?: IProductPagination;
 }
 
 export type EcomAPI = {

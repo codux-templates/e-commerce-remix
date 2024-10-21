@@ -13,6 +13,7 @@ import {
 } from './constants';
 import { getSortedProductsQuery } from './product-sorting';
 import { EcomAPI, EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError } from './types';
+import { DEFAULT_PAGE_SIZE } from './product-pagination';
 
 function getWixClientId() {
     /**
@@ -67,7 +68,7 @@ function createApi(): EcomAPI {
     const wixClient = getWixClient();
 
     return {
-        async getProductsByCategory(categorySlug, { filters, sortBy } = {}) {
+        async getProductsByCategory(categorySlug, { filters, sortBy, pagination } = {}) {
             try {
                 const category = (await wixClient.collections.getCollectionBySlug(categorySlug)).collection;
                 if (!category) {
@@ -90,17 +91,12 @@ function createApi(): EcomAPI {
                     query = getSortedProductsQuery(query, sortBy);
                 }
 
-                let productsResponse = await query.limit(100).find();
-                const allProducts = productsResponse.items;
+                const { items, totalCount } = await query
+                    .skip(pagination?.offset ?? 0)
+                    .limit(pagination?.limit ?? DEFAULT_PAGE_SIZE)
+                    .find();
 
-                // load all available products. if you have a lot of projects in your site
-                // please implement proper implementation of pagination
-                while (productsResponse.hasNext()) {
-                    productsResponse = await productsResponse.next();
-                    allProducts.push(...productsResponse.items);
-                }
-
-                return successResponse({ items: allProducts, totalCount: productsResponse.totalCount ?? 0 });
+                return successResponse({ items, totalCount: totalCount ?? 0 });
             } catch (e) {
                 return failureResponse(EcomApiErrorCodes.GetProductsFailure, getErrorMessage(e));
             }
