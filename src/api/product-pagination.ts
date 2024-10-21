@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
+import { DEFAULT_PAGE_SIZE } from './constants';
 import { getEcomApi } from './ecom-api';
 import { useAppliedProductFilters } from './product-filters';
 import { useAppliedProductSorting } from './product-sorting';
 import { Product } from './types';
-
-export const DEFAULT_PAGE_SIZE = 50;
 
 export function useProductPagination(
     categorySlug: string,

@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { ROUTES } from '~/router/config';
 import { getErrorMessage } from '~/utils';
 import {
+    DEFAULT_PAGE_SIZE,
     DEMO_STORE_WIX_CLIENT_ID,
     WIX_CLIENT_ID_COOKIE_KEY,
     WIX_SESSION_TOKEN_COOKIE_KEY,
@@ -13,7 +14,6 @@ import {
 } from './constants';
 import { getSortedProductsQuery } from './product-sorting';
 import { EcomAPI, EcomApiErrorCodes, EcomAPIFailureResponse, EcomAPISuccessResponse, isEcomSDKError } from './types';
-import { DEFAULT_PAGE_SIZE } from './product-pagination';
 
 function getWixClientId() {
     /**
