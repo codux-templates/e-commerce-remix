@@ -34,7 +34,7 @@ export const getStaticRoutes = async () => {
     const products = await getEcomApi().getAllProducts();
 
     if (products.status === 'failure') {
-        return [];
+        throw new Error(`${products.error.code} ${products.error.message || ''}`);
     }
 
     return products.body.map((product) => `/products/${product.slug}`);

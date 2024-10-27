@@ -43,7 +43,7 @@ export const getStaticRoutes = async () => {
     const categories = await getEcomApi().getAllCategories();
 
     if (categories.status === 'failure') {
-        return [];
+        throw new Error(`${categories.error.code} ${categories.error.message || ''}`);
     }
 
     return categories.body.map((category) => `/category/${category.slug}`);
