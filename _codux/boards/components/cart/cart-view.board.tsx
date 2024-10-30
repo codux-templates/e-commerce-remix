@@ -1,5 +1,5 @@
 import { createBoard } from '@wixc3/react-board';
-import { CartView } from '~/components/cart/cart-view/cart-view';
+import { CartView } from '~/src/components/cart/cart-view/cart-view';
 import { cart, cartTotals } from '_codux/mocks/cart';
 
 const noop = () => {};

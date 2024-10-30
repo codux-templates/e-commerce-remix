@@ -1,16 +1,19 @@
 import { useState } from 'react';
-import { Drawer } from '~/components/drawer/drawer';
-import { isCartItemAvailable } from '~/utils';
-import { useCart } from '~/hooks/use-cart';
-import { useCartOpen } from './cart-open-context';
+import { cart } from '@wix/ecom';
+import { useCartOpen } from '~/lib/cart-open-context';
+import { useCart } from '~/lib/ecom';
+import { Drawer } from '~/src/components/drawer/drawer';
 import { CartView } from './cart-view/cart-view';
 
 export const Cart = () => {
     const { isOpen, setIsOpen } = useCartOpen();
+    console.log('=====> CART', isOpen);
     const { cartData, cartTotals, checkout, removeItem, updateItemQuantity } = useCart();
     const [checkoutAttempted, setCheckoutAttempted] = useState(false);
 
-    const someItemsOutOfStock = cartData?.lineItems.some((item) => !isCartItemAvailable(item));
+    const someItemsOutOfStock = cartData?.lineItems.some(
+        (item) => item.availability?.status === cart.ItemAvailabilityStatus.NOT_AVAILABLE
+    );
 
     const handleCheckout = async () => {
         setCheckoutAttempted(true);

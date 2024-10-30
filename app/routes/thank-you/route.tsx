@@ -1,17 +1,12 @@
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { LinksFunction, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
-import { getEcomApi } from '~/api/ecom-api';
-import { OrderDetails } from '~/api/types';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { OrderSummary } from '~/components/order-summary/order-summary';
-import { ROUTES } from '~/router/config';
-import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
-import styles from './thank-you.module.scss';
+import { useEcomAPI, type OrderDetails } from '~/lib/ecom';
+import { getErrorMessage } from '~/lib/utils';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { OrderSummary } from '~/src/components/order-summary/order-summary';
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: getUrlOriginWithPath(request.url) };
-};
+import styles from './thank-you.module.scss';
 
 export default function ThankYouPage() {
     const [search] = useSearchParams();
@@ -20,7 +15,7 @@ export default function ThankYouPage() {
     const [order, setOrder] = useState<OrderDetails>();
     const [error, setError] = useState<string>();
 
-    const api = getEcomApi();
+    const api = useEcomAPI();
 
     useEffect(() => {
         if (orderId) {
@@ -53,7 +48,7 @@ export default function ThankYouPage() {
                 </div>
             )}
 
-            <Link to={ROUTES.category.to()}>
+            <Link to={'category/all-products'}>
                 <button className="primaryButton" type="button">
                     Continue Shopping
                 </button>
@@ -69,7 +64,7 @@ export function ErrorBoundary() {
     return <ErrorComponent title={title} message={message} />;
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction = () => {
     const title = 'E-Commerce App - Thank You';
     const description = 'Thank You for your purchase';
     const imageUrl = 'https://e-commerce.com/image.png';
@@ -79,11 +74,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

@@ -1,11 +1,5 @@
 import { LinksFunction, MetaFunction } from '@remix-run/node';
-import { LoaderFunctionArgs } from 'react-router-dom';
-import { getUrlOriginWithPath } from '~/utils';
 import styles from './about.module.scss';
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: getUrlOriginWithPath(request.url) };
-};
 
 export default function AboutPage() {
     return (
@@ -27,7 +21,7 @@ export default function AboutPage() {
     );
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction = () => {
     const title = 'E-Commerce App - About';
     const description = 'Welcome to the E-Commerce App - About Page';
     const imageUrl = 'https://e-commerce.com/image.png';
@@ -37,11 +31,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

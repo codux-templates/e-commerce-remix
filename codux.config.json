@@ -31,8 +31,7 @@
     "alias": {
       "@styles": "./src/styles",
       "@styles/*": "./src/styles/*",
-      "/*": "./*",
-      "~/*": "./src/*",
+      "~/*": "./*",
       "node:fs": false,
       "node:fs/promises": false,
       "node:path": false,

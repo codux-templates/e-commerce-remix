@@ -1,7 +1,7 @@
 import { SerializeFrom } from '@remix-run/node';
 import { products as wixStoresProducts } from '@wix/stores';
 import deepEqual from 'fast-deep-equal';
-import { Product } from '~/api/types';
+import { Product } from '~/lib/ecom';
 
 export function isOutOfStock(
     product: Product | SerializeFrom<Product>,
@@ -153,4 +153,15 @@ function getChoiceAvailabilityInfo(
         visible: matchingVariants.some((variant) => variant.variant?.visible),
         inStock: matchingVariants.some((variant) => variant.variant?.visible && variant.stock?.inStock),
     };
+}
+
+export function formatPrice(price: number, currency: string): string {
+    const formatter = Intl.NumberFormat('en-US', {
+        currency,
+        style: 'currency',
+        currencyDisplay: 'narrowSymbol',
+        minimumFractionDigits: 2,
+    });
+
+    return formatter.format(price);
 }

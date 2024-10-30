@@ -1,8 +1,8 @@
 import { products } from '@wix/stores';
-import { ColorSelect } from '~/components/color-select/color-select';
-import { Select } from '~/components/select/select';
+import { ColorSelect } from '~/lib/components/color-select/color-select';
+import { Select } from '~/src/components/select/select';
 import styles from './product-option.module.scss';
-import { getChoiceValue } from '~/utils';
+import { getChoiceValue } from '~/lib/utils';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
@@ -42,12 +42,12 @@ export const ProductOption = ({ option, selectedChoice, error, onChange }: Produ
                     options={choices
                         .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
-                            name: c.description!,
-                            hexValue: c.value!,
-                            inStock: !!c.inStock,
+                            id: c.description!,
+                            color: c.value!,
+                            crossedOut: !c.inStock,
                         }))}
+                    selectedId={selectedChoice?.description ?? ''}
                     onChange={handleChange}
-                    selectedName={selectedChoice?.description}
                 />
             ) : (
                 <Select

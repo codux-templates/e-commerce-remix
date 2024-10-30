@@ -3,17 +3,7 @@ import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError }
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { getEcomApi } from '~/api/ecom-api';
-import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { Price } from '~/components/price/price';
-import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
-import { ProductImages } from '~/components/product-images/product-images';
-import { ProductOption } from '~/components/product-option/product-option';
-import { UnsafeRichText } from '~/components/rich-text/rich-text';
-import { useCart } from '~/hooks/use-cart';
-import { ROUTES } from '~/router/config';
+import { useCart, AddToCartOptions, EcomApiErrorCodes, initializeEcomApi } from '~/lib/ecom';
 import {
     getErrorMessage,
     getMedia,
@@ -21,10 +11,17 @@ import {
     getProductOptions,
     getSelectedVariant,
     getSKU,
-    getUrlOriginWithPath,
     isOutOfStock,
     selectedChoicesToVariantChoices,
-} from '~/utils';
+} from '~/lib/utils';
+import { useCartOpen } from '~/lib/cart-open-context';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { Price } from '~/src/components/price/price';
+import { ProductAdditionalInfo } from '~/src/components/product-additional-info/product-additional-info';
+import { ProductImages } from '~/src/components/product-images/product-images';
+import { ProductOption } from '~/src/components/product-option/product-option';
+import { UnsafeRichText } from '~/src/components/rich-text/rich-text';
+
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -32,12 +29,15 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!productSlug) {
         throw new Error('Missing product slug');
     }
-    const productResponse = await getEcomApi().getProductBySlug(productSlug);
+
+    const ecomApi = await initializeEcomApi(request);
+
+    const productResponse = await ecomApi.getProductBySlug(productSlug);
     if (productResponse.status === 'failure') {
         throw json(productResponse.error);
     }
 
-    return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
+    return json({ product: productResponse.body });
 };
 
 export default function ProductDetailsPage() {
@@ -85,11 +85,7 @@ export default function ProductDetailsPage() {
             options = { variantId: selectedVariant._id };
         }
 
-        await cart.addItem({
-            id: product._id,
-            quantity,
-            options,
-        });
+        await cart.addToCart(product._id, quantity, options);
         setIsOpen(true);
     }
 
@@ -186,7 +182,7 @@ export function ErrorBoundary() {
             title={title}
             message={message}
             actionButtonText="Back to shopping"
-            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+            onActionButtonClick={() => navigate('/category/all-products')}
         />
     );
 }
@@ -205,11 +201,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data.canonicalUrl,
         },
         {
             property: 'robots',
