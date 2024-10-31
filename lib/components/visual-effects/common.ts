@@ -40,5 +40,5 @@ export const remap = (
     inputEnd: number,
     outputStart: number,
     outputEnd: number,
-    x: number
+    x: number,
 ): number => ((x - inputStart) / (inputEnd - inputStart)) * (outputEnd - outputStart) + outputStart;

@@ -17,10 +17,10 @@ export function useAppliedProductFilters() {
                     filters.forEach((filter) => params.delete(filter));
                     return params;
                 },
-                { preventScrollReset: true }
+                { preventScrollReset: true },
             );
         },
-        [setSearchParams]
+        [setSearchParams],
     );
 
     const clearAllFilters = useCallback(() => {

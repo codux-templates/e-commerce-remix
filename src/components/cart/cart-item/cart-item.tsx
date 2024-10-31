@@ -33,7 +33,7 @@ export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChan
             className={classNames(
                 styles.root,
                 { [styles.divider]: !isLast, [styles.outOfStock]: isUnavailable },
-                className
+                className,
             )}
         >
             <img src={image?.url} alt={name} className={styles.image} />

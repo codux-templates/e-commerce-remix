@@ -5,7 +5,7 @@ import { Product } from '~/lib/ecom';
 
 export function isOutOfStock(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {},
 ): boolean {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedChoices);
@@ -19,7 +19,7 @@ export function isOutOfStock(
 
 export function getPriceData(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {},
 ): Product['priceData'] {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedChoices);
@@ -31,7 +31,7 @@ export function getPriceData(
 
 export function getSKU(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
 ): Product['sku'] {
     if (product.manageVariants) {
         const selectedVariant = getSelectedVariant(product, selectedChoices);
@@ -43,7 +43,7 @@ export function getSKU(
 
 export function getSelectedVariant(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
 ): wixStoresProducts.Variant | undefined {
     const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices);
     return product.variants?.find((variant) => deepEqual(variant.choices, selectedChoiceValues));
@@ -51,7 +51,7 @@ export function getSelectedVariant(
 
 function getMatchingVariants(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
 ): wixStoresProducts.Variant[] {
     const selectedChoiceValues = selectedChoicesToVariantChoices(product, selectedChoices);
 
@@ -66,14 +66,14 @@ function getMatchingVariants(
             deepEqual(variant.choices, {
                 ...variant.choices,
                 ...selectedChoiceValues,
-            })
+            }),
         ) ?? []
     );
 }
 
 export const getChoiceValue = (
     optionType: wixStoresProducts.OptionType,
-    choice: wixStoresProducts.Choice
+    choice: wixStoresProducts.Choice,
 ): string | undefined => {
     // for color options, `description` field contains color name and `value` field contains hex color representation
     // e-commerce SDK for some actions (adding to cart for example) expects color name as selected color value
@@ -85,7 +85,7 @@ export const getChoiceValue = (
 // the name 'variant choices' is used because the same data structure is used for the Variant['choices'] property provided by SDK
 export const selectedChoicesToVariantChoices = (
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {},
 ): Record<string, string | undefined> => {
     const result: Record<string, string | undefined> = {};
     for (const [optionName, choice] of Object.entries(selectedChoices)) {
@@ -105,7 +105,7 @@ export const selectedChoicesToVariantChoices = (
 
 export function getMedia(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {}
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined> = {},
 ): wixStoresProducts.Media | undefined {
     const selectedChoiceWithMedia = Object.values(selectedChoices).find((c) => c?.media?.mainMedia !== undefined);
     return selectedChoiceWithMedia?.media ?? product.media;
@@ -117,7 +117,7 @@ export function getMedia(
  */
 export function getProductOptions(
     product: Product | SerializeFrom<Product>,
-    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>
+    selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
 ): wixStoresProducts.ProductOption[] | undefined {
     return product.productOptions?.map((option) => {
         return {
@@ -134,7 +134,7 @@ function getChoiceAvailabilityInfo(
     choice: wixStoresProducts.Choice,
     option: wixStoresProducts.ProductOption,
     selectedChoices: Record<string, wixStoresProducts.Choice | undefined>,
-    product: Product | SerializeFrom<Product>
+    product: Product | SerializeFrom<Product>,
 ): Pick<wixStoresProducts.Choice, 'visible' | 'inStock'> {
     if (!product.manageVariants || !option.name || !option.optionType) {
         return {

@@ -55,7 +55,7 @@ export const Drawer = ({ open, onClose, children, drawerClassName }: DrawerProps
                             </>
                         )}
                     </AnimatePresence>,
-                    document.body
+                    document.body,
                 )
             }
         </ClientOnly>
