@@ -36,6 +36,7 @@
     "swr": "^2.2.5"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.0.3",
     "@remix-run/dev": "^2.13.1",
     "@remix-run/testing": "^2.13.1",
     "@types/lodash.debounce": "^4.0.9",
