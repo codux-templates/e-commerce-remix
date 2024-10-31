@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { productFiltersFromSearchParams, searchParamsFromProductFilters } from '~/lib/ecom';
-import { IProductFilters } from '~/lib/ecom';
+import { productFiltersFromSearchParams, searchParamsFromProductFilters, IProductFilters } from '~/lib/ecom';
 import { formatPrice, mergeUrlSearchParams } from '~/lib/utils';
 import { useSearchParamsOptimistic } from '~/lib/hooks';
 import { Accordion } from '../accordion/accordion';
