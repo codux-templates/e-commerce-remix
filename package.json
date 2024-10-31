@@ -19,7 +19,7 @@
     "@remix-run/node": "^2.13.1",
     "@remix-run/react": "^2.13.1",
     "@remix-run/serve": "^2.13.1",
-    "@wix/ecom": "^1.0.793",
+    "@wix/ecom": "^1.0.787",
     "@wix/members": "^1.0.112",
     "@wix/redirects": "^1.0.58",
     "@wix/sdk": "^1.14.2",
