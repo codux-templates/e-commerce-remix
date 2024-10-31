@@ -1,9 +1,10 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { useCart, AddToCartOptions, EcomApiErrorCodes } from '~/lib/ecom';
+import { useCart, AddToCartOptions, EcomApiErrorCodes, createApi, createWixClient } from '~/lib/ecom';
 import { initializeEcomApi } from '~/lib/ecom/session';
 import {
     getErrorMessage,
@@ -39,6 +40,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     }
 
     return json({ product: productResponse.body });
+};
+
+export const getStaticRoutes: GetStaticRoutes = async () => {
+    const api = createApi(createWixClient());
+    const products = await api.getProducts();
+
+    if (products.status === 'failure') {
+        throw products.error;
+    }
+
+    return products.body.map((product) => `/products/${product.slug}`);
 };
 
 export default function ProductDetailsPage() {

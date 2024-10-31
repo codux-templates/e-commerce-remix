@@ -1,7 +1,13 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import classNames from 'classnames';
-import { EcomApiErrorCodes, productFiltersFromSearchParams, productSortByFromSearchParams } from '~/lib/ecom';
+import {
+    EcomApiErrorCodes,
+    createApi,
+    createWixClient,
+    productFiltersFromSearchParams,
+    productSortByFromSearchParams,
+} from '~/lib/ecom';
 import { useAppliedProductFilters } from '~/lib/hooks';
 import { initializeEcomApi } from '~/lib/ecom/session';
 import { getErrorMessage, isOutOfStock } from '~/lib/utils';
@@ -12,6 +18,7 @@ import { AppliedProductFilters } from '~/src/components/applied-product-filters/
 import { ProductSortingSelect } from '~/src/components/product-sorting-select/product-sorting-select';
 
 import styles from './category.module.scss';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const categorySlug = params.categorySlug;
@@ -52,6 +59,17 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         allCategories: allCategoriesResponse.body,
         productPriceBounds: productPriceBoundsResponse.body,
     };
+};
+
+export const getStaticRoutes: GetStaticRoutes = async () => {
+    const api = createApi(createWixClient());
+    const categories = await api.getAllCategories();
+
+    if (categories.status === 'failure') {
+        throw categories.error;
+    }
+
+    return categories.body.map((category) => `/category/${category.slug}`);
 };
 
 export default function ProductsCategoryPage() {
