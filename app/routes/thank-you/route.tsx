@@ -1,12 +1,16 @@
-import { LinksFunction, MetaFunction } from '@remix-run/node';
+import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { useEcomAPI, type OrderDetails } from '~/lib/ecom';
-import { getErrorMessage } from '~/lib/utils';
+import { getErrorMessage, removeQueryStringFromUrl } from '~/lib/utils';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { OrderSummary } from '~/src/components/order-summary/order-summary';
 
 import styles from './thank-you.module.scss';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+    return { canonicalUrl: removeQueryStringFromUrl(request.url) };
+};
 
 export default function ThankYouPage() {
     const [search] = useSearchParams();
@@ -64,7 +68,7 @@ export function ErrorBoundary() {
     return <ErrorComponent title={title} message={message} />;
 }
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const title = 'E-Commerce App - Thank You';
     const description = 'Thank You for your purchase';
     const imageUrl = 'https://e-commerce.com/image.png';
@@ -74,6 +78,11 @@ export const meta: MetaFunction = () => {
         {
             name: 'description',
             content: description,
+        },
+        {
+            tagName: 'link',
+            rel: 'canonical',
+            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

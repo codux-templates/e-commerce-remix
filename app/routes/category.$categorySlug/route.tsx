@@ -1,5 +1,6 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
 import {
     EcomApiErrorCodes,
@@ -10,7 +11,7 @@ import {
 } from '~/lib/ecom';
 import { useAppliedProductFilters } from '~/lib/hooks';
 import { initializeEcomApi } from '~/lib/ecom/session';
-import { getErrorMessage, isOutOfStock } from '~/lib/utils';
+import { getErrorMessage, isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { ProductFilters } from '~/src/components/product-filters/product-filters';
@@ -18,7 +19,6 @@ import { AppliedProductFilters } from '~/src/components/applied-product-filters/
 import { ProductSortingSelect } from '~/src/components/product-sorting-select/product-sorting-select';
 
 import styles from './category.module.scss';
-import { GetStaticRoutes } from '@wixc3/define-remix-app';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const categorySlug = params.categorySlug;
@@ -58,6 +58,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         categoryProducts: categoryProductsResponse.body,
         allCategories: allCategoriesResponse.body,
         productPriceBounds: productPriceBoundsResponse.body,
+        canonicalUrl: removeQueryStringFromUrl(request.url),
     };
 };
 
@@ -183,7 +184,7 @@ export function ErrorBoundary() {
     );
 }
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const title = 'E-Commerce App - Projects';
     const description = 'Welcome to the E-Commerce App - Projects Page';
     const imageUrl = 'https://e-commerce.com/image.png';
@@ -194,7 +195,11 @@ export const meta: MetaFunction = () => {
             name: 'description',
             content: description,
         },
-
+        {
+            tagName: 'link',
+            rel: 'canonical',
+            href: data?.canonicalUrl,
+        },
         {
             property: 'robots',
             content: 'index, follow',

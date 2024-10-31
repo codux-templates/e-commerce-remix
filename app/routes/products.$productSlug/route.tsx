@@ -14,6 +14,7 @@ import {
     getSelectedVariant,
     getSKU,
     isOutOfStock,
+    removeQueryStringFromUrl,
     selectedChoicesToVariantChoices,
 } from '~/lib/utils';
 import { useCartOpen } from '~/lib/cart-open-context';
@@ -39,7 +40,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         throw json(productResponse.error);
     }
 
-    return json({ product: productResponse.body });
+    return json({ product: productResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) });
 };
 
 export const getStaticRoutes: GetStaticRoutes = async () => {
@@ -213,6 +214,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
+        },
+        {
+            tagName: 'link',
+            rel: 'canonical',
+            href: data.canonicalUrl,
         },
         {
             property: 'robots',
