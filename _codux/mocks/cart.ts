@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { cart as wixEcomCart } from '@wix/ecom';
-import { Cart, CartItemDetails, CartTotals } from '~/api/types';
+import { Cart, CartItemDetails, CartTotals } from '~/lib/ecom';
 
 export const cartItem = createCartItem();
 export const cartItemWithDiscount = createCartItem({

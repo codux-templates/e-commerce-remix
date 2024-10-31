@@ -1,7 +1,7 @@
 import { NavLink } from '@remix-run/react';
 import classNames from 'classnames';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ROUTES } from '~/router/config';
+import { useCartOpen } from '~/lib/cart-open-context';
+
 import styles from './header.module.scss';
 
 export interface HeaderProps {
@@ -13,25 +13,25 @@ export const Header = ({ className }: HeaderProps) => {
 
     return (
         <div className={classNames(styles.root, className)}>
-            <NavLink to={ROUTES.home.to()} className={styles.logo}>
+            <NavLink to="/" className={styles.logo}>
                 LOGO
             </NavLink>
             <div className={styles.menu}>
                 <NavLink
-                    to={ROUTES.home.to()}
+                    to="/"
                     className={({ isActive }) => classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })}
                 >
                     Home
                 </NavLink>
                 <NavLink
-                    to={ROUTES.category.to()}
+                    to="/category/all-products"
                     className={({ isActive }) => classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })}
                 >
                     Products
                 </NavLink>
 
                 <NavLink
-                    to={ROUTES.about.to()}
+                    to="/about"
                     className={({ isActive }) => classNames(styles.menuButton, { [styles.activeMenuItem]: isActive })}
                 >
                     About

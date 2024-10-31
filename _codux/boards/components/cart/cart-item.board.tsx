@@ -1,6 +1,6 @@
 import { createBoard } from '@wixc3/react-board';
 import { cartItem, cartItemOutOfStock, cartItemWithDiscount } from '_codux/mocks/cart';
-import { CartItem } from '~/components/cart/cart-item/cart-item';
+import { CartItem } from '~/src/components/cart/cart-item/cart-item';
 
 const noop = () => {};
 

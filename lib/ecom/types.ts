@@ -28,7 +28,7 @@ export enum EcomApiErrorCodes {
     GetOrderFailure = 'GetOrderFailure',
 }
 
-export type EcomAPIError = { code: EcomApiErrorCodes; message?: string };
+export type EcomAPIError = { code: EcomApiErrorCodes; message: string };
 export type EcomAPISuccessResponse<T> = { status: 'success'; body: T };
 export type EcomAPIFailureResponse = { status: 'failure'; error: EcomAPIError };
 export type EcomAPIResponse<T> = EcomAPISuccessResponse<T> | EcomAPIFailureResponse;
@@ -42,8 +42,6 @@ export type EcomSDKError = {
         };
     };
 };
-// type according to https://www.wix.com/velo/reference/wix-stores-backend/ecommerce-integration
-export type AddToCartOptions = { variantId: string } | { options: Record<string, string | undefined> };
 
 export function isEcomSDKError(error: unknown): error is EcomSDKError {
     return (
@@ -81,20 +79,24 @@ export enum ProductSortBy {
 }
 
 interface GetProductsByCategoryOptions {
+    skip?: number;
+    limit?: number;
     filters?: IProductFilters;
     sortBy?: ProductSortBy;
 }
 
+export type AddToCartOptions = { variantId: string } | { options: Record<string, string | undefined> };
+
 export type EcomAPI = {
+    getProducts: (limit?: number) => Promise<EcomAPIResponse<Product[]>>;
     getProductsByCategory: (
         categorySlug: string,
-        options?: GetProductsByCategoryOptions
-    ) => Promise<
-        EcomAPIResponse<{
-            items: Product[];
-            totalCount: number;
-        }>
-    >;
+        options?: GetProductsByCategoryOptions,
+    ) => Promise<EcomAPIResponse<{ items: Product[]; totalCount: number }>>;
+    getFeaturedProducts: (
+        categorySlug: string,
+        count: number,
+    ) => Promise<EcomAPIResponse<{ category: Collection; items: Product[] }>>;
     getPromotedProducts: () => Promise<EcomAPIResponse<Product[]>>;
     getProductBySlug: (slug: string) => Promise<EcomAPIResponse<Product>>;
     getCart: () => Promise<EcomAPIResponse<Cart>>;

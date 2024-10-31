@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { Cart, CartTotals } from '~/api/types';
+import { Cart, CartTotals } from '~/lib/ecom';
 import { CartItem } from '../cart-item/cart-item';
 import styles from './cart-view.module.scss';
 import { ChevronRightIcon } from '@radix-ui/react-icons';

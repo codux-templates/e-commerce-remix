@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import discordIcon from '~/assets/svg/discord.svg';
-import facebookIcon from '~/assets/svg/facebook.svg';
-import githubIcon from '~/assets/svg/github.svg';
-import mediumIcon from '~/assets/svg/medium.svg';
-import twitterxIcon from '~/assets/svg/twitterx.svg';
-import youtubeIcon from '~/assets/svg/youtube.svg';
+import discordIcon from '~/src/assets/svg/discord.svg';
+import facebookIcon from '~/src/assets/svg/facebook.svg';
+import githubIcon from '~/src/assets/svg/github.svg';
+import mediumIcon from '~/src/assets/svg/medium.svg';
+import twitterxIcon from '~/src/assets/svg/twitterx.svg';
+import youtubeIcon from '~/src/assets/svg/youtube.svg';
 import styles from './site-footer.module.scss';
 
 export interface FooterProps {

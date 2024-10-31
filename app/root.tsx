@@ -11,21 +11,36 @@ import {
     useNavigation,
     useRouteError,
 } from '@remix-run/react';
+import { LoaderFunctionArgs } from '@remix-run/node';
+import { Tokens } from '@wix/sdk';
 import { useEffect } from 'react';
-import { EcomAPIContextProvider } from '~/api/ecom-api-context-provider';
-import { CartOpenContextProvider } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { SiteWrapper } from '~/components/site-wrapper/site-wrapper';
-import { ROUTES } from '~/router/config';
-import '~/styles/index.scss';
-import { getErrorMessage, routeLocationToUrl } from '~/utils';
+import { CartOpenContextProvider } from '~/lib/cart-open-context';
+import { EcomAPIContextProvider } from '~/lib/ecom';
+import { initializeEcomSession, commitSession } from '~/lib/ecom/session';
+import { getErrorMessage, routeLocationToUrl } from '~/lib/utils';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { SiteWrapper } from '~/src/components/site-wrapper/site-wrapper';
 
-export async function loader() {
-    return json({
-        ENV: {
-            WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
+import '~/src/styles/index.scss';
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const { wixEcomTokens, session, shouldUpdateSessionCookie } = await initializeEcomSession(request);
+
+    return json(
+        {
+            ENV: {
+                WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
+            },
+            wixEcomTokens,
         },
-    });
+        shouldUpdateSessionCookie
+            ? {
+                  headers: {
+                      'Set-Cookie': await commitSession(session),
+                  },
+              }
+            : undefined,
+    );
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -46,15 +61,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
     );
 }
 
+interface ContentWrapperProps extends React.PropsWithChildren {
+    tokens?: Tokens;
+}
+
+function ContentWrapper({ children, tokens }: ContentWrapperProps) {
+    return (
+        <EcomAPIContextProvider tokens={tokens}>
+            <CartOpenContextProvider>
+                <SiteWrapper>{children}</SiteWrapper>
+            </CartOpenContextProvider>
+        </EcomAPIContextProvider>
+    );
+}
+
 export default function App() {
-    const data = useLoaderData<typeof loader>();
+    const { ENV, wixEcomTokens } = useLoaderData<typeof loader>();
 
     if (typeof window !== 'undefined' && typeof window.ENV === 'undefined') {
-        window.ENV = data.ENV;
+        window.ENV = ENV;
     }
 
     return (
-        <ContentWrapper>
+        <ContentWrapper tokens={wixEcomTokens}>
             <Outlet />
         </ContentWrapper>
     );
@@ -83,18 +112,8 @@ export function ErrorBoundary() {
                 title={isPageNotFoundError ? 'Page Not Found' : 'Oops, something went wrong'}
                 message={isPageNotFoundError ? undefined : getErrorMessage(error)}
                 actionButtonText="Back to shopping"
-                onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+                onActionButtonClick={() => navigate('/category/all-products')}
             />
         </ContentWrapper>
-    );
-}
-
-function ContentWrapper({ children }: React.PropsWithChildren) {
-    return (
-        <EcomAPIContextProvider>
-            <CartOpenContextProvider>
-                <SiteWrapper>{children}</SiteWrapper>
-            </CartOpenContextProvider>
-        </EcomAPIContextProvider>
     );
 }
