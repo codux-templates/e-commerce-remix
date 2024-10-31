@@ -1,7 +1,26 @@
 import { isRouteErrorResponse, Location } from '@remix-run/react';
-import { isEcomSDKError } from '~/api/types';
+import { isEcomSDKError } from '~/lib/ecom';
 
-export function getUrlOriginWithPath(url: string) {
+/**
+ * It's important to add an appropriate role and a keyboard support
+ * for non-interactive HTML elements with click handlers, such as `<div onClick={handler}></div>`.
+ * This function returns a basic set of attributes
+ * to make the clickable element focusable and handle keyboard events.
+ */
+export function getClickableElementAttributes(handler: () => void) {
+    return {
+        role: 'button',
+        tabIndex: 0,
+        onClick: handler,
+        onKeyUp: (event: React.KeyboardEvent) => {
+            if (event.code === 'Enter' || event.code === 'Space') {
+                handler();
+            }
+        },
+    };
+}
+
+export function removeQueryStringFromUrl(url: string) {
     const { origin, pathname } = new URL(url);
     return new URL(pathname, origin).toString();
 }
@@ -58,25 +77,6 @@ export function routeLocationToUrl(location: Location, origin: string): URL {
 }
 
 /**
- * It's important to add an appropriate role and a keyboard support
- * for non-interactive HTML elements with click handlers, such as `<div onClick={handler}></div>`.
- * This function returns a basic set of attributes
- * to make the clickable element focusable and handle keyboard events.
- */
-export function getClickableElementAttributes(handler: () => void) {
-    return {
-        role: 'button',
-        tabIndex: 0,
-        onClick: handler,
-        onKeyUp: (event: React.KeyboardEvent) => {
-            if (event.code === 'Enter' || event.code === 'Space') {
-                handler();
-            }
-        },
-    };
-}
-
-/**
  * Merges multiple URLSearchParams instances into one URLSearchParams.
  *
  * For entries with the same key, values from subsequent URLSearchParams
@@ -105,15 +105,4 @@ export function mergeUrlSearchParams(...paramsArr: URLSearchParams[]): URLSearch
     }
 
     return result;
-}
-
-export function formatPrice(price: number, currency: string): string {
-    const formatter = Intl.NumberFormat('en-US', {
-        currency,
-        style: 'currency',
-        currencyDisplay: 'narrowSymbol',
-        minimumFractionDigits: 2,
-    });
-
-    return formatter.format(price);
 }

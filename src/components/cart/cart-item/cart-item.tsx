@@ -1,13 +1,11 @@
 import { Cross2Icon } from '@radix-ui/react-icons';
-import type { cart } from '@wix/ecom';
+import { cart } from '@wix/ecom';
+import { media } from '@wix/sdk';
 import classNames from 'classnames';
 import { ChangeEvent } from 'react';
-import { getImageHttpUrl } from '~/api/wix-image';
-import { Price } from '~/components/price/price';
-import { isCartItemAvailable } from '~/utils';
+import { Price } from '~/src/components/price/price';
 import styles from './cart-item.module.scss';
 
-const IMAGE_SIZE = 120;
 export interface CartItemProps {
     className?: string;
     isLast?: boolean;
@@ -18,9 +16,8 @@ export interface CartItemProps {
 
 export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChange }: CartItemProps) => {
     const name = cartItem.productName?.translated ?? '';
-    const imageUrl = getImageHttpUrl(cartItem.image, IMAGE_SIZE, IMAGE_SIZE);
-    const isAvailable = isCartItemAvailable(cartItem);
-
+    const image = cartItem.image ? media.getImageUrl(cartItem.image) : undefined;
+    const isUnavailable = cartItem.availability?.status === cart.ItemAvailabilityStatus.NOT_AVAILABLE;
     const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (!cartItem._id) {
             return;
@@ -35,11 +32,11 @@ export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChan
         <div
             className={classNames(
                 styles.root,
-                { [styles.divider]: !isLast, [styles.outOfStock]: !isAvailable },
-                className
+                { [styles.divider]: !isLast, [styles.outOfStock]: isUnavailable },
+                className,
             )}
         >
-            <img src={imageUrl} alt={name} className={styles.image} />
+            <img src={image?.url} alt={name} className={styles.image} />
             <div className={styles.infoContainer}>
                 <div className={styles.itemLine}>
                     <div>
@@ -56,7 +53,9 @@ export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChan
                     </button>
                 </div>
 
-                {isAvailable ? (
+                {isUnavailable ? (
+                    <div>Out of stock</div>
+                ) : (
                     <div className={styles.actionsContainer}>
                         <input
                             type="number"
@@ -66,8 +65,6 @@ export const CartItem = ({ cartItem, className, isLast, onRemove, onQuantityChan
                             className="numberInput"
                         />
                     </div>
-                ) : (
-                    <div>Out of stock</div>
                 )}
             </div>
         </div>

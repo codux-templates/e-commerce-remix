@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from '@remix-run/react';
-import { IProductFilters, ProductFilter } from '~/api/types';
+import { ProductFilter, productFiltersFromSearchParams } from '~/lib/ecom';
 
 export function useAppliedProductFilters() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -17,10 +17,10 @@ export function useAppliedProductFilters() {
                     filters.forEach((filter) => params.delete(filter));
                     return params;
                 },
-                { preventScrollReset: true }
+                { preventScrollReset: true },
             );
         },
-        [setSearchParams]
+        [setSearchParams],
     );
 
     const clearAllFilters = useCallback(() => {
@@ -33,22 +33,4 @@ export function useAppliedProductFilters() {
         clearFilters,
         clearAllFilters,
     };
-}
-
-export function productFiltersFromSearchParams(params: URLSearchParams): IProductFilters {
-    const minPrice = params.get(ProductFilter.minPrice);
-    const maxPrice = params.get(ProductFilter.maxPrice);
-    const minPriceNumber = Number(minPrice);
-    const maxPriceNumber = Number(maxPrice);
-    return {
-        minPrice: minPrice && !Number.isNaN(minPriceNumber) ? minPriceNumber : undefined,
-        maxPrice: maxPrice && !Number.isNaN(maxPriceNumber) ? maxPriceNumber : undefined,
-    };
-}
-
-export function searchParamsFromProductFilters({ minPrice, maxPrice }: IProductFilters): URLSearchParams {
-    const params = new URLSearchParams();
-    if (minPrice !== undefined) params.set(ProductFilter.minPrice, minPrice.toString());
-    if (maxPrice !== undefined) params.set(ProductFilter.maxPrice, maxPrice.toString());
-    return params;
 }

@@ -1,6 +1,5 @@
-import { productSortByFromSearchParams, SORT_BY_SEARCH_PARAM } from '~/api/product-sorting';
-import { ProductSortBy } from '~/api/types';
-import { useSearchParamsOptimistic } from '~/utils/use-search-params-optimistic';
+import { productSortByFromSearchParams, SORT_BY_SEARCH_PARAM, ProductSortBy } from '~/lib/ecom';
+import { useSearchParamsOptimistic } from '~/lib/hooks';
 import { Select } from '../select/select';
 import styles from './product-sorting-select.module.scss';
 
@@ -23,7 +22,7 @@ export const ProductSortingSelect = () => {
                 params.set(SORT_BY_SEARCH_PARAM, sortBy);
                 return params;
             },
-            { preventScrollReset: true }
+            { preventScrollReset: true },
         );
     };
 

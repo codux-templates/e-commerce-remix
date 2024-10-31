@@ -1,19 +1,19 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
-import { getEcomApi } from '~/api/ecom-api';
-import { HeroImage } from '~/components/hero-image/hero-image';
-import { ProductCard } from '~/components/product-card/product-card';
-import { ROUTES } from '~/router/config';
-import { getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import { initializeEcomApi } from '~/lib/ecom/session';
+import { isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
+import { HeroImage } from '~/src/components/hero-image/hero-image';
+import { ProductCard } from '~/src/components/product-card/product-card';
 import styles from './index.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    const productsResponse = await getEcomApi().getPromotedProducts();
+    const ecomApi = await initializeEcomApi(request);
+    const productsResponse = await ecomApi.getPromotedProducts();
     if (productsResponse.status === 'failure') {
         throw json(productsResponse.error);
     }
 
-    return { products: productsResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) };
+    return { products: productsResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) };
 };
 
 export default function HomePage() {
@@ -29,14 +29,14 @@ export default function HomePage() {
                 bottomLabel="Get more for less on selected brands"
                 buttonLabel="Shop Now"
                 topLabelClassName={styles.topLabelHighlighted}
-                onButtonClick={() => navigate(ROUTES.category.to())}
+                onButtonClick={() => navigate('/category/all-products')}
             />
             <h1 className={styles.heroTitle}>Best Sellers</h1>
             <p className={styles.hpParagraph}>Shop our best seller items</p>
             <div className={styles.cardsLayout}>
                 {products?.map((product) =>
                     product.slug && product.name ? (
-                        <Link to={ROUTES.product.to(product.slug)} key={product.slug}>
+                        <Link to={`/products/${product.slug}`} key={product.slug}>
                             <ProductCard
                                 imageUrl={product.media?.items?.at(0)?.image?.url}
                                 name={product.name}
@@ -45,7 +45,7 @@ export default function HomePage() {
                                 outOfStock={isOutOfStock(product)}
                             />
                         </Link>
-                    ) : null
+                    ) : null,
                 )}
             </div>
         </div>

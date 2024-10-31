@@ -1,8 +1,7 @@
 import { useCallback, useMemo } from 'react';
-import { productFiltersFromSearchParams, searchParamsFromProductFilters } from '~/api/product-filters';
-import { IProductFilters } from '~/api/types';
-import { formatPrice, mergeUrlSearchParams } from '~/utils';
-import { useSearchParamsOptimistic } from '~/utils/use-search-params-optimistic';
+import { productFiltersFromSearchParams, searchParamsFromProductFilters, IProductFilters } from '~/lib/ecom';
+import { formatPrice, mergeUrlSearchParams } from '~/lib/utils';
+import { useSearchParamsOptimistic } from '~/lib/hooks';
 import { Accordion } from '../accordion/accordion';
 import { RangeSlider } from '../range-slider/range-slider';
 

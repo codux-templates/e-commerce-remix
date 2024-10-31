@@ -1,19 +1,11 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { getEcomApi } from '~/api/ecom-api';
-import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { Price } from '~/components/price/price';
-import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
-import { ProductImages } from '~/components/product-images/product-images';
-import { ProductOption } from '~/components/product-option/product-option';
-import { UnsafeRichText } from '~/components/rich-text/rich-text';
-import { useCart } from '~/hooks/use-cart';
-import { ROUTES } from '~/router/config';
+import { useCart, AddToCartOptions, EcomApiErrorCodes, createApi, createWixClient } from '~/lib/ecom';
+import { initializeEcomApi } from '~/lib/ecom/session';
 import {
     getErrorMessage,
     getMedia,
@@ -21,10 +13,18 @@ import {
     getProductOptions,
     getSelectedVariant,
     getSKU,
-    getUrlOriginWithPath,
     isOutOfStock,
+    removeQueryStringFromUrl,
     selectedChoicesToVariantChoices,
-} from '~/utils';
+} from '~/lib/utils';
+import { useCartOpen } from '~/lib/cart-open-context';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { Price } from '~/src/components/price/price';
+import { ProductAdditionalInfo } from '~/src/components/product-additional-info/product-additional-info';
+import { ProductImages } from '~/src/components/product-images/product-images';
+import { ProductOption } from '~/src/components/product-option/product-option';
+import { UnsafeRichText } from '~/src/components/rich-text/rich-text';
+
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -32,12 +32,26 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!productSlug) {
         throw new Error('Missing product slug');
     }
-    const productResponse = await getEcomApi().getProductBySlug(productSlug);
+
+    const ecomApi = await initializeEcomApi(request);
+
+    const productResponse = await ecomApi.getProductBySlug(productSlug);
     if (productResponse.status === 'failure') {
         throw json(productResponse.error);
     }
 
-    return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
+    return json({ product: productResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) });
+};
+
+export const getStaticRoutes: GetStaticRoutes = async () => {
+    const api = createApi(createWixClient());
+    const products = await api.getProducts();
+
+    if (products.status === 'failure') {
+        throw products.error;
+    }
+
+    return products.body.map((product) => `/products/${product.slug}`);
 };
 
 export default function ProductDetailsPage() {
@@ -59,9 +73,8 @@ export default function ProductDetailsPage() {
         return result;
     };
 
-    const [selectedChoices, setSelectedChoices] = useState<Record<string, products.Choice | undefined>>(
-        getInitialSelectedChoices()
-    );
+    const [selectedChoices, setSelectedChoices] =
+        useState<Record<string, products.Choice | undefined>>(getInitialSelectedChoices());
 
     const outOfStock = isOutOfStock(product, selectedChoices);
     const priceData = getPriceData(product, selectedChoices);
@@ -85,11 +98,7 @@ export default function ProductDetailsPage() {
             options = { variantId: selectedVariant._id };
         }
 
-        await cart.addItem({
-            id: product._id,
-            quantity,
-            options,
-        });
+        await cart.addToCart(product._id, quantity, options);
         setIsOpen(true);
     }
 
@@ -186,7 +195,7 @@ export function ErrorBoundary() {
             title={title}
             message={message}
             actionButtonText="Back to shopping"
-            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+            onActionButtonClick={() => navigate('/category/all-products')}
         />
     );
 }

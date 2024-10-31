@@ -1,18 +1,23 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { isRouteErrorResponse, json, NavLink, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
-import { getEcomApi } from '~/api/ecom-api';
-import { productFiltersFromSearchParams, useAppliedProductFilters } from '~/api/product-filters';
-import { productSortByFromSearchParams } from '~/api/product-sorting';
-import { EcomApiErrorCodes } from '~/api/types';
-import { getImageHttpUrl } from '~/api/wix-image';
-import { AppliedProductFilters } from '~/components/applied-product-filters/applied-product-filters';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { ProductCard } from '~/components/product-card/product-card';
-import { ProductFilters } from '~/components/product-filters/product-filters';
-import { ProductSortingSelect } from '~/components/product-sorting-select/product-sorting-select';
-import { ROUTES } from '~/router/config';
-import { getErrorMessage, getUrlOriginWithPath, isOutOfStock } from '~/utils';
+import {
+    EcomApiErrorCodes,
+    createApi,
+    createWixClient,
+    productFiltersFromSearchParams,
+    productSortByFromSearchParams,
+} from '~/lib/ecom';
+import { useAppliedProductFilters } from '~/lib/hooks';
+import { initializeEcomApi } from '~/lib/ecom/session';
+import { getErrorMessage, isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
+import { ProductCard } from '~/src/components/product-card/product-card';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { ProductFilters } from '~/src/components/product-filters/product-filters';
+import { AppliedProductFilters } from '~/src/components/applied-product-filters/applied-product-filters';
+import { ProductSortingSelect } from '~/src/components/product-sorting-select/product-sorting-select';
+
 import styles from './category.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -21,18 +26,18 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         throw new Error('Missing category slug');
     }
 
-    const api = getEcomApi();
+    const ecomApi = await initializeEcomApi(request);
     const url = new URL(request.url);
 
     const [currentCategoryResponse, categoryProductsResponse, allCategoriesResponse, productPriceBoundsResponse] =
         await Promise.all([
-            api.getCategoryBySlug(categorySlug),
-            api.getProductsByCategory(categorySlug, {
+            ecomApi.getCategoryBySlug(categorySlug),
+            ecomApi.getProductsByCategory(categorySlug, {
                 filters: productFiltersFromSearchParams(url.searchParams),
                 sortBy: productSortByFromSearchParams(url.searchParams),
             }),
-            api.getAllCategories(),
-            api.getProductPriceBounds(categorySlug),
+            ecomApi.getAllCategories(),
+            ecomApi.getProductPriceBounds(categorySlug),
         ]);
 
     if (currentCategoryResponse.status === 'failure') {
@@ -53,9 +58,19 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         categoryProducts: categoryProductsResponse.body,
         allCategories: allCategoriesResponse.body,
         productPriceBounds: productPriceBoundsResponse.body,
-
-        canonicalUrl: getUrlOriginWithPath(request.url),
+        canonicalUrl: removeQueryStringFromUrl(request.url),
     };
+};
+
+export const getStaticRoutes: GetStaticRoutes = async () => {
+    const api = createApi(createWixClient());
+    const categories = await api.getAllCategories();
+
+    if (categories.status === 'failure') {
+        throw categories.error;
+    }
+
+    return categories.body.map((category) => `/category/${category.slug}`);
 };
 
 export default function ProductsCategoryPage() {
@@ -76,7 +91,7 @@ export default function ProductsCategoryPage() {
                             category.slug ? (
                                 <NavLink
                                     key={category._id}
-                                    to={ROUTES.category.to(category.slug)}
+                                    to={`/category/${category.slug}`}
                                     className={({ isActive }) =>
                                         classNames('linkButton', {
                                             [styles.activeCategory]: isActive,
@@ -85,7 +100,7 @@ export default function ProductsCategoryPage() {
                                 >
                                     {category.name}
                                 </NavLink>
-                            ) : null
+                            ) : null,
                         )}
                     </ul>
                 </nav>
@@ -126,20 +141,20 @@ export default function ProductsCategoryPage() {
                 </div>
 
                 <div className={styles.gallery}>
-                    {categoryProducts?.items?.map(
+                    {categoryProducts.items.map(
                         (item) =>
                             item.slug &&
                             item.name && (
-                                <NavLink to={ROUTES.product.to(item.slug)} key={item.slug}>
+                                <NavLink to={`/products/${item.slug}`} key={item.slug}>
                                     <ProductCard
-                                        imageUrl={getImageHttpUrl(item.media?.items?.at(0)?.image?.url, 240)}
+                                        imageUrl={item.media?.mainMedia?.image?.url}
                                         name={item.name}
                                         price={item.priceData ?? undefined}
                                         outOfStock={isOutOfStock(item)}
                                         className={styles.productCard}
                                     />
                                 </NavLink>
-                            )
+                            ),
                     )}
                 </div>
             </div>
@@ -164,7 +179,7 @@ export function ErrorBoundary() {
             title={title}
             message={message}
             actionButtonText="Back to shopping"
-            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+            onActionButtonClick={() => navigate('/category/all-products')}
         />
     );
 }

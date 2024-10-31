@@ -14,7 +14,7 @@ export function productSortByFromSearchParams(searchParams: URLSearchParams): Pr
 
 export function getSortedProductsQuery(
     query: products.ProductsQueryBuilder,
-    sortBy: ProductSortBy
+    sortBy: ProductSortBy,
 ): products.ProductsQueryBuilder {
     switch (sortBy) {
         case ProductSortBy.newest:
