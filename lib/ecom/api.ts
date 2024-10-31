@@ -3,7 +3,8 @@ import { redirects } from '@wix/redirects';
 import { createClient, IOAuthStrategy, OAuthStrategy, Tokens, WixClient } from '@wix/sdk';
 import { collections, products } from '@wix/stores';
 import { getErrorMessage } from '~/lib/utils';
-import { DEMO_STORE_WIX_CLIENT_ID, WIX_STORES_APP_ID } from './constants';
+import { DEMO_STORE_WIX_CLIENT_ID } from '~/src/constants';
+import { WIX_STORES_APP_ID } from './constants';
 import { getFilteredProductsQuery } from './product-filters';
 import { getSortedProductsQuery } from './product-sorting';
 import {
