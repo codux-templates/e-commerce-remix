@@ -16,7 +16,7 @@ export function useSearchParamsOptimistic() {
             setOptimisticSearchParams(params);
             setSearchParams(params, options);
         },
-        [setSearchParams]
+        [setSearchParams],
     );
 
     // Synchronize search params on back/forward browser button clicks.
