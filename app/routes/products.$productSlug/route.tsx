@@ -3,7 +3,8 @@ import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError }
 import type { products } from '@wix/stores';
 import classNames from 'classnames';
 import { useState } from 'react';
-import { useCart, AddToCartOptions, EcomApiErrorCodes, initializeEcomApi } from '~/lib/ecom';
+import { useCart, AddToCartOptions, EcomApiErrorCodes } from '~/lib/ecom';
+import { initializeEcomApi } from '~/lib/ecom/session';
 import {
     getErrorMessage,
     getMedia,
@@ -59,9 +60,8 @@ export default function ProductDetailsPage() {
         return result;
     };
 
-    const [selectedChoices, setSelectedChoices] = useState<Record<string, products.Choice | undefined>>(
-        getInitialSelectedChoices()
-    );
+    const [selectedChoices, setSelectedChoices] =
+        useState<Record<string, products.Choice | undefined>>(getInitialSelectedChoices());
 
     const outOfStock = isOutOfStock(product, selectedChoices);
     const priceData = getPriceData(product, selectedChoices);

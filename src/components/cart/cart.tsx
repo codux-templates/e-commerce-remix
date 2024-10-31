@@ -7,12 +7,11 @@ import { CartView } from './cart-view/cart-view';
 
 export const Cart = () => {
     const { isOpen, setIsOpen } = useCartOpen();
-    console.log('=====> CART', isOpen);
     const { cartData, cartTotals, checkout, removeItem, updateItemQuantity } = useCart();
     const [checkoutAttempted, setCheckoutAttempted] = useState(false);
 
     const someItemsOutOfStock = cartData?.lineItems.some(
-        (item) => item.availability?.status === cart.ItemAvailabilityStatus.NOT_AVAILABLE
+        (item) => item.availability?.status === cart.ItemAvailabilityStatus.NOT_AVAILABLE,
     );
 
     const handleCheckout = async () => {

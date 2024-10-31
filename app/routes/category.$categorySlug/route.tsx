@@ -1,13 +1,9 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import classNames from 'classnames';
-import {
-    initializeEcomApi,
-    EcomApiErrorCodes,
-    productFiltersFromSearchParams,
-    productSortByFromSearchParams,
-} from '~/lib/ecom';
+import { EcomApiErrorCodes, productFiltersFromSearchParams, productSortByFromSearchParams } from '~/lib/ecom';
 import { useAppliedProductFilters } from '~/lib/hooks';
+import { initializeEcomApi } from '~/lib/ecom/session';
 import { getErrorMessage, isOutOfStock } from '~/lib/utils';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import { ErrorComponent } from '~/src/components/error-component/error-component';

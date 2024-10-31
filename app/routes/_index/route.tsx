@@ -1,6 +1,6 @@
 import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
-import { initializeEcomApi } from '~/lib/ecom';
+import { initializeEcomApi } from '~/lib/ecom/session';
 import { HeroImage } from '~/src/components/hero-image/hero-image';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import { isOutOfStock } from '~/lib/utils';
@@ -45,7 +45,7 @@ export default function HomePage() {
                                 outOfStock={isOutOfStock(product)}
                             />
                         </Link>
-                    ) : null
+                    ) : null,
                 )}
             </div>
         </div>
