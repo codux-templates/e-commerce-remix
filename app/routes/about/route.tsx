@@ -22,47 +22,15 @@ export default function AboutPage() {
 }
 
 export const meta: MetaFunction = () => {
-    const title = 'About Us';
-    const description = 'Description of our store here';
-    const imagePath = '/cover.jpg';
-
     return [
-        { title },
+        { title: 'About Us' },
         {
             name: 'description',
-            content: description,
+            content: 'Description of our store here',
         },
         {
             property: 'robots',
             content: 'index, follow',
-        },
-        {
-            property: 'og:title',
-            content: title,
-        },
-        {
-            property: 'og:description',
-            content: description,
-        },
-        {
-            property: 'og:image',
-            content: imagePath,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imagePath,
         },
     ];
 };

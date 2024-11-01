@@ -184,47 +184,15 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = `Shop - ${data?.category.name}`;
-    const description = data?.category.description ?? `${data?.category.name} products`;
-    const imageUrl = data?.category.media?.mainMedia?.image?.url ?? '/cover.jpg';
-
     return [
-        { title },
+        { title: data?.category.name ?? 'Products' },
         {
             name: 'description',
-            content: description,
+            content: data?.category.description ?? 'Category description',
         },
         {
             property: 'robots',
             content: 'index, follow',
-        },
-        {
-            property: 'og:title',
-            content: title,
-        },
-        {
-            property: 'og:description',
-            content: description,
-        },
-        {
-            property: 'og:image',
-            content: imageUrl,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imageUrl,
         },
     ];
 };

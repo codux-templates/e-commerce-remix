@@ -65,48 +65,16 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction = () => {
-    const title = 'Thank You';
-    const description = 'Thank You for your order';
-    const imagePath = '/cover.jpg';
-
     return [
-        { title },
+        { title: 'Thank You' },
         {
             name: 'description',
-            content: description,
+            content: 'Thank You for your order',
         },
 
         {
             property: 'robots',
-            content: 'index, follow',
-        },
-        {
-            property: 'og:title',
-            content: title,
-        },
-        {
-            property: 'og:description',
-            content: description,
-        },
-        {
-            property: 'og:image',
-            content: imagePath,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imagePath,
+            content: 'noindex, nofollow',
         },
     ];
 };
