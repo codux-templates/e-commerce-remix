@@ -1,0 +1,13 @@
+.root {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.clearAllButton {
+    margin-left: 8px;
+    font: var(--paragraph3);
+    text-decoration: underline;
+    cursor: pointer;
+}

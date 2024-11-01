@@ -1,51 +1,63 @@
-import { ChevronRightIcon } from '@radix-ui/react-icons';
-import classnames from 'classnames';
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { ClientOnly } from 'remix-utils/client-only';
+import classNames from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
+import { RemoveScroll } from 'react-remove-scroll';
 import styles from './drawer.module.scss';
 
-export interface DrawerProps {
-    className?: string;
+interface DrawerProps {
+    open: boolean;
     onClose: () => void;
-    title: string;
-    children?: React.ReactNode;
-    isOpen: boolean;
+    children: React.ReactNode;
+    drawerClassName?: string;
 }
 
-export const Drawer = ({ className, onClose, title, isOpen, children }: DrawerProps) => {
+export const Drawer = ({ open, onClose, children, drawerClassName }: DrawerProps) => {
     useEffect(() => {
-        if (isOpen) {
-            const scrollBarWidth = window.innerWidth - document.body.clientWidth;
-            if (scrollBarWidth > 0) {
-                document.body.style.paddingRight = `${scrollBarWidth}px`;
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                onClose();
             }
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.paddingRight = `0px`;
-            document.body.style.overflow = 'auto';
-        }
-    }, [isOpen]);
+        };
+        if (open) document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [open, onClose]);
 
     return (
-        <div
-            onClick={onClose}
-            onKeyDown={onClose}
-            role="button"
-            tabIndex={0}
-            className={classnames(styles.background, { [styles.open]: isOpen })}
-        >
-            <div
-                className={classnames(styles.drawer, className, { [styles.open]: isOpen })}
-                onClick={(e) => e.stopPropagation()}
-                onKeyDown={(e) => e.stopPropagation()}
-                role="button"
-                tabIndex={-1}
-            >
-                <div className={styles.header}>
-                    <h3>{title}</h3>
-                    <ChevronRightIcon className={styles.arrowIcon} onClick={onClose} height={35} width={35} />
-                </div>
-                <div className={styles.body}>{children}</div>
-            </div>
-        </div>
+        <ClientOnly>
+            {() =>
+                createPortal(
+                    <AnimatePresence>
+                        {open && (
+                            <>
+                                <motion.div
+                                    className={styles.backdrop}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                    onClick={onClose}
+                                />
+
+                                {/* RemoveScroll disables scroll outside the drawer. */}
+                                <RemoveScroll>
+                                    <motion.div
+                                        className={classNames(styles.drawer, drawerClassName)}
+                                        initial={{ clipPath: 'inset(0 0 0 100%)' }}
+                                        animate={{ clipPath: 'none' }}
+                                        exit={{ clipPath: 'inset(0 0 0 100%)' }}
+                                        transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                    >
+                                        {children}
+                                    </motion.div>
+                                </RemoveScroll>
+                            </>
+                        )}
+                    </AnimatePresence>,
+                    document.body,
+                )
+            }
+        </ClientOnly>
     );
 };

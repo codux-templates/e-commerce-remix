@@ -1,0 +1,63 @@
+.item:not(:last-child) {
+    border-bottom: 1px solid rgba(118, 113, 101, 0.3);
+}
+
+.header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.title {
+    font: var(--heading2);
+    font-size: 18px;
+}
+
+.toggleIcon {
+    width: 22px;
+    height: 22px;
+    color: var(--charcoal-black);
+}
+
+.content {
+    --transitionDuration: 0.4s;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--transitionDuration) ease-in-out;
+}
+
+.expanded {
+    grid-template-rows: 1fr;
+}
+
+.contentExpander {
+    overflow: auto;
+    transition: overflow 0s allow-discrete;
+}
+
+.expanded .contentExpander {
+    // Prevent clipping outline and box-shadow after transition.
+    overflow: visible;
+    transition-delay: var(--transitionDuration);
+}
+
+.contentInner {
+    padding-bottom: 25px;
+}
+
+.small {
+    .title {
+        font: var(--paragraph3);
+    }
+
+    .toggleIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .contentInner {
+        padding-bottom: 16px;
+    }
+}

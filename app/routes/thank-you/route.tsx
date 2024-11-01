@@ -1,16 +1,15 @@
 import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, Link, useRouteError, useSearchParams } from '@remix-run/react';
 import { useEffect, useState } from 'react';
-import { getEcomApi } from '~/api/ecom-api';
-import { OrderDetails } from '~/api/types';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { OrderSummary } from '~/components/order-summary/order-summary';
-import { ROUTES } from '~/router/config';
-import { getErrorMessage, getUrlOriginWithPath } from '~/utils';
+import { useEcomAPI, type OrderDetails } from '~/lib/ecom';
+import { getErrorMessage, removeQueryStringFromUrl } from '~/lib/utils';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { OrderSummary } from '~/src/components/order-summary/order-summary';
+
 import styles from './thank-you.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: getUrlOriginWithPath(request.url) };
+    return { canonicalUrl: removeQueryStringFromUrl(request.url) };
 };
 
 export default function ThankYouPage() {
@@ -20,7 +19,7 @@ export default function ThankYouPage() {
     const [order, setOrder] = useState<OrderDetails>();
     const [error, setError] = useState<string>();
 
-    const api = getEcomApi();
+    const api = useEcomAPI();
 
     useEffect(() => {
         if (orderId) {
@@ -53,7 +52,7 @@ export default function ThankYouPage() {
                 </div>
             )}
 
-            <Link to={ROUTES.category.to()}>
+            <Link to={'category/all-products'}>
                 <button className="primaryButton" type="button">
                     Continue Shopping
                 </button>

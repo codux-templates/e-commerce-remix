@@ -1,0 +1,14 @@
+.root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.title {
+    font: var(--paragraph3);
+}
+
+.select {
+    padding-right: 18px;
+}

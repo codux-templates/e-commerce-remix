@@ -2,13 +2,13 @@ import { NavLink } from '@remix-run/react';
 import { createBoard, Variant } from '@wixc3/react-board';
 import classNames from 'classnames';
 import { MemoryRouter } from 'react-router-dom';
-import discordIcon from '~/assets/svg/discord.svg';
-import facebookIcon from '~/assets/svg/facebook.svg';
-import githubIcon from '~/assets/svg/github.svg';
-import mediumIcon from '~/assets/svg/medium.svg';
-import twitterxIcon from '~/assets/svg/twitterx.svg';
-import youtubeIcon from '~/assets/svg/youtube.svg';
-import styles from '~/styles/ui-kit-buttons.module.scss';
+import discordIcon from '~/src/assets/svg/discord.svg';
+import facebookIcon from '~/src/assets/svg/facebook.svg';
+import githubIcon from '~/src/assets/svg/github.svg';
+import mediumIcon from '~/src/assets/svg/medium.svg';
+import twitterxIcon from '~/src/assets/svg/twitterx.svg';
+import youtubeIcon from '~/src/assets/svg/youtube.svg';
+import styles from '~/src/styles/ui-kit-buttons.module.scss';
 
 export default createBoard({
     name: 'UI Kit - Buttons',

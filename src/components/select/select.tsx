@@ -7,16 +7,17 @@ export interface SelectOption {
 }
 
 export interface SelectProps {
+    className?: string;
     options: SelectOption[];
     value?: string;
-    placeholder: string;
-    hasError: boolean;
+    placeholder?: string;
+    hasError?: boolean;
     onChange: (value: string) => void;
 }
 
-export const Select = ({ options, value, onChange, placeholder, hasError }: SelectProps) => {
+export const Select = ({ className, options, value, onChange, placeholder, hasError }: SelectProps) => {
     return (
-        <div className={classNames(styles.root, { [styles.error]: hasError })}>
+        <div className={classNames(className, styles.root, { [styles.error]: hasError })}>
             <select
                 className={classNames({ [styles.placeholder]: value === undefined })}
                 value={value ?? ''}

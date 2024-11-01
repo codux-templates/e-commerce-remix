@@ -1,7 +1,7 @@
 .introButton {
     text-align: center;
     font: var(--heading6);
-    background-color: var(--snow-white);
+    background: var(--snow-white);
     padding: 10px;
     width: 160px;
     color: var(--charcoal-black);
@@ -11,12 +11,12 @@
 }
 
 .introButton:hover {
-    background-color: #b6c1f0;
+    background: var(--light-blue);
     color: var(--black);
 }
 
 .primaryButton {
-    background-color: var(--charcoal-black);
+    background: var(--charcoal-black);
     display: flex;
     cursor: pointer;
     align-items: center;
@@ -30,7 +30,7 @@
     z-index: 1;
 }
 .primaryButton:hover {
-    background-color: var(--white);
+    background: var(--white);
     border: 1px solid var(--charcoal-black);
     color: var(--charcoal-black);
 }
@@ -46,12 +46,12 @@
     padding-left: 22px;
     border: 1px solid white;
     z-index: 1;
-    background-color: var(--white);
+    background: var(--white);
     border: 1px solid var(--charcoal-black);
     border-radius: 35px;
     &:hover {
-        background-color: #729991;
-        border: 1px solid #729991;
+        background: var(--light-green);
+        border: 1px solid var(--light-green);
         color: var(--white);
     }
 }
@@ -59,7 +59,7 @@
 .primaryButton:disabled {
     cursor: initial;
     color: var(--white);
-    background-color: var(--grey);
+    background: var(--grey);
     border-color: var(--grey);
 }
 
@@ -83,5 +83,13 @@
     height: 25px;
     width: 60px;
     padding-right: 10px;
+    font: var(--paragraph3);
+}
+
+.rangeSlider {
+    --track-color: var(--grey);
+    --selected-range-color: var(--charcoal-black);
+    --thumb-color: var(--charcoal-black);
+    --thumb-focus-ring-color: var(--charcoal-black);
     font: var(--paragraph3);
 }
