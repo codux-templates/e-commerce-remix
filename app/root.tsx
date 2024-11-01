@@ -122,7 +122,7 @@ export function ErrorBoundary() {
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const title = 'E-Commerce Starter';
     const description = 'Create your own e-commerce store';
-    const imageURL = '/cover.jpg';
+    const imagePath = '/cover.jpg';
 
     return [
         { title: title },
@@ -149,7 +149,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: imageURL,
+            content: imagePath,
         },
         {
             name: 'twitter:card',
@@ -165,7 +165,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             name: 'twitter:image',
-            content: imageURL,
+            content: imagePath,
         },
     ];
 };

@@ -55,7 +55,7 @@ export default function HomePage() {
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const title = 'E-Commerce App';
     const description = 'Welcome to the E-Commerce App';
-    const imageUrl = '/cover.jpg';
+    const imagePath = '/cover.jpg';
 
     return [
         { title },
@@ -82,7 +82,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: imageUrl,
+            content: imagePath,
         },
         {
             name: 'twitter:card',
@@ -98,7 +98,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             name: 'twitter:image',
-            content: imageUrl,
+            content: imagePath,
         },
     ];
 };
