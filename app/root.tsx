@@ -11,13 +11,13 @@ import {
     useNavigation,
     useRouteError,
 } from '@remix-run/react';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Tokens } from '@wix/sdk';
 import { useEffect } from 'react';
 import { CartOpenContextProvider } from '~/lib/cart-open-context';
 import { EcomAPIContextProvider } from '~/lib/ecom';
 import { initializeEcomSession, commitSession } from '~/lib/ecom/session';
-import { getErrorMessage, routeLocationToUrl } from '~/lib/utils';
+import { getErrorMessage, removeQueryStringFromUrl, routeLocationToUrl } from '~/lib/utils';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { SiteWrapper } from '~/src/components/site-wrapper/site-wrapper';
 
@@ -32,6 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
                 WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
             },
             wixEcomTokens,
+            canonicalUrl: removeQueryStringFromUrl(request.url),
         },
         shouldUpdateSessionCookie
             ? {
@@ -117,3 +118,64 @@ export function ErrorBoundary() {
         </ContentWrapper>
     );
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+    const title = 'E-Commerce Starter';
+    const description = 'Create your own e-commerce store';
+    const imageURL = '/cover.jpg';
+
+    return [
+        { title: title },
+        {
+            name: 'description',
+            content: description,
+        },
+        {
+            tagName: 'link',
+            rel: 'canonical',
+            href: data?.canonicalUrl,
+        },
+        {
+            property: 'robots',
+            content: 'index, follow',
+        },
+        {
+            property: 'og:title',
+            content: title,
+        },
+        {
+            property: 'og:description',
+            content: description,
+        },
+        {
+            property: 'og:image',
+            content: imageURL,
+        },
+        {
+            name: 'twitter:card',
+            content: 'summary_large_image',
+        },
+        {
+            name: 'twitter:title',
+            content: title,
+        },
+        {
+            name: 'twitter:description',
+            content: description,
+        },
+        {
+            name: 'twitter:image',
+            content: imageURL,
+        },
+    ];
+};
+
+export const links: LinksFunction = () => {
+    return [
+        {
+            rel: 'icon',
+            href: '/favicon.ico',
+            type: 'image/ico',
+        },
+    ];
+};

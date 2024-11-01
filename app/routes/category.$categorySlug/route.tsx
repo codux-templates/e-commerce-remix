@@ -185,9 +185,9 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App - Projects';
-    const description = 'Welcome to the E-Commerce App - Projects Page';
-    const imageUrl = 'https://e-commerce.com/image.png';
+    const title = `Shop - ${data?.category.name}`;
+    const description = data?.category.description ?? `${data?.category.name} products`;
+    const imageUrl = data?.category.media?.mainMedia?.image?.url ?? '/cover.jpg';
 
     return [
         { title },

@@ -69,12 +69,12 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App - Thank You';
-    const description = 'Thank You for your purchase';
-    const imageUrl = 'https://e-commerce.com/image.png';
+    const title = 'Thank You';
+    const description = 'Thank You for your order';
+    const imagePath = '/cover.jpg';
 
     return [
-        { title: title },
+        { title },
         {
             name: 'description',
             content: description,
@@ -98,7 +98,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: imageUrl,
+            content: imagePath,
         },
         {
             name: 'twitter:card',
@@ -114,7 +114,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             name: 'twitter:image',
-            content: imageUrl,
+            content: imagePath,
         },
     ];
 };

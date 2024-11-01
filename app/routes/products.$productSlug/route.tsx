@@ -201,13 +201,9 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    if (!data) {
-        return [];
-    }
-
-    const title = data.product.name ?? 'Product Details';
-    const description = data.product.description ?? 'Product Description';
-    const coverImage = data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
+    const title = data?.product.name ?? 'Product Details';
+    const description = data?.product.description ?? 'Product Description';
+    const imageURL = data?.product.media?.mainMedia?.image?.url ?? '/cover.jpg';
 
     return [
         { title: title },
@@ -218,7 +214,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             tagName: 'link',
             rel: 'canonical',
-            href: data.canonicalUrl,
+            href: data?.canonicalUrl,
         },
         {
             property: 'robots',
@@ -234,7 +230,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: coverImage,
+            content: imageURL,
         },
         {
             name: 'twitter:card',
@@ -250,7 +246,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             name: 'twitter:image',
-            content: coverImage,
+            content: imageURL,
         },
     ];
 };

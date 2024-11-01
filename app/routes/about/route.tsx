@@ -27,9 +27,9 @@ export default function AboutPage() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App - About';
-    const description = 'Welcome to the E-Commerce App - About Page';
-    const imageUrl = 'https://e-commerce.com/image.png';
+    const title = 'About Us';
+    const description = 'Description of our store here';
+    const imageUrl = '/cover.jpg';
 
     return [
         { title },
