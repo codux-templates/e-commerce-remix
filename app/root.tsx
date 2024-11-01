@@ -11,7 +11,7 @@ import {
     useNavigation,
     useRouteError,
 } from '@remix-run/react';
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Tokens } from '@wix/sdk';
 import { useEffect } from 'react';
 import { CartOpenContextProvider } from '~/lib/cart-open-context';
@@ -166,16 +166,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'twitter:image',
             content: imagePath,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };

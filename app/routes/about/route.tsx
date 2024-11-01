@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { removeQueryStringFromUrl } from '~/lib/utils';
 import styles from './about.module.scss';
 
@@ -73,16 +73,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'twitter:image',
             content: imagePath,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };

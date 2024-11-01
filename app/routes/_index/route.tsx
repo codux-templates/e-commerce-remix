@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
 import { initializeEcomApi } from '~/lib/ecom/session';
 import { isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
@@ -99,16 +99,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'twitter:image',
             content: imagePath,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };

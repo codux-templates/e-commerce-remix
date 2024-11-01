@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
@@ -231,16 +231,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'twitter:image',
             content: imageUrl,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };
