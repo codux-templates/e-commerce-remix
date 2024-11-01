@@ -53,8 +53,8 @@ export default function HomePage() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App';
-    const description = 'Welcome to the E-Commerce App';
+    const title = 'E-Commerce Starter';
+    const description = 'Create your own e-commerce store';
     const imagePath = '/cover.jpg';
 
     return [
