@@ -1,24 +1,33 @@
 import { products } from '@wix/stores';
-import { ColorSelect } from '~/components/color-select/color-select';
-import { Select } from '~/components/select/select';
-import { getChoiceValue } from './product-option-utils';
+import { ColorSelect } from '~/lib/components/color-select/color-select';
+import { Select } from '~/src/components/select/select';
 import styles from './product-option.module.scss';
+import { getChoiceValue } from '~/lib/utils';
 
 export interface ProductOptionProps {
     option: products.ProductOption;
-    selectedValue: string | undefined;
+    selectedChoice: products.Choice | undefined;
     error: string | undefined;
-    onChange: (value: string) => void;
+    onChange: (value: products.Choice) => void;
 }
 
-export const ProductOption = ({ option, selectedValue, error, onChange }: ProductOptionProps) => {
+export const ProductOption = ({ option, selectedChoice, error, onChange }: ProductOptionProps) => {
     const { name, optionType, choices } = option;
 
     if (name === undefined || choices === undefined) {
         return null;
     }
 
-    const selectedChoice = choices.find((c) => getChoiceValue(option, c) === selectedValue);
+    const handleChange = (value: string) => {
+        if (!optionType) {
+            return;
+        }
+
+        const newSelectedChoice = choices.find((c) => getChoiceValue(optionType, c) === value);
+        if (newSelectedChoice) {
+            onChange(newSelectedChoice);
+        }
+    };
 
     return (
         <div className={styles.root}>
@@ -31,26 +40,27 @@ export const ProductOption = ({ option, selectedValue, error, onChange }: Produc
                 <ColorSelect
                     hasError={error !== undefined}
                     options={choices
-                        .filter((c) => c.value && c.description)
+                        .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
-                            name: c.description!,
-                            hexValue: c.value!,
+                            id: c.description!,
+                            color: c.value!,
+                            crossedOut: !c.inStock,
                         }))}
-                    onChange={onChange}
-                    selectedName={selectedValue}
+                    selectedId={selectedChoice?.description ?? ''}
+                    onChange={handleChange}
                 />
             ) : (
                 <Select
                     hasError={error !== undefined}
                     options={choices
-                        .filter((c) => c.value && c.description)
+                        .filter((c) => c.value && c.description && c.visible)
                         .map((c) => ({
-                            name: c.description!,
+                            name: c.inStock ? c.description! : `${c.description!} (Out of stock)`,
                             value: c.value!,
                         }))}
-                    value={selectedValue}
+                    value={selectedChoice?.value}
                     placeholder={`Select ${name}`}
-                    onChange={onChange}
+                    onChange={handleChange}
                 />
             )}
             {error !== undefined && <div className={styles.error}>{error}</div>}

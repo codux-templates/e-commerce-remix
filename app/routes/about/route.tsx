@@ -1,10 +1,9 @@
-import { LinksFunction, MetaFunction } from '@remix-run/node';
-import { LoaderFunctionArgs } from 'react-router-dom';
-import { getUrlOriginWithPath } from '~/utils';
+import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { removeQueryStringFromUrl } from '~/lib/utils';
 import styles from './about.module.scss';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: getUrlOriginWithPath(request.url) };
+    return { canonicalUrl: removeQueryStringFromUrl(request.url) };
 };
 
 export default function AboutPage() {

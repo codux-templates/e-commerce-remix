@@ -1,0 +1,81 @@
+@use '@styles/variables.scss' as *;
+
+.cart {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    height: 100%;
+}
+
+.header {
+    height: 80px;
+    background: var(--black);
+    color: var(--white);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font: var(--heading2);
+    letter-spacing: 2px;
+}
+
+.arrowIcon {
+    position: absolute;
+    left: 0px;
+    margin: 0 0 0 16px;
+    cursor: pointer;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    padding: 10px;
+    letter-spacing: 2px;
+}
+
+.emptyCart {
+    font: var(--heading1);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.items {
+    overflow: auto;
+}
+
+.subtotalCheckout {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: end;
+    direction: ltr;
+    margin: 14px;
+}
+
+.checkoutButton {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+.subtotalLabel {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.errorMessage {
+    color: var(--red);
+    align-self: flex-start;
+}

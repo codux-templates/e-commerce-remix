@@ -2,14 +2,14 @@
   "$schema": "https://wixplosives.github.io/codux-config-schema/codux.config.schema.json",
   "boardGlobalSetup": "./_codux/boards-global-setup.ts",
   "componentsDiscovery": {
-    "include": ["src/**"],
-    "exclude": ["_codux/**"]
+    "include": ["src/**", "lib/**"],
+    "exclude": ["_codux/component-templates/**"]
   },
+  "boardsPath": "_codux/boards",
   "newComponent": {
     "componentsPath": "src/components",
     "templatesPath": "_codux/component-templates"
   },
-  "boardsPath": "_codux/boards/components",
   "safeRender": {
     "maxInstancesPerComponent": 1000
   },
@@ -25,19 +25,20 @@
     "solution": "scss modules"
   },
   "styleFilesConfig": {
-    "commonStyleFilePattern": "**/src/styles/**"
+    "commonStyleFilePattern": "**/styles/**"
   },
   "resolve": {
     "alias": {
       "@styles": "./src/styles",
       "@styles/*": "./src/styles/*",
-      "/*": "./*",
-      "~/*": "./src/*",
+      "~/*": "./*",
       "node:fs": false,
       "node:fs/promises": false,
       "node:path": false,
       "node:crypto": false,
+      "crypto": false,
       "node:stream": false,
+      "stream": false,
       "node:os": false,
       "node:util": false,
       "node:events": false,

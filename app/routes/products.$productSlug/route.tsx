@@ -1,20 +1,30 @@
 import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
+import type { products } from '@wix/stores';
+import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
-import { useRef, useState } from 'react';
-import { useAddToCart } from '~/api/api-hooks';
-import { getEcomApi } from '~/api/ecom-api';
-import { useCartOpen } from '~/components/cart/cart-open-context';
-import { ErrorComponent } from '~/components/error-component/error-component';
-import { Price } from '~/components/price/price';
-import { ProductAdditionalInfo } from '~/components/product-additional-info/product-additional-info';
-import { ProductImages } from '~/components/product-images/product-images';
-import { ProductOption } from '~/components/product-option/product-option';
-import { UnsafeRichText } from '~/components/rich-text/rich-text';
-import { getChoiceValue } from '~/components/product-option/product-option-utils';
-import { ROUTES } from '~/router/config';
-import { getErrorMessage, getPriceData, getSelectedVariant, getSKU, getUrlOriginWithPath, isOutOfStock } from '~/utils';
-import { AddToCartOptions, EcomApiErrorCodes } from '~/api/types';
+import { useState } from 'react';
+import { useCart, AddToCartOptions, EcomApiErrorCodes, createApi, createWixClient } from '~/lib/ecom';
+import { initializeEcomApi } from '~/lib/ecom/session';
+import {
+    getErrorMessage,
+    getMedia,
+    getPriceData,
+    getProductOptions,
+    getSelectedVariant,
+    getSKU,
+    isOutOfStock,
+    removeQueryStringFromUrl,
+    selectedChoicesToVariantChoices,
+} from '~/lib/utils';
+import { useCartOpen } from '~/lib/cart-open-context';
+import { ErrorComponent } from '~/src/components/error-component/error-component';
+import { Price } from '~/src/components/price/price';
+import { ProductAdditionalInfo } from '~/src/components/product-additional-info/product-additional-info';
+import { ProductImages } from '~/src/components/product-images/product-images';
+import { ProductOption } from '~/src/components/product-option/product-option';
+import { UnsafeRichText } from '~/src/components/rich-text/rich-text';
+
 import styles from './product-details.module.scss';
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -22,41 +32,54 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     if (!productSlug) {
         throw new Error('Missing product slug');
     }
-    const productResponse = await getEcomApi().getProductBySlug(productSlug);
+
+    const ecomApi = await initializeEcomApi(request);
+
+    const productResponse = await ecomApi.getProductBySlug(productSlug);
     if (productResponse.status === 'failure') {
         throw json(productResponse.error);
     }
 
-    return json({ product: productResponse.body, canonicalUrl: getUrlOriginWithPath(request.url) });
+    return json({ product: productResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) });
+};
+
+export const getStaticRoutes: GetStaticRoutes = async () => {
+    const api = createApi(createWixClient());
+    const products = await api.getProducts();
+
+    if (products.status === 'failure') {
+        throw products.error;
+    }
+
+    return products.body.map((product) => `/products/${product.slug}`);
 };
 
 export default function ProductDetailsPage() {
     const { product } = useLoaderData<typeof loader>();
     const { setIsOpen } = useCartOpen();
     const [addToCartAttempted, setAddToCartAttempted] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
-    const { trigger: addToCart } = useAddToCart();
-    const quantityInput = useRef<HTMLInputElement>(null);
+    const cart = useCart();
 
-    const getInitialSelectedOptions = () => {
-        const result: Record<string, string | undefined> = {};
+    const getInitialSelectedChoices = () => {
+        const result: Record<string, products.Choice | undefined> = {};
         for (const option of product.productOptions ?? []) {
             if (option.name) {
-                const initialChoice = option?.choices?.length === 1 ? option.choices[0] : undefined;
-                result[option.name] = getChoiceValue(option, initialChoice);
+                result[option.name] = option?.choices?.length === 1 ? option.choices[0] : undefined;
             }
         }
 
         return result;
     };
 
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string | undefined>>(
-        getInitialSelectedOptions()
-    );
+    const [selectedChoices, setSelectedChoices] =
+        useState<Record<string, products.Choice | undefined>>(getInitialSelectedChoices());
 
-    const outOfStock = isOutOfStock(product, selectedOptions);
-    const priceData = getPriceData(product, selectedOptions);
-    const sku = getSKU(product, selectedOptions);
+    const outOfStock = isOutOfStock(product, selectedChoices);
+    const priceData = getPriceData(product, selectedChoices);
+    const sku = getSKU(product, selectedChoices);
+    const media = getMedia(product, selectedChoices);
 
     async function addToCartHandler() {
         if (!product?._id || outOfStock) {
@@ -64,37 +87,30 @@ export default function ProductDetailsPage() {
         }
 
         setAddToCartAttempted(true);
-        if (Object.values(selectedOptions).includes(undefined)) {
+        if (Object.values(selectedChoices).includes(undefined)) {
             return;
         }
 
-        const quantity = parseInt(quantityInput.current?.value ?? '1', 10);
-        const selectedVariant = getSelectedVariant(product, selectedOptions);
+        const selectedVariant = getSelectedVariant(product, selectedChoices);
 
-        let options: AddToCartOptions = { options: selectedOptions };
+        let options: AddToCartOptions = { options: selectedChoicesToVariantChoices(product, selectedChoices) };
         if (product.manageVariants && selectedVariant?._id) {
             options = { variantId: selectedVariant._id };
         }
 
-        await addToCart({
-            id: product._id,
-            quantity,
-            options,
-        });
+        await cart.addToCart(product._id, quantity, options);
         setIsOpen(true);
     }
 
+    const productOptions = getProductOptions(product, selectedChoices);
+
     return (
         <div className={styles.root}>
-            <ProductImages
-                mainImage={product.media?.mainMedia}
-                images={product.media?.items}
-                className={styles.media}
-            />
+            <ProductImages mainImage={media?.mainMedia} images={media?.items} className={styles.media} />
             <div className={styles.productInfo}>
                 <div>
                     <div className={styles.productName}>{product.name}</div>
-                    {sku !== undefined && <div className={styles.sku}>SKU: {sku}</div>}
+                    {sku && <div className={styles.sku}>SKU: {sku}</div>}
                     {priceData?.formatted?.price && (
                         <Price
                             fullPrice={priceData?.formatted?.price}
@@ -108,22 +124,23 @@ export default function ProductDetailsPage() {
                     <UnsafeRichText className={styles.description}>{product.description}</UnsafeRichText>
                 )}
 
-                {product.productOptions && product.productOptions.length > 0 && (
+                {productOptions && productOptions.length > 0 && (
                     <div className={styles.productOptions}>
-                        {product.productOptions?.map((option) => (
+                        {productOptions.map((option) => (
                             <ProductOption
                                 key={option.name}
                                 error={
-                                    addToCartAttempted && selectedOptions[option.name!] === undefined
+                                    addToCartAttempted && selectedChoices[option.name!] === undefined
                                         ? `Select ${option.name}`
                                         : undefined
                                 }
                                 option={option}
-                                selectedValue={selectedOptions[option.name!]}
-                                onChange={(value) => {
-                                    setSelectedOptions((prev) => ({
+                                selectedChoice={selectedChoices[option.name!]}
+                                onChange={(newSelectedChoice) => {
+                                    setQuantity(1);
+                                    setSelectedChoices((prev) => ({
                                         ...prev,
-                                        [option.name!]: value,
+                                        [option.name!]: newSelectedChoice,
                                     }));
                                 }}
                             />
@@ -135,12 +152,11 @@ export default function ProductDetailsPage() {
                     <label>
                         <div>Quantity:</div>
                         <input
-                            ref={quantityInput}
-                            defaultValue={1}
                             className={classNames('numberInput', styles.quantity)}
                             type="number"
+                            value={quantity}
                             min={1}
-                            placeholder="1"
+                            onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
                         />
                     </label>
                 </div>
@@ -179,7 +195,7 @@ export function ErrorBoundary() {
             title={title}
             message={message}
             actionButtonText="Back to shopping"
-            onActionButtonClick={() => navigate(ROUTES.category.to('all-products'))}
+            onActionButtonClick={() => navigate('/category/all-products')}
         />
     );
 }
