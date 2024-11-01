@@ -11,7 +11,7 @@ import {
 } from '~/lib/ecom';
 import { useAppliedProductFilters } from '~/lib/hooks';
 import { initializeEcomApi } from '~/lib/ecom/session';
-import { getErrorMessage, isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
+import { getErrorMessage, isOutOfStock } from '~/lib/utils';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { ProductFilters } from '~/src/components/product-filters/product-filters';
@@ -58,7 +58,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         categoryProducts: categoryProductsResponse.body,
         allCategories: allCategoriesResponse.body,
         productPriceBounds: productPriceBoundsResponse.body,
-        canonicalUrl: removeQueryStringFromUrl(request.url),
     };
 };
 
@@ -194,11 +193,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

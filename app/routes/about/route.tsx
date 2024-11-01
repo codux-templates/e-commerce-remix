@@ -1,10 +1,5 @@
-import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { removeQueryStringFromUrl } from '~/lib/utils';
+import { MetaFunction } from '@remix-run/node';
 import styles from './about.module.scss';
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: removeQueryStringFromUrl(request.url) };
-};
 
 export default function AboutPage() {
     return (
@@ -26,7 +21,7 @@ export default function AboutPage() {
     );
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction = () => {
     const title = 'About Us';
     const description = 'Description of our store here';
     const imagePath = '/cover.jpg';
@@ -36,11 +31,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

@@ -17,7 +17,7 @@ import { useEffect } from 'react';
 import { CartOpenContextProvider } from '~/lib/cart-open-context';
 import { EcomAPIContextProvider } from '~/lib/ecom';
 import { initializeEcomSession, commitSession } from '~/lib/ecom/session';
-import { getErrorMessage, removeQueryStringFromUrl, routeLocationToUrl } from '~/lib/utils';
+import { getErrorMessage, routeLocationToUrl } from '~/lib/utils';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { SiteWrapper } from '~/src/components/site-wrapper/site-wrapper';
 
@@ -32,7 +32,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
                 WIX_CLIENT_ID: process?.env?.WIX_CLIENT_ID,
             },
             wixEcomTokens,
-            canonicalUrl: removeQueryStringFromUrl(request.url),
         },
         shouldUpdateSessionCookie
             ? {
@@ -119,7 +118,7 @@ export function ErrorBoundary() {
     );
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
+export const meta: MetaFunction = () => {
     const title = 'E-Commerce Starter';
     const description = 'Create your own e-commerce store';
     const imagePath = '/cover.jpg';
@@ -129,11 +128,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',

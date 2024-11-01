@@ -1,5 +1,4 @@
 import { json } from '@remix-run/react';
-import { removeQueryStringFromUrl } from '~/lib/utils';
 import { EcomAPI } from '../ecom';
 
 export async function getProductDetailsRouteData(api: EcomAPI, productSlug: string | undefined, url: string) {
@@ -10,6 +9,5 @@ export async function getProductDetailsRouteData(api: EcomAPI, productSlug: stri
 
     return {
         product: productResponse.body,
-        canonicalUrl: removeQueryStringFromUrl(url),
     };
 }
