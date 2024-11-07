@@ -86,7 +86,7 @@ export default function ProductsCategoryPage() {
                 <nav className={styles.sidebarSection}>
                     <h2 className={styles.sidebarTitle}>Browse by</h2>
 
-                    <ul>
+                    <ul className={styles.categoryList}>
                         {allCategories.map((category) =>
                             category.slug ? (
                                 <NavLink

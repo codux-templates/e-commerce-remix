@@ -8,6 +8,13 @@
 .root select {
     padding: 4px 8px;
     width: 100%;
+    appearance: none;
+    border: none;
+    outline: none;
+}
+
+.root:focus-within {
+    outline: 1px solid var(--black);
 }
 
 .root.error {
