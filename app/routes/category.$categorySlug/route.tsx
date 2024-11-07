@@ -93,7 +93,7 @@ export default function ProductsCategoryPage() {
                                     key={category._id}
                                     to={`/category/${category.slug}`}
                                     className={({ isActive }) =>
-                                        classNames('linkButton', {
+                                        classNames(styles.categoryItem, 'linkButton', {
                                             [styles.activeCategory]: isActive,
                                         })
                                     }

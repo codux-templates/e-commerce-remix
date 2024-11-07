@@ -64,13 +64,13 @@
 }
 
 .linkButton {
-    height: 42px;
     display: flex;
     align-items: center;
     cursor: pointer;
     z-index: 1;
     border: none;
     background: transparent;
+    padding: 0;
 }
 
 .linkButton:hover {
