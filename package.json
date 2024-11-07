@@ -1,5 +1,5 @@
 {
-  "name": "e-commerce-reclaim",
+  "name": "e-commerce-remix",
   "version": "0.1.0",
   "private": true,
   "sideEffects": false,
@@ -53,6 +53,7 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "prettier": "^3.3.3",
+    "react-router-dom": "~6.27.0",
     "sass": "~1.79.6",
     "typescript": "~5.6.3",
     "vite": "^5.4.10",
