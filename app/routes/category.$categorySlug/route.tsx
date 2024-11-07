@@ -86,14 +86,14 @@ export default function ProductsCategoryPage() {
                 <nav className={styles.sidebarSection}>
                     <h2 className={styles.sidebarTitle}>Browse by</h2>
 
-                    <ul>
+                    <ul className={styles.categoryList}>
                         {allCategories.map((category) =>
                             category.slug ? (
                                 <NavLink
                                     key={category._id}
                                     to={`/category/${category.slug}`}
                                     className={({ isActive }) =>
-                                        classNames('linkButton', {
+                                        classNames(styles.categoryItem, 'linkButton', {
                                             [styles.activeCategory]: isActive,
                                         })
                                     }

@@ -54,7 +54,7 @@ export const AppliedProductFilters = ({
                 </AppliedFilter>
             )}
 
-            <button className={styles.clearAllButton} onClick={onClearAllFilters}>
+            <button className={classNames(styles.clearAllButton, 'linkButton')} onClick={onClearAllFilters}>
                 Clear All
             </button>
         </div>
