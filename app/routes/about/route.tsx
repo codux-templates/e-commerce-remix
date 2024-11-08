@@ -26,7 +26,7 @@ export const meta: MetaFunction = () => {
         { title: 'About Us' },
         {
             name: 'description',
-            content: 'Description of our store here',
+            content: 'Create your own e-commerce store',
         },
         {
             property: 'robots',

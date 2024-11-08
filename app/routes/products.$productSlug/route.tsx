@@ -201,8 +201,7 @@ export function ErrorBoundary() {
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const title = data?.product.name ?? 'Product Details';
-    const description = data?.product.description ?? 'Product Description';
-    const imageURL = data?.product.media?.mainMedia?.image?.url ?? '/cover.jpg';
+    const description = data?.product.description;
 
     return [
         { title: title },
@@ -224,23 +223,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: imageURL,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imageURL,
+            content: '/social-media-image.jpg',
         },
     ];
 };

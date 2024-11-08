@@ -188,7 +188,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         { title: data?.category.name ?? 'Products' },
         {
             name: 'description',
-            content: data?.category.description ?? 'Category description',
+            content: data?.category.description,
         },
         {
             property: 'robots',
