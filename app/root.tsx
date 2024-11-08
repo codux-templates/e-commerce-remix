@@ -123,7 +123,7 @@ export const meta: MetaFunction = () => {
     const description = 'Create your own e-commerce store';
 
     return [
-        { title: title },
+        { title },
         {
             name: 'description',
             content: description,

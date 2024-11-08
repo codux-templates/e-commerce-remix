@@ -204,7 +204,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     const description = data?.product.description;
 
     return [
-        { title: title },
+        { title },
         {
             name: 'description',
             content: description,
