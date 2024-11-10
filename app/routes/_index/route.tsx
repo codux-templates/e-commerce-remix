@@ -1,7 +1,7 @@
-import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs } from '@remix-run/node';
 import { Link, MetaFunction, useLoaderData, useNavigate, json } from '@remix-run/react';
 import { initializeEcomApi } from '~/lib/ecom/session';
-import { isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
+import { isOutOfStock } from '~/lib/utils';
 import { HeroImage } from '~/src/components/hero-image/hero-image';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import styles from './index.module.scss';
@@ -13,7 +13,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         throw json(productsResponse.error);
     }
 
-    return { products: productsResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) };
+    return { products: productsResponse.body };
 };
 
 export default function HomePage() {
@@ -52,21 +52,15 @@ export default function HomePage() {
     );
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App';
-    const description = 'Welcome to the E-Commerce App';
-    const imageUrl = 'https://e-commerce.com/image.png';
+export const meta: MetaFunction<typeof loader> = () => {
+    const title = 'E-Commerce Starter';
+    const description = 'Create your own e-commerce store';
 
     return [
         { title },
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
         },
         {
             property: 'robots',
@@ -82,33 +76,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: imageUrl,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imageUrl,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
+            content: '/social-media-image.jpg',
         },
     ];
 };

@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { isRouteErrorResponse, json, useLoaderData, useNavigate, useRouteError } from '@remix-run/react';
 import type { products } from '@wix/stores';
 import { GetStaticRoutes } from '@wixc3/define-remix-app';
@@ -14,7 +14,6 @@ import {
     getSelectedVariant,
     getSKU,
     isOutOfStock,
-    removeQueryStringFromUrl,
     selectedChoicesToVariantChoices,
 } from '~/lib/utils';
 import { useCartOpen } from '~/lib/cart-open-context';
@@ -40,7 +39,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         throw json(productResponse.error);
     }
 
-    return json({ product: productResponse.body, canonicalUrl: removeQueryStringFromUrl(request.url) });
+    return json({ product: productResponse.body });
 };
 
 export const getStaticRoutes: GetStaticRoutes = async () => {
@@ -201,24 +200,14 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    if (!data) {
-        return [];
-    }
-
-    const title = data.product.name ?? 'Product Details';
-    const description = data.product.description ?? 'Product Description';
-    const coverImage = data.product.media?.mainMedia?.image?.url ?? 'https://e-commerce.com/image.png';
+    const title = data?.product.name ?? 'Product Details';
+    const description = data?.product.description;
 
     return [
-        { title: title },
+        { title },
         {
             name: 'description',
             content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data.canonicalUrl,
         },
         {
             property: 'robots',
@@ -234,33 +223,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
         },
         {
             property: 'og:image',
-            content: coverImage,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: coverImage,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
+            content: '/social-media-image.jpg',
         },
     ];
 };
