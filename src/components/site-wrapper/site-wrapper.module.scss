@@ -3,6 +3,8 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* create a stacking context for the app */
+    isolation: isolate;
 }
 
 .content {

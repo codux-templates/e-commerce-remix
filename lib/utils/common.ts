@@ -20,11 +20,6 @@ export function getClickableElementAttributes(handler: () => void) {
     };
 }
 
-export function removeQueryStringFromUrl(url: string) {
-    const { origin, pathname } = new URL(url);
-    return new URL(pathname, origin).toString();
-}
-
 /*
  * Retrieves the message from a thrown error.
  * - Handles Remix ErrorResponse (non-Error instance).

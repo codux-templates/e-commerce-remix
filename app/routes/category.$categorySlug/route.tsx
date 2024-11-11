@@ -1,4 +1,4 @@
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { NavLink, useLoaderData, json, useRouteError, useNavigate, isRouteErrorResponse } from '@remix-run/react';
 import { GetStaticRoutes } from '@wixc3/define-remix-app';
 import classNames from 'classnames';
@@ -11,7 +11,7 @@ import {
 } from '~/lib/ecom';
 import { useAppliedProductFilters } from '~/lib/hooks';
 import { initializeEcomApi } from '~/lib/ecom/session';
-import { getErrorMessage, isOutOfStock, removeQueryStringFromUrl } from '~/lib/utils';
+import { getErrorMessage, isOutOfStock } from '~/lib/utils';
 import { ProductCard } from '~/src/components/product-card/product-card';
 import { ErrorComponent } from '~/src/components/error-component/error-component';
 import { ProductFilters } from '~/src/components/product-filters/product-filters';
@@ -58,7 +58,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         categoryProducts: categoryProductsResponse.body,
         allCategories: allCategoriesResponse.body,
         productPriceBounds: productPriceBoundsResponse.body,
-        canonicalUrl: removeQueryStringFromUrl(request.url),
     };
 };
 
@@ -86,14 +85,14 @@ export default function ProductsCategoryPage() {
                 <nav className={styles.sidebarSection}>
                     <h2 className={styles.sidebarTitle}>Browse by</h2>
 
-                    <ul>
+                    <ul className={styles.categoryList}>
                         {allCategories.map((category) =>
                             category.slug ? (
                                 <NavLink
                                     key={category._id}
                                     to={`/category/${category.slug}`}
                                     className={({ isActive }) =>
-                                        classNames('linkButton', {
+                                        classNames(styles.categoryItem, 'linkButton', {
                                             [styles.activeCategory]: isActive,
                                         })
                                     }
@@ -185,62 +184,15 @@ export function ErrorBoundary() {
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App - Projects';
-    const description = 'Welcome to the E-Commerce App - Projects Page';
-    const imageUrl = 'https://e-commerce.com/image.png';
-
     return [
-        { title },
+        { title: data?.category.name ?? 'Products' },
         {
             name: 'description',
-            content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
+            content: data?.category.description,
         },
         {
             property: 'robots',
             content: 'index, follow',
-        },
-        {
-            property: 'og:title',
-            content: title,
-        },
-        {
-            property: 'og:description',
-            content: description,
-        },
-        {
-            property: 'og:image',
-            content: imageUrl,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imageUrl,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };
