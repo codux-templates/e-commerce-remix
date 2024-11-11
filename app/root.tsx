@@ -11,7 +11,7 @@ import {
     useNavigation,
     useRouteError,
 } from '@remix-run/react';
-import { LoaderFunctionArgs } from '@remix-run/node';
+import { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
 import { Tokens } from '@wix/sdk';
 import { useEffect } from 'react';
 import { CartOpenContextProvider } from '~/lib/cart-open-context';
@@ -117,3 +117,32 @@ export function ErrorBoundary() {
         </ContentWrapper>
     );
 }
+
+export const meta: MetaFunction = () => {
+    const title = 'E-Commerce Starter';
+    const description = 'Create your own e-commerce store';
+
+    return [
+        { title },
+        {
+            name: 'description',
+            content: description,
+        },
+        {
+            property: 'robots',
+            content: 'index, follow',
+        },
+        {
+            property: 'og:title',
+            content: title,
+        },
+        {
+            property: 'og:description',
+            content: description,
+        },
+        {
+            property: 'og:image',
+            content: '/social-media-image.jpg',
+        },
+    ];
+};

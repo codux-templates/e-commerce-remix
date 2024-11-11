@@ -26,6 +26,8 @@
     text-transform: uppercase;
     padding-bottom: 10px;
     border-bottom: solid 1px var(--grey);
+    font: var(--heading6);
+    font-weight: 400;
 }
 
 .products {
@@ -66,6 +68,15 @@
 .productCard {
     width: 100%;
     height: 100%;
+}
+
+.categoryList {
+    list-style: none;
+    padding: 0;
+}
+
+.categoryItem {
+    height: 42px;
 }
 
 .activeCategory {

@@ -1,10 +1,5 @@
-import { LinksFunction, LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
-import { removeQueryStringFromUrl } from '~/lib/utils';
+import { MetaFunction } from '@remix-run/node';
 import styles from './about.module.scss';
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-    return { canonicalUrl: removeQueryStringFromUrl(request.url) };
-};
 
 export default function AboutPage() {
     return (
@@ -26,63 +21,16 @@ export default function AboutPage() {
     );
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-    const title = 'E-Commerce App - About';
-    const description = 'Welcome to the E-Commerce App - About Page';
-    const imageUrl = 'https://e-commerce.com/image.png';
-
+export const meta: MetaFunction = () => {
     return [
-        { title },
+        { title: 'About Us' },
         {
             name: 'description',
-            content: description,
-        },
-        {
-            tagName: 'link',
-            rel: 'canonical',
-            href: data?.canonicalUrl,
+            content: 'Create your own e-commerce store',
         },
         {
             property: 'robots',
             content: 'index, follow',
-        },
-        {
-            property: 'og:title',
-            content: title,
-        },
-        {
-            property: 'og:description',
-            content: description,
-        },
-        {
-            property: 'og:image',
-            content: imageUrl,
-        },
-        {
-            name: 'twitter:card',
-            content: 'summary_large_image',
-        },
-        {
-            name: 'twitter:title',
-            content: title,
-        },
-        {
-            name: 'twitter:description',
-            content: description,
-        },
-        {
-            name: 'twitter:image',
-            content: imageUrl,
-        },
-    ];
-};
-
-export const links: LinksFunction = () => {
-    return [
-        {
-            rel: 'icon',
-            href: '/favicon.ico',
-            type: 'image/ico',
         },
     ];
 };
