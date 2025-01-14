@@ -56,6 +56,7 @@ function createCartItem(overrides: Partial<CartItemDetails> = {}): CartItemDetai
         fixedQuantity: false,
         priceUndetermined: false,
         customLineItem: false,
+        policies: [],
         ...overrides,
     };
 }
