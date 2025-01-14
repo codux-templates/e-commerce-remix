@@ -5,6 +5,8 @@ export const mockOrder: orders.Order & orders.OrderNonNullableFields = {
     _id: '111111111111',
     lineItems: [
         {
+            priceUndetermined: false,
+            fixedQuantity: false,
             productName: { original: 'Tets Product' },
             price: {
                 amount: '10.00',
@@ -43,6 +45,8 @@ export const mockOrder: orders.Order & orders.OrderNonNullableFields = {
             quantity: 2,
         },
         {
+            priceUndetermined: false,
+            fixedQuantity: false,
             productName: { original: 'Another Product' },
             price: {
                 amount: '75.00',
