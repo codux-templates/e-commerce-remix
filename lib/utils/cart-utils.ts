@@ -1,4 +1,3 @@
-import ecom from '@wix/ecom';
 import deepEqual from 'fast-deep-equal';
 import { AddToCartOptions, Cart, CartItem, CartTotals } from '~/lib/ecom';
 
@@ -17,7 +16,7 @@ export function findItemIdInCart({ lineItems }: Cart, catalogItemId: string, opt
     });
 }
 
-export function calculateCartItemsCount(cart: ecom.cart.Cart): number {
+export function calculateCartItemsCount(cart: Cart): number {
     return cart.lineItems?.reduce((total, item) => total + item.quantity!, 0) ?? 0;
 }
 
