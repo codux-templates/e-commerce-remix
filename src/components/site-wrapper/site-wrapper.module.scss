@@ -3,15 +3,12 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    flex: 1;
     /* create a stacking context for the app */
     isolation: isolate;
 }
 
 .content {
-    min-height: min-content;
     flex-grow: 1;
     background: var(--snow-white);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
